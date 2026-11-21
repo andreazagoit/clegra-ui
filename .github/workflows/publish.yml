@@ -1,0 +1,73 @@
+# Publishes this package to npm through npm's Trusted Publishing (OIDC: no token is stored anywhere), with provenance
+# (npm accepts a provenance statement from a public repository: this one). npmjs.com trusts exactly this file of this
+# repository (the package's Settings → Trusted Publisher: GitHub Actions, workflow publish.yml, no environment).
+#
+# Trigger: a push to main that changes package.json, i.e. a new snapshot of the package. When package.json's version
+# is not on npm yet, the job installs from the lockfile, packs it (prepack builds dist/), prints the tarball's
+# integrity and publishes that exact tarball. Prereleases (x.y.z-next.N) go to the dist-tag `next`, releases to
+# `latest`. A version already on npm is skipped. `workflow_dispatch` runs it again by hand after a failed run.
+#
+# The tarball is reproducible: the same commit packs to the same bytes on any machine (same Node major, same npm), so
+# the integrity printed here equals the one of a pack made where the package is developed.
+name: Publish
+
+on:
+  push:
+    branches: [main]
+    paths: ["package.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # npm Trusted Publishing and provenance
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted Publishing needs npm 11.5.1 or newer; the same npm packs where the package is developed.
+      - name: npm with Trusted Publishing
+        run: npm install -g npm@11.6.2 && npm --version
+
+      - name: Version not on npm yet?
+        id: meta
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already on npm: nothing to publish"; echo "publish=no" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          case "$version" in *-*) disttag=next ;; *) disttag=latest ;; esac
+          { echo "publish=yes"; echo "name=$name"; echo "version=$version"; echo "disttag=$disttag"; } >> "$GITHUB_OUTPUT"
+
+      - name: Install
+        if: steps.meta.outputs.publish == 'yes'
+        run: npm ci --no-audit --no-fund
+
+      # The integrity is what the consumers' lockfiles carry for this version: it must equal the pack made where the
+      # package is developed (the snapshot's release command prints that one too).
+      - name: Pack
+        if: steps.meta.outputs.publish == 'yes'
+        id: pack
+        run: |
+          file=$(npm pack --silent | tail -n 1)
+          integrity="sha512-$(openssl dgst -sha512 -binary "$file" | base64 -w0)"
+          { echo "file=$file"; echo "integrity=$integrity"; } >> "$GITHUB_OUTPUT"
+          echo "packed $file $integrity"
+          echo "### ${{ steps.meta.outputs.name }}@${{ steps.meta.outputs.version }}: \`$integrity\`" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish
+        if: steps.meta.outputs.publish == 'yes'
+        run: npm publish "${{ steps.pack.outputs.file }}" --tag "${{ steps.meta.outputs.disttag }}" --access public --provenance
