@@ -1,0 +1,15 @@
+node_modules/
+# npm pack / npm publish: the build (scripts/build.mjs) and the repository's package.json while the published one is
+# swapped in (scripts/prepack.mjs, put back by scripts/postpack.mjs).
+dist/
+.package.repo.json
+tsconfig.build.json
+# Tarballs made for other projects (npm pack --pack-destination tarballs).
+/tarballs/
+*.tgz
+*.tsbuildinfo
+.env
+.env.*
+# The Storybook builds (npm run build-storybook, build-storybook:public): dev-only, never committed or packed.
+storybook-static/
+storybook-public/

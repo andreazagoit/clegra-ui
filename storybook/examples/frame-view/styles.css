@@ -1,0 +1,16 @@
+/* The view's stylesheet: Tailwind, then Clegra's (tokens, theme, the components' variants).
+ * Without Tailwind in your build, drop this file's two imports and
+ * `import "@clegra/ui/prebuilt.css"` in main.tsx instead: the components are
+ * styled the same; lay out your own markup with plain CSS and the tokens. */
+@import "tailwindcss";
+@import "@clegra/ui/styles.css"; /* it lets Tailwind see the components' classes itself */
+
+/* The host sends its fonts as variables; the view sets none of its own. */
+:root {
+  --font-sans: "Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif;
+}
+body {
+  margin: 0;
+  /* Transparent: the host's page shows through, so the frame has no edge of its own. */
+  background: transparent;
+}

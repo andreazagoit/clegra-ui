@@ -1,0 +1,12 @@
+/* Clegra's theme: shadcn's variables (background, primary, card, sidebar…)
+ * pointed at the Clegra palette, light and dark, plus Clegra's own roles
+ * (yes, highlight, link, face, stamp, sketch) and the «sì» button (.btn-yes).
+ *
+ *   Blu #2D4BEE + Arancio, on Panna / Foglio / Notte: every account, a
+ *   company's or a personal one
+ *
+ * The colours are written once, in src/brand/colors.css; src/brand/
+ * theme.css maps them to the roles. This file brings both into the library,
+ * so an app gets the whole palette by importing @clegra/ui's styles.css.
+ * shadcn's components are never restyled: they read these variables. */
+@import "./brand/theme.css";

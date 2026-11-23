@@ -1,0 +1,9 @@
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+/* The library's stylesheet: shadcn's variants and Clegra's theme, as the apps import it. */
+@import "@clegra/ui/styles.css";
+@source "../storybook";
+
+:root {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+}

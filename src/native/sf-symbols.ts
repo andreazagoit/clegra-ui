@@ -1,0 +1,117 @@
+import type { ButtonProps } from "@expo/ui/swift-ui"
+import { isValidElement, type ReactNode } from "react"
+
+export type SFSymbol = NonNullable<ButtonProps["systemImage"]>
+
+/** Common lucide icons (by name, without "Lucide" or "Icon") and their SF Symbols. */
+const table: Record<string, SFSymbol> = {
+  Plus: "plus",
+  Minus: "minus",
+  X: "xmark",
+  Check: "checkmark",
+  ChevronDown: "chevron.down",
+  ChevronUp: "chevron.up",
+  ChevronLeft: "chevron.left",
+  ChevronRight: "chevron.right",
+  ArrowLeft: "arrow.left",
+  ArrowRight: "arrow.right",
+  ArrowUp: "arrow.up",
+  ArrowDown: "arrow.down",
+  Search: "magnifyingglass",
+  Settings: "gearshape",
+  Settings2: "slider.horizontal.3",
+  Trash: "trash",
+  Trash2: "trash",
+  Pencil: "pencil",
+  SquarePen: "square.and.pencil",
+  Edit: "square.and.pencil",
+  Copy: "doc.on.doc",
+  Download: "arrow.down.to.line",
+  Upload: "arrow.up.to.line",
+  Share: "square.and.arrow.up",
+  Share2: "square.and.arrow.up",
+  Send: "paperplane",
+  SendHorizontal: "paperplane",
+  Mail: "envelope",
+  Inbox: "tray",
+  User: "person",
+  Users: "person.2",
+  UserPlus: "person.badge.plus",
+  LogOut: "rectangle.portrait.and.arrow.right",
+  Calendar: "calendar",
+  Clock: "clock",
+  Bell: "bell",
+  Heart: "heart",
+  Star: "star",
+  House: "house",
+  Home: "house",
+  Menu: "line.3.horizontal",
+  Ellipsis: "ellipsis",
+  MoreHorizontal: "ellipsis",
+  Info: "info.circle",
+  CircleAlert: "exclamationmark.circle",
+  AlertCircle: "exclamationmark.circle",
+  TriangleAlert: "exclamationmark.triangle",
+  AlertTriangle: "exclamationmark.triangle",
+  CircleCheck: "checkmark.circle",
+  CheckCircle: "checkmark.circle",
+  CircleX: "xmark.circle",
+  XCircle: "xmark.circle",
+  Filter: "line.3.horizontal.decrease",
+  ExternalLink: "arrow.up.right.square",
+  Link: "link",
+  Paperclip: "paperclip",
+  Image: "photo",
+  File: "doc",
+  FileText: "doc.text",
+  Folder: "folder",
+  FolderOpen: "folder",
+  Building: "building.2",
+  Building2: "building.2",
+  Phone: "phone",
+  MessageSquare: "bubble.left",
+  MessageCircle: "bubble.left",
+  Save: "square.and.arrow.down",
+  RefreshCw: "arrow.clockwise",
+  RotateCw: "arrow.clockwise",
+  RotateCcw: "arrow.counterclockwise",
+  Eye: "eye",
+  EyeOff: "eye.slash",
+  Lock: "lock",
+  Unlock: "lock.open",
+  Bold: "bold",
+  Italic: "italic",
+  Underline: "underline",
+  Mic: "mic",
+  Play: "play",
+  Pause: "pause",
+  Sparkles: "sparkles",
+  Archive: "archivebox",
+  Tag: "tag",
+  Bookmark: "bookmark",
+  Printer: "printer",
+  Sun: "sun.max",
+  Moon: "moon",
+  Globe: "globe",
+  MapPin: "mappin",
+  Camera: "camera",
+  Server: "server.rack",
+  Laptop: "laptopcomputer",
+  Smartphone: "iphone",
+  MonitorSmartphone: "desktopcomputer",
+  Cpu: "cpu",
+}
+
+/** The lucide name of an element's component: the drawn wrapper's displayName, or lucide's own. */
+export function iconName(node: ReactNode): string | undefined {
+  if (!isValidElement(node)) return undefined
+  const type = node.type as { displayName?: string; name?: string } | string
+  const raw = typeof type === "string" ? undefined : (type.displayName ?? type.name)
+  return raw?.replace(/^Lucide/, "").replace(/Icon$/, "")
+}
+
+/** The SF Symbol for a lucide icon element, when the table has one. */
+export const sfSymbolOf = (node: ReactNode): SFSymbol | undefined => {
+  const name = iconName(node)
+  return name ? table[name] : undefined
+}

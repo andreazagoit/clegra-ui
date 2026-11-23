@@ -1,0 +1,493 @@
+{
+  "name": "@clegra/ui",
+  "version": "0.1.0-next.6",
+  "clegra": {
+    "kind": "public",
+    "owner": "ui"
+  },
+  "type": "module",
+  "description": "Clegra's design system: the app shell (rail, inner bar, floating header, page frame), components for React (shadcn on Base UI) and React Native (Expo UI on iOS), the theme (light and dark) with its fonts, tokens and <ClegraProvider> for MCP Apps views.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreazagoit/clegra-ui.git"
+  },
+  "homepage": "https://github.com/andreazagoit/clegra-ui#readme",
+  "bugs": {
+    "url": "https://github.com/andreazagoit/clegra-ui/issues"
+  },
+  "keywords": [
+    "clegra",
+    "design-system",
+    "react",
+    "react-native",
+    "app-shell",
+    "shadcn",
+    "base-ui",
+    "tailwindcss",
+    "expo",
+    "mcp-apps"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "./components/*": {
+      "react-native": {
+        "types": "./src/components/*.native.tsx",
+        "ios": "./src/components/*.ios.tsx",
+        "default": "./src/components/*.native.tsx"
+      },
+      "types": "./src/components/*.tsx",
+      "default": "./src/components/*.tsx"
+    },
+    "./react/components/*": {
+      "types": "./src/components/*.tsx",
+      "default": "./src/components/*.tsx"
+    },
+    "./react-native/components/*": {
+      "types": "./src/components/*.native.tsx",
+      "ios": "./src/components/*.ios.tsx",
+      "default": "./src/components/*.native.tsx"
+    },
+    "./base-ui/*": {
+      "react-native": {
+        "types": "./src/base-ui/*.native.tsx",
+        "ios": "./src/base-ui/*.ios.tsx",
+        "default": "./src/base-ui/*.native.tsx"
+      },
+      "types": "./src/base-ui/*.tsx",
+      "default": "./src/base-ui/*.tsx"
+    },
+    "./react/base-ui/*": {
+      "types": "./src/base-ui/*.tsx",
+      "default": "./src/base-ui/*.tsx"
+    },
+    "./react-native/base-ui/*": {
+      "types": "./src/base-ui/*.native.tsx",
+      "ios": "./src/base-ui/*.ios.tsx",
+      "default": "./src/base-ui/*.native.tsx"
+    },
+    "./hooks/*": {
+      "react-native": {
+        "types": "./src/hooks/*.native.ts",
+        "default": "./src/hooks/*.native.ts"
+      },
+      "types": "./src/hooks/*.ts",
+      "default": "./src/hooks/*.ts"
+    },
+    "./react/hooks/*": {
+      "types": "./src/hooks/*.ts",
+      "default": "./src/hooks/*.ts"
+    },
+    "./react-native/hooks/*": {
+      "types": "./src/hooks/*.native.ts",
+      "default": "./src/hooks/*.native.ts"
+    },
+    "./primitives": {
+      "react-native": {
+        "types": "./src/primitives.native.tsx",
+        "default": "./src/primitives.native.tsx"
+      },
+      "types": "./src/primitives.tsx",
+      "default": "./src/primitives.tsx"
+    },
+    "./react/primitives": {
+      "types": "./src/primitives.tsx",
+      "default": "./src/primitives.tsx"
+    },
+    "./react-native/primitives": {
+      "types": "./src/primitives.native.tsx",
+      "default": "./src/primitives.native.tsx"
+    },
+    "./drawn/components/*": {
+      "types": "./src/components/*.native.tsx",
+      "default": "./src/components/*.native.tsx"
+    },
+    "./drawn/base-ui/*": {
+      "types": "./src/base-ui/*.native.tsx",
+      "default": "./src/base-ui/*.native.tsx"
+    },
+    "./frame": {
+      "types": "./src/frame/index.ts",
+      "default": "./src/frame/index.ts"
+    },
+    "./shell": {
+      "types": "./src/shell/index.ts",
+      "default": "./src/shell/index.ts"
+    },
+    "./shell/reorder": {
+      "types": "./src/shell/reorder.tsx",
+      "default": "./src/shell/reorder.tsx"
+    },
+    "./clegra/*": {
+      "types": "./src/clegra/*.tsx",
+      "default": "./src/clegra/*.tsx"
+    },
+    "./tokens": {
+      "types": "./src/tokens.ts",
+      "default": "./src/tokens.ts"
+    },
+    "./accents": {
+      "types": "./src/brand/accents.ts",
+      "default": "./src/brand/accents.ts"
+    },
+    "./native/chat-context": {
+      "types": "./src/native/chat-context.ts",
+      "default": "./src/native/chat-context.ts"
+    },
+    "./native/checkbox-el": {
+      "types": "./src/native/checkbox-el.tsx",
+      "default": "./src/native/checkbox-el.tsx"
+    },
+    "./native/expo-ui-accordion": {
+      "types": "./src/native/expo-ui-accordion.tsx",
+      "default": "./src/native/expo-ui-accordion.tsx"
+    },
+    "./native/expo-ui-alert-dialog": {
+      "types": "./src/native/expo-ui-alert-dialog.tsx",
+      "default": "./src/native/expo-ui-alert-dialog.tsx"
+    },
+    "./native/expo-ui-button": {
+      "types": "./src/native/expo-ui-button.tsx",
+      "default": "./src/native/expo-ui-button.tsx"
+    },
+    "./native/expo-ui-calendar": {
+      "types": "./src/native/expo-ui-calendar.tsx",
+      "default": "./src/native/expo-ui-calendar.tsx"
+    },
+    "./native/expo-ui-chart": {
+      "types": "./src/native/expo-ui-chart.tsx",
+      "default": "./src/native/expo-ui-chart.tsx"
+    },
+    "./native/expo-ui-context-menu": {
+      "types": "./src/native/expo-ui-context-menu.tsx",
+      "default": "./src/native/expo-ui-context-menu.tsx"
+    },
+    "./native/expo-ui-controls": {
+      "types": "./src/native/expo-ui-controls.tsx",
+      "default": "./src/native/expo-ui-controls.tsx"
+    },
+    "./native/expo-ui-dialog": {
+      "types": "./src/native/expo-ui-dialog.tsx",
+      "default": "./src/native/expo-ui-dialog.tsx"
+    },
+    "./native/expo-ui-drawer": {
+      "types": "./src/native/expo-ui-drawer.tsx",
+      "default": "./src/native/expo-ui-drawer.tsx"
+    },
+    "./native/expo-ui-dropdown-menu": {
+      "types": "./src/native/expo-ui-dropdown-menu.tsx",
+      "default": "./src/native/expo-ui-dropdown-menu.tsx"
+    },
+    "./native/expo-ui-input": {
+      "types": "./src/native/expo-ui-input.tsx",
+      "default": "./src/native/expo-ui-input.tsx"
+    },
+    "./native/expo-ui-menu": {
+      "types": "./src/native/expo-ui-menu.tsx",
+      "default": "./src/native/expo-ui-menu.tsx"
+    },
+    "./native/expo-ui-menubar": {
+      "types": "./src/native/expo-ui-menubar.tsx",
+      "default": "./src/native/expo-ui-menubar.tsx"
+    },
+    "./native/expo-ui-popover": {
+      "types": "./src/native/expo-ui-popover.tsx",
+      "default": "./src/native/expo-ui-popover.tsx"
+    },
+    "./native/expo-ui-progress": {
+      "types": "./src/native/expo-ui-progress.tsx",
+      "default": "./src/native/expo-ui-progress.tsx"
+    },
+    "./native/expo-ui-select": {
+      "types": "./src/native/expo-ui-select.tsx",
+      "default": "./src/native/expo-ui-select.tsx"
+    },
+    "./native/expo-ui-separator": {
+      "types": "./src/native/expo-ui-separator.tsx",
+      "default": "./src/native/expo-ui-separator.tsx"
+    },
+    "./native/expo-ui-slider": {
+      "types": "./src/native/expo-ui-slider.tsx",
+      "default": "./src/native/expo-ui-slider.tsx"
+    },
+    "./native/expo-ui-spinner": {
+      "types": "./src/native/expo-ui-spinner.tsx",
+      "default": "./src/native/expo-ui-spinner.tsx"
+    },
+    "./native/expo-ui-switch": {
+      "types": "./src/native/expo-ui-switch.tsx",
+      "default": "./src/native/expo-ui-switch.tsx"
+    },
+    "./native/expo-ui-tabs": {
+      "types": "./src/native/expo-ui-tabs.tsx",
+      "default": "./src/native/expo-ui-tabs.tsx"
+    },
+    "./native/expo-ui-toggle-group": {
+      "types": "./src/native/expo-ui-toggle-group.tsx",
+      "default": "./src/native/expo-ui-toggle-group.tsx"
+    },
+    "./native/expo-ui-toggle": {
+      "types": "./src/native/expo-ui-toggle.tsx",
+      "default": "./src/native/expo-ui-toggle.tsx"
+    },
+    "./native/form-context": {
+      "types": "./src/native/form-context.tsx",
+      "default": "./src/native/form-context.tsx"
+    },
+    "./native/icon-context": {
+      "types": "./src/native/icon-context.ts",
+      "default": "./src/native/icon-context.ts"
+    },
+    "./native/icons": {
+      "types": "./src/native/icons.ts",
+      "default": "./src/native/icons.ts"
+    },
+    "./native/lucide": {
+      "types": "./src/native/lucide.ts",
+      "default": "./src/native/lucide.ts"
+    },
+    "./native/overlay": {
+      "types": "./src/native/overlay.tsx",
+      "default": "./src/native/overlay.tsx"
+    },
+    "./native/sf-symbols": {
+      "types": "./src/native/sf-symbols.ts",
+      "default": "./src/native/sf-symbols.ts"
+    },
+    "./native/slot": {
+      "types": "./src/native/slot.tsx",
+      "default": "./src/native/slot.tsx"
+    },
+    "./native/theme": {
+      "types": "./src/native/theme.ts",
+      "default": "./src/native/theme.ts"
+    },
+    "./native/toast": {
+      "types": "./src/native/toast.ts",
+      "default": "./src/native/toast.ts"
+    },
+    "./native/tw": {
+      "types": "./src/native/tw.ts",
+      "default": "./src/native/tw.ts"
+    },
+    "./native/use-tw": {
+      "types": "./src/native/use-tw.ts",
+      "default": "./src/native/use-tw.ts"
+    },
+    "./metro": "./src/metro.cjs",
+    "./styles.css": "./src/styles.css",
+    "./glass.css": "./src/glass.css",
+    "./theme.css": "./src/theme.css",
+    "./accents.css": "./src/brand/accents.css",
+    "./shadcn.css": "./src/shadcn.css",
+    "./face": {
+      "react-native": {
+        "types": "./src/face/face.native.tsx",
+        "default": "./src/face/face.native.tsx"
+      },
+      "types": "./src/face/face.tsx",
+      "default": "./src/face/face.tsx"
+    },
+    "./react-native/face": {
+      "types": "./src/face/face.native.tsx",
+      "default": "./src/face/face.native.tsx"
+    },
+    "./face/shapes": {
+      "types": "./src/face/shapes.tsx",
+      "default": "./src/face/shapes.tsx"
+    },
+    "./face/geometry": {
+      "types": "./src/face/geometry.ts",
+      "default": "./src/face/geometry.ts"
+    },
+    "./face/motion": {
+      "types": "./src/face/motion.ts",
+      "default": "./src/face/motion.ts"
+    },
+    "./records/derive": {
+      "types": "./src/records/derive.ts",
+      "default": "./src/records/derive.ts"
+    },
+    "./records/*": {
+      "types": "./src/records/*.tsx",
+      "default": "./src/records/*.tsx"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.json && tsc -p storybook/tsconfig.json",
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "accents": "tsx scripts/accents.ts",
+    "pack:check": "node scripts/pack-check.mjs",
+    "prepack": "node scripts/prepack.mjs",
+    "postpack": "node scripts/postpack.mjs",
+    "postpublish": "node scripts/postpack.mjs",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "build-storybook": "storybook build -o storybook-static",
+    "build-storybook:public": "storybook build -c .storybook-public -o storybook-public",
+    "check:storybook:public": "node scripts/check-storybook.mjs"
+  },
+  "peerDependencies": {
+    "@base-ui/react": "^1.9.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@expo/ui": ">=58",
+    "@shadcn/react": "^0.3.1",
+    "class-variance-authority": "^0.7.1",
+    "cmdk": "^1.1.1",
+    "cn": "^0.5.0",
+    "date-fns": "^4.4.0",
+    "embla-carousel-react": "^8.6.0",
+    "input-otp": "^1.5.0",
+    "lucide-react": "^1.60.0",
+    "lucide-react-native": ">=1",
+    "next-themes": "^0.4.6",
+    "react": "^19",
+    "react-day-picker": "^10.0.2",
+    "react-dom": "^19",
+    "react-native": ">=0.88",
+    "react-native-svg": ">=15",
+    "react-resizable-panels": "^4.16.1",
+    "recharts": "^3.10.1",
+    "sonner": "^2.0.8",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0"
+  },
+  "peerDependenciesMeta": {
+    "@base-ui/react": {
+      "optional": true
+    },
+    "@dnd-kit/core": {
+      "optional": true
+    },
+    "@dnd-kit/sortable": {
+      "optional": true
+    },
+    "@dnd-kit/utilities": {
+      "optional": true
+    },
+    "@expo/ui": {
+      "optional": true
+    },
+    "@shadcn/react": {
+      "optional": true
+    },
+    "class-variance-authority": {
+      "optional": true
+    },
+    "cmdk": {
+      "optional": true
+    },
+    "cn": {
+      "optional": true
+    },
+    "date-fns": {
+      "optional": true
+    },
+    "embla-carousel-react": {
+      "optional": true
+    },
+    "input-otp": {
+      "optional": true
+    },
+    "lucide-react": {
+      "optional": true
+    },
+    "lucide-react-native": {
+      "optional": true
+    },
+    "next-themes": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-day-picker": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    },
+    "react-resizable-panels": {
+      "optional": true
+    },
+    "recharts": {
+      "optional": true
+    },
+    "sonner": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    },
+    "tw-animate-css": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@base-ui/react": "1.9.0",
+    "@dnd-kit/core": "6.3.1",
+    "@dnd-kit/sortable": "10.0.0",
+    "@dnd-kit/utilities": "3.2.2",
+    "@expo/ui": "58.0.26",
+    "@fontsource-variable/inter": "5.3.0",
+    "@shadcn/react": "0.3.1",
+    "@storybook/addon-docs": "10.6.7",
+    "@storybook/react-native-web-vite": "10.6.7",
+    "@tailwindcss/postcss": "4.3.3",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "22.19.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.3.0",
+    "class-variance-authority": "0.7.1",
+    "cmdk": "1.1.1",
+    "cn": "0.5.0",
+    "date-fns": "4.4.0",
+    "embla-carousel-react": "8.6.0",
+    "input-otp": "1.5.0",
+    "lucide-react": "1.63.0",
+    "lucide-react-native": "1.66.0",
+    "next": "16.4.6",
+    "next-themes": "0.4.6",
+    "postcss": "8.5.32",
+    "react": "19.3.0",
+    "react-day-picker": "10.0.2",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.1",
+    "react-native-svg": "15.16.0",
+    "react-native-web": "0.21.4",
+    "react-resizable-panels": "4.16.1",
+    "recharts": "3.10.1",
+    "sonner": "2.0.8",
+    "storybook": "10.6.7",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "tw-animate-css": "1.4.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.8"
+  }
+}

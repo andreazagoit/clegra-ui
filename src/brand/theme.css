@@ -1,0 +1,334 @@
+/*
+ * Clegra's colours for the apps (Clegra's own and every app on @clegra/ui), from
+ * the palette (colors.css, the one place the colours are written).
+ * @clegra/ui brings it into its styles.css (src/theme.css),
+ * which every app imports: it sets shadcn's variables, so the components take
+ * the brand without being touched (shadcn's components stay as shadcn makes them).
+ *
+ * THE NEUTRAL BASE (owner, 2026-11-12), shadcn's «neutral»:
+ *   light  Bianco ground and cards, Grigio 50 panels, Grigio 100 fills, Nero text
+ *   dark   Nero ground, Grigio 900 cards, Grigio 850 panels, Grigio 800 fills, Grigio 50 text
+ * Blu is the primary accent: the primary button (iOS-style, white text, 6.3:1),
+ * links, the focus ring, the menus' selection, the open item (Azzurro in dark,
+ * where Blu as text is 3.2:1). Fills (buttons, the user's bubble) stay Blu.
+ *
+ * One palette for every account, a company's or a personal one: the type of
+ * account changes what is in the app, never its colours.
+ *
+ * An app's area (data-app-accent, accents.css) points --primary, --link, --ring, --sidebar-active and --selection
+ * at the app's own accent; everything else here stays as it is.
+ *
+ * Arancio (--yes, --highlight) is the second accent, used sparingly: the «sì»
+ * (the button that says yes to what Clegra prepared, the «sì» chip), counts
+ * and highlights. Never a chart colour or the face. Nero text on it (6.5:1);
+ * on white it carries a Nero edge where it means something (Arancio alone is 3.0:1).
+ */
+@import "./colors.css";
+/* The apps' accents (accents.css, generated from accents.ts): Clegra blue here, an app's own tint in its area. */
+@import "./accents.css";
+
+@theme inline {
+  --color-yes: var(--yes);
+  --color-on-yes: var(--on-yes);
+  --color-yes-edge: var(--yes-edge);
+  --color-sketch: var(--sketch);
+  --color-face: var(--face);
+  --color-stamp: var(--stamp);
+  --color-link: var(--link);
+  --color-highlight: var(--highlight);
+  --color-on-highlight: var(--on-highlight);
+  --color-sidebar-active: var(--sidebar-active);
+  /* The statuses' text colours (chips: the colour at 11–14% as their ground). */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+}
+
+:root {
+  --background: var(--palette-neutral-0); /* Bianco */
+  --foreground: var(--palette-neutral-950); /* Nero */
+  --card: var(--palette-neutral-0);
+  --card-foreground: var(--palette-neutral-950);
+  --popover: var(--palette-neutral-0);
+  --popover-foreground: var(--palette-neutral-950);
+  --primary: var(--palette-blue); /* Blu */
+  --primary-foreground: var(--palette-white);
+  --secondary: var(--palette-neutral-100);
+  --secondary-foreground: var(--palette-neutral-950);
+  --muted: var(--palette-neutral-100);
+  --muted-foreground: var(--palette-neutral-500); /* 5.3:1 on white, 4.9:1 on Grigio 100 */
+  --accent: var(--palette-neutral-100);
+  --accent-foreground: var(--palette-neutral-950);
+  --destructive: var(--palette-status-danger);
+  --border: var(--palette-neutral-200);
+  --input: var(--palette-neutral-300); /* a step over the lines: a field's edge reads on white */
+  --control-edge: color-mix(in srgb, var(--palette-neutral-400) 65%, var(--palette-neutral-500)); /* a field's edge at 3:1 on the white card, where the edge must carry the control (the sign-in pages) */
+  --ring: var(--palette-blue);
+  --chart-1: var(--palette-blue);
+  --chart-2: var(--palette-blue-light);
+  --chart-3: var(--palette-blue-deep);
+  --chart-4: var(--palette-neutral-500);
+  --chart-5: var(--palette-neutral-400);
+  --sidebar: var(--palette-neutral-50); /* the floating panel beside the white page */
+  --sidebar-foreground: var(--palette-neutral-950);
+  --sidebar-primary: var(--palette-blue);
+  --sidebar-primary-foreground: var(--palette-white);
+  --sidebar-accent: var(--palette-neutral-100); /* hover and the open item: a neutral fill */
+  --sidebar-accent-foreground: var(--palette-neutral-950);
+  --sidebar-border: var(--palette-neutral-200);
+  --sidebar-ring: var(--palette-blue);
+  --sidebar-active: var(--palette-blue); /* the open item's words and icon (Blu, 5.8:1 on Grigio 100) */
+
+  /* The brand's own. */
+  --link: var(--palette-blue);
+  --yes: var(--palette-accent); /* Arancio: the «sì» */
+  --on-yes: var(--palette-neutral-950); /* Nero, 6.5:1 */
+  --yes-edge: var(--palette-neutral-950); /* Arancio on white is 3.0:1: a Nero edge */
+  --highlight: var(--palette-accent); /* the same Arancio: a count, a figure to notice */
+  --on-highlight: var(--palette-neutral-950);
+  --stamp: var(--palette-blue); /* «Fatto» */
+  --sketch: var(--palette-blue);
+  --sketch-opacity: 0.5;
+  --face: var(--palette-blue); /* Clegra's head */
+  --face-eyes: transparent; /* light: the eyes are cut out */
+  --success: var(--palette-status-success);
+  --warning: var(--palette-status-warning);
+}
+
+.dark {
+  --background: var(--palette-neutral-950); /* Nero */
+  --foreground: var(--palette-neutral-50);
+  --card: var(--palette-neutral-900);
+  --card-foreground: var(--palette-neutral-50);
+  --popover: var(--palette-neutral-900);
+  --popover-foreground: var(--palette-neutral-50);
+  --primary: var(--palette-blue);
+  --primary-foreground: var(--palette-white);
+  --secondary: var(--palette-neutral-800);
+  --secondary-foreground: var(--palette-neutral-50);
+  --muted: var(--palette-neutral-800);
+  --muted-foreground: var(--palette-neutral-400); /* 6:1 on Grigio 800 */
+  --accent: var(--palette-neutral-800);
+  --accent-foreground: var(--palette-neutral-50);
+  --destructive: var(--palette-status-danger-dark);
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 16%);
+  --control-edge: var(--palette-neutral-500); /* 3.4:1 on Grigio 900 */
+  --ring: var(--palette-blue-light); /* Azzurro */
+  --chart-1: var(--palette-blue-light);
+  --chart-2: var(--palette-blue);
+  --chart-3: var(--palette-blue-mist);
+  --chart-4: var(--palette-neutral-400);
+  --chart-5: var(--palette-neutral-500);
+  --sidebar: var(--palette-neutral-850);
+  --sidebar-foreground: var(--palette-neutral-50);
+  --sidebar-primary: var(--palette-blue);
+  --sidebar-primary-foreground: var(--palette-white);
+  --sidebar-accent: var(--palette-neutral-800);
+  --sidebar-accent-foreground: var(--palette-neutral-50);
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-ring: var(--palette-blue-light);
+  --sidebar-active: var(--palette-blue-light); /* Azzurro: Blu as text on Nero is 3.2:1 */
+
+  --link: var(--palette-blue-light);
+  --yes: var(--palette-accent); /* on Nero 6.5:1: no edge needed */
+  --on-yes: var(--palette-neutral-950);
+  --highlight: var(--palette-accent);
+  --on-highlight: var(--palette-neutral-950);
+  --yes-edge: transparent;
+  --stamp: var(--palette-blue-light);
+  --sketch: var(--palette-blue-light);
+  --sketch-opacity: 0.6;
+  --face: var(--palette-blue); /* on Nero: the Blu head with Panna eyes (the Faccina's own, as the icon) */
+  --face-eyes: var(--palette-cream);
+  --success: var(--palette-status-success-dark);
+  --warning: var(--palette-status-warning-dark);
+}
+
+/*
+ * Blu as TEXT on Nero is 3.2:1: where the shared components write in the
+ * primary colour (a link, an icon tinted «primary»), the dark theme writes in
+ * Azzurro instead (8.3:1). Fills (buttons, the user's bubble) stay Blu.
+ */
+.dark .text-primary {
+  color: var(--link);
+}
+
+/* The «sì» button: Arancio with Nero text, a Nero edge on light grounds (components: className="btn-yes"). */
+.btn-yes {
+  background-color: var(--yes);
+  color: var(--on-yes);
+  border: var(--palette-accent-edge-width, 1.5px) solid var(--yes-edge);
+}
+.btn-yes:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--yes) 88%, var(--on-yes));
+}
+.btn-yes:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/*
+ * THE SIDEBAR («sidebar bianca», owner's decision of 2026-11-09; neutral since
+ * 2026-11-12): in light the floating panel is Grigio 50 beside the white page,
+ * in dark Grigio 850 beside the Nero one. Hover and the open item are a
+ * neutral fill (--sidebar-accent), and the open item is marked in the brand's
+ * colour: its words and icon in --sidebar-active (Blu; Azzurro in dark).
+ * The second accent (Arancio) stays for the counts and the «sì» only.
+ */
+:is([data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"])[data-active] {
+  color: var(--sidebar-active);
+}
+
+/*
+ * THE APPLE-STYLE LAYER (approved 2026-11-12, Clegra's design system):
+ * the chrome floats on the content in frosted capsules; the content is the
+ * ground and scrolls under it. On the web the material is a plain frosted
+ * blur (a tint of the surface + blur + saturate, a hairline), in two
+ * thicknesses, regular and thick (owner, 2026-11-12), only for
+ * chrome (header pills, the floating panels, menus, the FAB, the composer),
+ * never for content: cards and tables stay solid (white / Grigio 900).
+ * The classes that use these tokens are @clegra/ui's Clegra layer
+ * (src/glass.css, `@clegra/ui/glass.css`); no new colour is written here, every
+ * value is a mix of the palette.
+ *
+ * Fallbacks are the same tokens resolved differently, never a second
+ * component: without backdrop-filter, and with «Riduci trasparenza»
+ * (prefers-reduced-transparency, or html[data-glass="opaque"]), glass is
+ * opaque; html[data-glass="lite"] keeps the tint and drops the blur to 8 px
+ * (a software GPU, or the person's choice in Vista).
+ */
+@theme {
+  /* Concentric radii: inner = outer − inset. */
+  --radius-panel: 1.375rem; /* 22: the floating panels (sidebar, Clegra), sheets, grouped lists */
+  --radius-pill: 1.25rem; /* 20: header pills (40 high) */
+  --radius-card: 1.125rem; /* 18: cards, the table frame, KPI tiles */
+  --radius-item: 1rem; /* 16: items inside pills (32), menus, artifact cards */
+  --radius-cell: 0.875rem; /* 14: list cells, attachments */
+  --radius-nav: 0.625rem; /* 10: nav items, the rail's tiles */
+  --radius-menu-row: 0.5625rem; /* 9: a menu's rows */
+}
+
+:root {
+  /* The shell's measures (Clegra's design system §3, §5; LAYOUTS: rem, so they grow with the text size). */
+  --shell-inset: 0.5rem; /* 8: panels from the window's edges */
+  /*
+   * The apps' rail (Clegra's design system §6 «Concentric radii»; owner, 2026-11-13): the same on the web and the
+   * Mac. Every item is one tile at --rail-inset from the panel's edges; the panel's radius is the tile's + that
+   * inset, so the corners are concentric. In the Mac app the window's buttons sit above the rail, unboxed
+   * (client styles.css html.desktop-mac).
+   */
+  --shell-rail: 68px;
+  --rail-inset: 12px;
+  --rail-tile: calc(var(--shell-rail) - 2 * var(--rail-inset)); /* 44: every item (icons, the company's, search, Panoramica, store, Amministrazione, the face) */
+  --rail-tile-radius: calc(var(--rail-tile) * 0.25); /* 11: the icons' mask, 25% */
+  --rail-radius: calc(var(--rail-tile-radius) + var(--rail-inset)); /* 23: the rail's panel */
+  --rail-gap: 12px; /* between two tiles */
+  --rail-target: calc(var(--rail-tile) + 4px); /* 48: a tile's link (the face's too), 2 around the tile */
+  --shell-nav: 15rem; /* 240: an app's inner bar */
+  --shell-list: 20rem; /* 320: the list of sidebar and split */
+  --shell-column: 60rem; /* 960: contained */
+  --shell-gutter: 1.5rem; /* 24 (16 on a phone): the page's side inset, the same for the floating header's pills and the content under them */
+  --shell-header: 4rem; /* 64: the floating header's zone, every layout's top padding */
+  --shell-pill: 2.5rem; /* 40: a header pill (44 on a phone) */
+  --shell-pill-item: 2rem; /* 32: an item inside a pill */
+  --shell-clegra: 23.75rem; /* 380: the Clegra panel (drag 320–560) */
+  --shell-bottom: 6.875rem; /* 110: the content's bottom padding, the FAB (52 at 20) never covers the last row */
+  --shell-edge: 4.625rem; /* 74: the scroll edge under the header (64 + the safe area on a phone: glass.css) */
+
+  --glass: color-mix(in srgb, var(--palette-neutral-0) 68%, transparent); /* a white frost over the content */
+  --glass-thick: color-mix(in srgb, var(--palette-neutral-50) 82%, transparent);
+  --glass-opaque: var(--palette-neutral-50);
+  --glass-stroke: color-mix(in srgb, var(--palette-neutral-950) 10%, transparent); /* the inner edge, 0.5 px */
+  --glass-blur: blur(18px) saturate(180%);
+  --glass-blur-thick: blur(30px) saturate(170%);
+  --glass-shadow: 0 1px 1px color-mix(in srgb, var(--palette-neutral-950) 5%, transparent), 0 6px 18px color-mix(in srgb, var(--palette-neutral-950) 9%, transparent);
+  --panel-shadow: 0 1px 2px color-mix(in srgb, var(--palette-neutral-950) 6%, transparent), 0 12px 32px color-mix(in srgb, var(--palette-neutral-950) 10%, transparent);
+  --fill: color-mix(in srgb, var(--palette-neutral-950) 6%, transparent); /* hover inside glass */
+  --fill-strong: color-mix(in srgb, var(--palette-neutral-950) 10%, transparent); /* the selection, a set filter */
+  --head: color-mix(in srgb, var(--palette-neutral-0) 76%, transparent); /* a sticky table head */
+  --head-blur: blur(16px) saturate(170%);
+  --rail-tint: color-mix(in srgb, var(--palette-neutral-950) 3.5%, transparent);
+  --hairline: color-mix(in srgb, var(--palette-neutral-950) 9%, transparent);
+  --hairline-strong: color-mix(in srgb, var(--palette-neutral-950) 14%, transparent);
+  --faint: color-mix(in srgb, var(--palette-neutral-500) 80%, var(--palette-neutral-0)); /* shortcuts in menus, section labels */
+  --edge-blur: blur(6px);
+  --radius-button: 9999px; /* buttons are capsules (glass layer: [data-slot=button]) */
+}
+
+/* A phone (narrower than 768, layout-room.ts SHELL.phone): the gutter is 16. */
+@media (width < 48rem) {
+  :root {
+    --shell-gutter: 1rem;
+  }
+}
+
+.dark {
+  /* Neutral greys, no tint: the pills a step over the panels, both over the Nero ground. */
+  --glass: color-mix(in srgb, var(--palette-neutral-750) 58%, transparent);
+  --glass-thick: color-mix(in srgb, var(--palette-neutral-850) 82%, transparent);
+  --glass-opaque: var(--palette-neutral-800);
+  --glass-stroke: rgb(255 255 255 / 13%);
+  --glass-blur: blur(18px) saturate(160%);
+  --glass-shadow: 0 1px 1px rgb(0 0 0 / 40%), 0 8px 22px rgb(0 0 0 / 45%);
+  --panel-shadow: 0 1px 2px rgb(0 0 0 / 50%), 0 16px 40px rgb(0 0 0 / 55%);
+  --fill: rgb(255 255 255 / 8%);
+  --fill-strong: rgb(255 255 255 / 14%);
+  --head: color-mix(in srgb, var(--palette-neutral-900) 74%, transparent);
+  --rail-tint: rgb(0 0 0 / 18%);
+  --hairline: rgb(255 255 255 / 10%);
+  --hairline-strong: rgb(255 255 255 / 16%);
+  --faint: color-mix(in srgb, var(--palette-neutral-400) 78%, var(--palette-neutral-950));
+}
+
+/* Opaque: no backdrop-filter, or «Riduci trasparenza» (the system's, or the person's). Every text contrast is checked on this case. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root,
+  .dark {
+    --glass: var(--glass-opaque);
+    --glass-thick: var(--glass-opaque);
+    --head: var(--card);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  .dark {
+    --glass: var(--glass-opaque);
+    --glass-thick: var(--glass-opaque);
+    --head: var(--card);
+    --glass-blur: none;
+    --glass-blur-thick: none;
+    --head-blur: none;
+    --edge-blur: none;
+  }
+}
+html[data-glass="opaque"],
+html[data-glass="opaque"] .dark,
+html[data-glass="opaque"].dark {
+  --glass: var(--glass-opaque);
+  --glass-thick: var(--glass-opaque);
+  --head: var(--card);
+  --glass-blur: none;
+  --glass-blur-thick: none;
+  --head-blur: none;
+  --edge-blur: none;
+}
+/* Slow devices: the tint stays, the blur is 8 px. */
+html[data-glass="lite"] {
+  --glass-blur: blur(8px);
+  --glass-blur-thick: blur(8px);
+  --head-blur: blur(8px);
+  --edge-blur: none;
+}
+/* Increase contrast: a stronger pill edge and hairlines. */
+@media (prefers-contrast: more) {
+  :root {
+    --glass-stroke: color-mix(in srgb, var(--palette-neutral-950) 30%, transparent);
+    --hairline: color-mix(in srgb, var(--palette-neutral-950) 20%, transparent);
+    --hairline-strong: color-mix(in srgb, var(--palette-neutral-950) 30%, transparent);
+  }
+  .dark {
+    --glass-stroke: rgb(255 255 255 / 30%);
+    --hairline: rgb(255 255 255 / 22%);
+    --hairline-strong: rgb(255 255 255 / 30%);
+  }
+}

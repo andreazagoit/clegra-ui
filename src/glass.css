@@ -1,0 +1,334 @@
+/*
+ * CLEGRA'S FROSTED BLUR (owner, 2026-11-12: «su web semplicemente usiamo il
+ * blur al posto del glass»): a translucent tint of the surface + backdrop
+ * blur and saturation, a hairline edge, a soft shadow. Two levels only,
+ * regular and thick; no Liquid Glass effects (no rims, refraction or sheens).
+ * The Clegra layer of the Apple-style design system (approved
+ * 2026-11-12). The tokens are in the theme (src/brand/theme.css:
+ * --glass*, --fill*, --head, the radii); this file turns them into classes
+ * and gives shadcn's menus, popovers and buttons the shape, through their
+ * `data-slot`, without touching the components.
+ *
+ * Imported by every app after styles.css (prebuilt.css has it too):
+ *   @import "@clegra/ui/glass.css";   (in this repository: src/glass.css)
+ * A marketing site that wants plain shadcn shapes leaves it out.
+ *
+ * Glass is for chrome only. It sits on fixed elements (the header, the
+ * panels), never on something that scrolls inside a pill: compositing stays cheap.
+ */
+
+/* Regular: header pills, the FAB. */
+.glass {
+  background-color: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: inset 0 0 0 0.5px var(--glass-stroke), var(--glass-shadow);
+}
+
+/*
+ * A page's tools as pills of their own (HeaderPill data-filter-pill: the
+ * calendar's dates, «Calendari», the view), folded into «Filtri (n)»: rows
+ * of its list, without their own glass or height.
+ */
+[data-filters-folded] [data-filter-pill] {
+  height: auto;
+  padding: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Thick: the floating panels, menus, popovers, the composer. */
+.glass-thick {
+  background-color: var(--glass-thick);
+  -webkit-backdrop-filter: var(--glass-blur-thick);
+  backdrop-filter: var(--glass-blur-thick);
+  box-shadow: inset 0 0 0 0.5px var(--glass-stroke), var(--panel-shadow);
+}
+
+/*
+ * The one primary action of a page, iOS-style: Blu at 90% with the chrome's
+ * blur behind it (a blue frost over the content), a light inner edge, white
+ * text. White on it stays at 5.6:1 or more over any ground (6.3:1 on solid Blu);
+ * with «Riduci trasparenza» or no backdrop-filter it is solid Blu.
+ */
+.glass-tinted {
+  background-color: color-mix(in srgb, var(--primary) 90%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  color: var(--primary-foreground);
+  box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 22%), inset 0 1px 0 rgb(255 255 255 / 14%), var(--glass-shadow);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-tinted {
+    background-color: var(--primary);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass-tinted {
+    background-color: var(--primary);
+  }
+}
+html[data-glass="opaque"] .glass-tinted {
+  background-color: var(--primary);
+}
+
+/*
+ * The scroll edge: one per scroller, under the floating header. The content
+ * fades and blurs under the pills, so text under a pill is never sharp and a
+ * pill never sits on raw content. Static CSS: no scroll-linked animation.
+ */
+.scroll-edge {
+  pointer-events: none;
+  height: var(--shell-edge);
+  -webkit-backdrop-filter: var(--edge-blur);
+  backdrop-filter: var(--edge-blur);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--background) 82%, transparent) 0%,
+    color-mix(in srgb, var(--background) 50%, transparent) 45%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
+}
+.scroll-edge[data-side="bottom"] {
+  height: 6rem;
+  transform: scaleY(-1);
+}
+/*
+ * A phone: the band covers the pills (44, 4 from the top, under the status bar's safe area) and fades out before the
+ * content's first line (64 below the safe area), so what the page starts with is sharp at rest and only what scrolls
+ * up under the pills blurs.
+ */
+@media (max-width: 47.99rem) {
+  .scroll-edge {
+    height: calc(4rem + env(safe-area-inset-top));
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--background) 96%, transparent) 0%,
+      color-mix(in srgb, var(--background) 86%, transparent) 55%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(#000 70%, transparent);
+    mask-image: linear-gradient(#000 70%, transparent);
+  }
+}
+/* Reduce transparency: a solid band with a hairline under it. */
+@media (prefers-reduced-transparency: reduce) {
+  .scroll-edge {
+    height: var(--shell-header);
+    background: var(--background);
+    -webkit-mask-image: none;
+    mask-image: none;
+    box-shadow: 0 0.5px 0 var(--hairline-strong);
+  }
+}
+html[data-glass="opaque"] .scroll-edge {
+  height: var(--shell-header);
+  background: var(--background);
+  -webkit-mask-image: none;
+  mask-image: none;
+  box-shadow: 0 0.5px 0 var(--hairline-strong);
+}
+
+/*
+ * Tables in a glass page (owner, 2026-11-12): the head row is a rounded block
+ * of its own (40 high, radius 20 like the header pills, the `--head` surface
+ * and blur, a hairline), 6 above the rows' solid card (radius 18, rows of 44
+ * with 0.5 px lines). The head block is sticky at 60, under the floating
+ * header, and the rows scroll beneath it.
+ *
+ * Both blocks are drawn by the wrapper (`::before` the sticky head block,
+ * `::after` the card), never by the cells: the head's labels stay cells of the
+ * same <table> as the rows, so the columns line up exactly whatever columns
+ * drop by priority (media or container queries) and whatever the table's
+ * width. Opt in with `.glass-table` on the wrapper around shadcn's Table.
+ */
+.glass-table {
+  --table-head: 2.5rem; /* 40: the head block, a header pill's height */
+  --table-head-gap: 0.375rem; /* 6: between the head block and the rows' card */
+  --table-head-top: 3.75rem; /* 60: where the head block sticks, under the floating header */
+  position: relative;
+  isolation: isolate;
+  min-width: 100%;
+  width: fit-content;
+}
+.glass-table::before {
+  content: "";
+  display: block;
+  position: sticky;
+  top: var(--table-head-top);
+  z-index: 1;
+  height: var(--table-head);
+  margin-bottom: calc(-1 * var(--table-head));
+  border-radius: var(--radius-pill);
+  background-color: var(--head);
+  -webkit-backdrop-filter: var(--head-blur);
+  backdrop-filter: var(--head-blur);
+  box-shadow: inset 0 0 0 0.5px var(--hairline-strong), 0 1px 2px color-mix(in srgb, var(--palette-neutral-950) 4%, transparent);
+  pointer-events: none;
+}
+.glass-table::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--table-head) + var(--table-head-gap)) 0 0;
+  z-index: -1;
+  background-color: var(--card);
+  border-radius: var(--radius-card);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 1px 2px color-mix(in srgb, var(--palette-neutral-950) 4%, transparent);
+  pointer-events: none;
+}
+.glass-table [data-slot="table-container"] {
+  overflow: visible;
+}
+.glass-table [data-slot="table"] {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+/* The head's cells: transparent over the block, the gap under it their own bottom padding. */
+.glass-table [data-slot="table-head"] {
+  position: sticky;
+  top: var(--table-head-top);
+  z-index: 2;
+  height: calc(var(--table-head) + var(--table-head-gap));
+  padding-inline: 0.875rem;
+  padding-bottom: var(--table-head-gap);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  background-color: transparent;
+  border-bottom: 0;
+}
+.glass-table [data-slot="table-header"] [data-slot="table-row"],
+.glass-table [data-slot="table-header"] [data-slot="table-row"]:hover {
+  border-bottom: 0;
+  background-color: transparent;
+}
+.glass-table [data-slot="table-body"] [data-slot="table-row"] {
+  border-bottom: 0;
+}
+.glass-table [data-slot="table-body"] [data-slot="table-cell"] {
+  height: 2.75rem;
+  padding-inline: 0.875rem;
+  font-size: 0.84375rem;
+  border-bottom: 0.5px solid var(--hairline);
+}
+/*
+ * The table stays inside its frame (the header's edges): when its columns can't all fit on one line, long text
+ * cells wrap (a name, a reference), never below 112 (padding included), so a date or a short value stays on
+ * one line; amounts, the first column and truncated cells never wrap. A table whose columns still can't fit
+ * widens its blocks with it (fit-content) rather than spilling rows out of the card; its columns should drop by
+ * priority before that happens.
+ */
+.glass-table [data-slot="table-body"] [data-slot="table-cell"]:not(:first-child, .text-right, .truncate) {
+  white-space: normal;
+  min-width: 7rem;
+}
+/* A truncated cell (a name) takes the room left and cuts its text with «…» there, instead of widening the table. */
+.glass-table [data-slot="table-body"] [data-slot="table-cell"].truncate {
+  width: 100%;
+  max-width: 0;
+  min-width: 8rem;
+}
+.glass-table [data-slot="table-body"] [data-slot="table-row"]:last-child [data-slot="table-cell"] {
+  border-bottom: 0;
+}
+
+/* Cards in a glass page: solid, radius 18, a hairline edge instead of a border. */
+.glass-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius-card);
+  box-shadow: 0 0 0 0.5px var(--hairline-strong), 0 1px 2px color-mix(in srgb, var(--palette-neutral-950) 4%, transparent);
+}
+
+/*
+ * shadcn's components get the shape from here, by their data-slot (the
+ * components themselves stay as shadcn made them): capsule buttons, menus and
+ * popovers on thick glass with radius 16 and 30 px rows of radius 9, the
+ * selection in solid Blu as macOS.
+ */
+[data-slot="button"] {
+  border-radius: var(--radius-button);
+}
+/* Cards: solid, radius 18 (the content never sits on glass). */
+[data-slot="card"] {
+  border-radius: var(--radius-card);
+}
+:is([data-slot="dropdown-menu-content"], [data-slot="dropdown-menu-sub-content"], [data-slot="menubar-content"], [data-slot="context-menu-content"], [data-slot="popover-content"], [data-slot="select-content"], [data-slot="combobox-content"]) {
+  border-radius: var(--radius-item);
+  background-color: var(--glass-thick);
+  -webkit-backdrop-filter: var(--glass-blur-thick);
+  backdrop-filter: var(--glass-blur-thick);
+  box-shadow: inset 0 0 0 0.5px var(--glass-stroke), var(--panel-shadow);
+  border-color: transparent;
+}
+:is([data-slot="dropdown-menu-item"], [data-slot="dropdown-menu-sub-trigger"], [data-slot="dropdown-menu-checkbox-item"], [data-slot="dropdown-menu-radio-item"], [data-slot="menubar-item"], [data-slot="context-menu-item"]) {
+  min-height: 1.875rem;
+  border-radius: var(--radius-menu-row);
+}
+:is([data-slot="dropdown-menu-item"], [data-slot="dropdown-menu-sub-trigger"], [data-slot="dropdown-menu-checkbox-item"], [data-slot="dropdown-menu-radio-item"], [data-slot="menubar-item"], [data-slot="context-menu-item"]):is([data-highlighted], [data-popup-open]):not([data-variant="destructive"]) {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+:is([data-slot="dropdown-menu-item"], [data-slot="dropdown-menu-sub-trigger"], [data-slot="dropdown-menu-checkbox-item"], [data-slot="dropdown-menu-radio-item"]):is([data-highlighted], [data-popup-open]):not([data-variant="destructive"]) * {
+  color: currentColor;
+}
+
+/*
+ * Focus outside the control, never clipped: a 2 px ring with a 2 px offset,
+ * for the keyboard (:focus-visible). Text fields are left out: a field always
+ * matches :focus-visible, and its outline drew a rectangle inside the rounded
+ * pill. A field shows focus on its own (shadcn's Input) or, inside a header
+ * pill, the PILL does: below.
+ */
+:is(.glass, .glass-thick) :focus-visible:not(:is(input, textarea, select, [contenteditable])),
+.glass-tinted:focus-visible,
+.glass-tinted :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+/*
+ * A field inside a pill (the header's search, a capsule around an input):
+ * the inner field draws nothing, the capsule gets the ring along its own
+ * rounded shape, iOS-style: a 1 px line in the ring colour and a soft 3 px
+ * halo. Typing focus is always shown, whatever brought it (mouse or keyboard).
+ */
+:is(.glass, .glass-thick) :is(input, textarea, select):focus {
+  outline: none;
+}
+.glass:has(:is(input, textarea, select):focus) {
+  box-shadow: inset 0 0 0 1px var(--ring), 0 0 0 3px color-mix(in srgb, var(--ring) 28%, transparent), var(--glass-shadow);
+}
+
+/*
+ * A table wider than a phone scrolls sideways inside its frame: the head block and the card stay put, the head's
+ * labels and the rows move together. A sideways scroller can't stick to the page, so on a phone the head block
+ * scrolls away with the table.
+ */
+@media (width < 48rem) {
+  .glass-table {
+    width: auto;
+  }
+  .glass-table [data-slot="table-container"] {
+    overflow-x: auto;
+  }
+  .glass-table [data-slot="table-body"] [data-slot="table-cell"] {
+    white-space: nowrap;
+  }
+  .glass-table::before,
+  .glass-table [data-slot="table-head"] {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass,
+  .glass-thick,
+  .glass-tinted {
+    transition: none;
+  }
+}

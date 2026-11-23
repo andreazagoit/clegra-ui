@@ -1,0 +1,97 @@
+# Changelog
+
+`@clegra/ui`, Clegra's design system. Newest first. Versions before 1.0 are prereleases on the npm dist-tag `next`.
+Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
+history is kept here.
+
+## 0.1.0-next.6 (unreleased)
+
+- **`SiteShell`** (`@clegra/ui/shell`): the frame of an app's own website, shown in a card inside Clegra and on its
+  own in a tab. The inner bar (`NavBar` + `NavSections`) as a left sidebar flush to the page's edges (240, no panel,
+  no radius, no glass, a hairline on its right): the app's tile and name (`brand`: `{ name, href?, icon?, image? }`),
+  its `sections`, the `footer` items and `footerExtra` pinned at the bottom; the page beside it, scrolling on its
+  own. Under 768 a slim top bar whose ☰ opens the sidebar as a drawer (a sheet from the left: a pick, Esc or a click
+  outside closes it). `accent` tints the whole site. Test hooks `data-site-shell`, `data-site-sidebar`,
+  `data-site-bar`, `data-site-menu`, `data-site-drawer`, `data-site-main`. Needs only `styles.css`. Storybook:
+  «Clegra/Shell/Site shell».
+
+## 0.1.0-next.5 (2026-11-21)
+
+- **Every app has its own accent**, like Apple's apps: a closed palette of ten names (`blue`, Clegra's and the default,
+  `indigo`, `purple`, `pink`, `red`, `orange`, `yellow`, `green`, `teal`, `gray`), each hand-tuned for light and dark
+  with a foreground, a text colour and a soft ground, every pair WCAG AA (a test computes them). `@clegra/ui/accents`
+  (`APP_ACCENT_NAMES`, `appAccentColors`, `isAppAccent`, `appAccentOf`, `appAccentVariables`), the stylesheet's
+  `data-app-accent` scopes (`--app-accent`, `--app-accent-foreground`, `--app-accent-text`, `--app-accent-soft`; Tailwind
+  `bg-app-accent`…; `@clegra/ui/accents.css`, in `styles.css`) pointing `--primary`, `--link`, `--ring`,
+  `--sidebar-active` and the new `--selection` at the accent, `<AppAccent>` / `useAppAccent()` /
+  `appAccentProps()` (`@clegra/ui/clegra/app-accent`) and `<AppShell accent>` (the app's bar, list and content; never
+  the rail or `aside`). Status colours never change. Storybook: «Brand/App accents».
+- The open entry of an inner bar and a set header pill use `--selection` (Clegra's neutral fill outside an app, the
+  accent's soft ground inside).
+- **MCP Apps views**: `hostContextFor({ accent })` puts the accent in the standard info and ring variables and
+  Clegra's roles; `styles.variables` now holds only the standard names and Clegra's `--clegra-*` roles travel in
+  `_meta["clegra/ui"].variables` with `accent` (the official client refuses unknown names). `themeOfHostContext`
+  reads them there; `applyClegraTheme` marks the document `data-app-accent`; `ClegraTheme.accent`.
+
+## 0.1.0-next.4 (2026-11-20)
+
+- **The lockup's Faccina is 20 % larger** beside the wordmark (`@clegra/ui/face`: `ClegraLockup`, `LOCKUP` in
+  `/geometry`): the face is 1.92 of its 100-unit box (was 1.6), with the same gap to the word and the same vertical
+  centre; `box` and `viewBox` grow to the left by 32 units. The wordmark's strokes are unchanged, so a lockup set by
+  its height keeps the word's size and is 4.8 % wider.
+
+## 0.1.0-next.3 (2026-11-20)
+
+- **Fragments are artifacts** in `@clegra/ui/records/derive`, with no alias: `ArtifactType` and `ArtifactAction`
+  (were `FragmentType`, `FragmentAction`); the comments and docs say artifact.
+
+## 0.1.0-next.2 (2026-11-19)
+
+- **Clegra's face** (`@clegra/ui/face`, web and React Native): `ClegraFace` with its states and expressions, the
+  lockup with the wordmark, `@clegra/ui/react-native/face` (the native one by name), `@clegra/ui/face/shapes`, `/geometry` (`faceSvg`, the shapes as data) and `/motion`.
+  The brand mark is public; its geometry ships as data (no JSON import).
+- **Records** (`@clegra/ui/records/record`, `/kinds`, `/derive`): the record card, row, chip, detail, state and
+  skeleton, the kind results and reference chips, and `derive` (a record's fields, state and words from a
+  fragment). Every word is a prop or a `StateWords`/`Labels` value.
+- **`palette`** in `@clegra/ui/tokens`: the brand tones the face falls back to without a stylesheet.
+
+## 0.1.0-next.1 (2026-11-17)
+
+The design the Clegra client uses today, public: an app on `@clegra/ui` looks like Clegra.
+
+- **The app shell** (`@clegra/ui/shell`, web): `AppShell` (rail, docked inner bar and list, floating header, the
+  page, bottom bar, aside), `ShellRail` with the signed-in person (`user`: a face that goes to a page or opens a menu
+  of items, choices and separators) and its `brand`/`search` slots, `NavBar`, `NavSections`, `SectionsPill`,
+  `ShellHeader`, `DrawerPill`, `ShellMain`, the page frame `ShellPage` / `PageHeading`, `AppIconImage`,
+  `CountBadge`, `Keys`, `ShortcutsDialog`, `useShell()`, `isCurrentPath`. Presentational: the app's link component is
+  `link`, every word is a prop.
+- **Embedded**: `<AppShell embedded>` renders only the page, no chrome, when Clegra shows it (apps don't draw
+  Clegra's chrome); `useShell().embedded` says so. The app decides it on the server (a layout of its embed route).
+- **`@clegra/ui/shell/reorder`**: `railReorder`, dragging the rail's items into the person's order; the only entry
+  that imports `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` (new optional peers).
+- **`@clegra/ui/clegra/*`**: `pill` (the header's glass pills), `surface` (`FloatingPanel`, `ScrollEdge`,
+  `Segmented`), `rows` (`RowList`, `Row`, `RowIcon`, `FactList`, `Fact`), `confirm-switch` (`ConfirmSwitch`,
+  `needsConfirmation`).
+- **`@clegra/ui/glass.css`**: Clegra's frosted glass layer (the panels, the header's pills, menus and popovers on thick
+  glass with capsule buttons, `.glass-table` with its phone rules, `.glass-card`, `.glass-tinted`, the scroll edge).
+  `prebuilt.css` includes it.
+- **Fonts bundled** (the owner's decision of 2026-11-17, replacing next.0's «the font is the app's»): Inter and Geist
+  Mono, variable woff2, latin subset, with their OFL texts in `fonts/`; `styles.css` declares them
+  (`font-display: swap`) and defaults `--font-sans` / `--font-mono` to them ahead of a system stack. An app's own
+  next/font variable or `:root` rule still overrides them. The self-referencing `--font-sans` of next.0 is gone.
+- Theme: `--control-edge` (a field's edge at 3:1 where the edge carries the control), light and dark.
+
+## 0.1.0-next.0 (2026-11-17)
+
+The first version published to npm (`npm i @clegra/ui@next`).
+
+- **Its own package and repository** (npm refused the unscoped name). Every import is `@clegra/ui/<subpath>`, the
+  subpaths unchanged (`@clegra/ui/components/button`, `@clegra/ui/frame`, `@clegra/ui/styles.css`, …).
+  The source is `src/` at the repository's root; `@clegra/ui` does not depend on `@clegra/sdk`.
+- **Everything is public.** The components that were reserved for Clegra's own shell and assistant (sidebar,
+  navigation-menu, menubar, bubble, message, message-scroller, trace, questionnaire, marker, attachment, code-block,
+  sonner, resizable, form) are exported and shipped, web and native. So are `@clegra/ui/drawn/*` and every
+  `@clegra/ui/native/*` entry, `native/toast` included. Every app, Clegra's own too, uses the same package.
+- The wire key Clegra's look rides in stays `hostContext._meta["clegra/ui"]`.
+- No font file ships: the theme's `--font-sans` is the app's to define (README, «Fonts»).
+- `publishConfig.access: public`; a prerelease is refused without a dist-tag (npm and `prepack`).
