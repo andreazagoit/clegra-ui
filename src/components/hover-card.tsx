@@ -2,6 +2,7 @@
 
 import { PreviewCard as PreviewCardPrimitive } from "@base-ui/react/preview-card"
 import { cn } from "cn"
+import { useAppAccentProps } from "../clegra/app-accent"
 
 function HoverCard({ ...props }: PreviewCardPrimitive.Root.Props) {
   return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />
@@ -26,7 +27,7 @@ function HoverCardContent({
     "align" | "alignOffset" | "side" | "sideOffset"
   >) {
   return (
-    <PreviewCardPrimitive.Portal data-slot="hover-card-portal">
+    <PreviewCardPrimitive.Portal {...useAppAccentProps()} data-slot="hover-card-portal">
       <PreviewCardPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}

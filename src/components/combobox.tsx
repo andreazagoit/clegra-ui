@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 import { cn } from "cn"
+import { useAppAccentProps } from "../clegra/app-accent"
 
 import { Button } from "@clegra/ui/react/components/button"
 import {
@@ -98,7 +99,7 @@ function ComboboxContent({
     "side" | "align" | "sideOffset" | "alignOffset" | "anchor"
   >) {
   return (
-    <ComboboxPrimitive.Portal>
+    <ComboboxPrimitive.Portal {...useAppAccentProps()}>
       <ComboboxPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}

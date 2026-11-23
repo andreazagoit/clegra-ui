@@ -60,7 +60,10 @@ export function AppShell({
   nav?: React.ReactNode
   /** A sidebar page's docked list (hidden while empty). */
   list?: React.ReactNode
-  /** Parts without a place of their own (key listeners, the app's frame logic): rendered between the panels and the content. */
+  /**
+   * Parts without a place of their own (key listeners, the app's frame logic, the search): rendered between the
+   * panels and the content, in the open app's accent (context only: what they portal, a dialog or a menu, takes it).
+   */
   chrome?: React.ReactNode
   /** The floating header (`ShellHeader` and its pills). */
   header?: React.ReactNode
@@ -116,7 +119,7 @@ export function AppShell({
             </FloatingPanel>
           )}
         </div>
-        {chrome}
+        {inApp(chrome)}
         {/* The content slot: the ground. The page scrolls under the floating header and its scroll edge. */}
         <div data-page-area="" {...tint} className="relative flex h-svh min-w-0 flex-1 flex-col bg-background">
           <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">

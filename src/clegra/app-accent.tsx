@@ -16,8 +16,13 @@ import { DEFAULT_APP_ACCENT, type AppAccentName } from "../brand/accents"
  *
  * `useAppAccent()` says the accent in force (the default, blue, outside any). `appAccentProps(name)` gives the
  * attribute for an element of your own.
+ *
+ * An overlay portalled out of the area (a popover, a menu, a select's list, a dialog, a sheet, a drawer, a tooltip)
+ * is rendered under <body>, outside the element that carries the attribute; its Portal takes
+ * `useAppAccentProps()` (the accent in force where it is opened, from React's context, which crosses the portal), so
+ * a date picker opened in Calendar is Calendar's red, one opened in Clegra's chrome stays blue.
  */
-const AccentContext = React.createContext<AppAccentName>(DEFAULT_APP_ACCENT)
+const AccentContext = React.createContext<AppAccentName | null>(null)
 
 /** The attribute that puts an element and what is inside it in an accent. */
 export const appAccentProps = (accent: AppAccentName) => ({ "data-app-accent": accent }) as const
@@ -38,4 +43,10 @@ export function AppAccentContext({ accent, children }: { accent: AppAccentName; 
 }
 
 /** The accent in force here: the nearest <AppAccent>'s, else the default (Clegra's blue). */
-export const useAppAccent = (): AppAccentName => React.useContext(AccentContext)
+export const useAppAccent = (): AppAccentName => React.useContext(AccentContext) ?? DEFAULT_APP_ACCENT
+
+/** The attribute of the accent in force, for an overlay's portal (above); none outside every app's area. */
+export function useAppAccentProps(): ReturnType<typeof appAccentProps> | Record<string, never> {
+  const accent = React.useContext(AccentContext)
+  return accent ? appAccentProps(accent) : {}
+}

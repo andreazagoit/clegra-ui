@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 import { cn } from "cn"
+import { useAppAccentProps } from "../clegra/app-accent"
 
 type DrawerContextProps = {
   hasSnapPoints: boolean
@@ -56,7 +57,7 @@ function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
 }
 
 function DrawerPortal({ ...props }: DrawerPrimitive.Portal.Props) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />
+  return <DrawerPrimitive.Portal {...useAppAccentProps()} data-slot="drawer-portal" {...props} />
 }
 
 function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {

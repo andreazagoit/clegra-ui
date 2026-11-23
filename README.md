@@ -102,7 +102,7 @@ The package is the repository's root; `.github/workflows/publish.yml` publishes 
 | `docs/` | The guide, the release steps | no |
 | `scripts/` | The build, `prepack`/`postpack`, the pack check, the public Storybook's check | no |
 | `.storybook/`, `.storybook-public/`, `storybook/` | The Storybook (dev-only): every component, web and React Native, the face, the records, examples (`storybook/examples`); the public build is the app developers' catalogue (`storybook/apps`, the «Apps» stories only) | no |
-| `components.json` | shadcn's settings: components are added with shadcn's CLI and stay as shadcn made them | no |
+| `components.json` | shadcn's settings: components are added with shadcn's CLI and stay as shadcn made them, but for one line: each overlay's `Portal` takes `useAppAccentProps()` (the app's accent crosses the portal; `src/clegra/app-accent.test.ts` checks it) | no |
 
 ```sh
 npm ci

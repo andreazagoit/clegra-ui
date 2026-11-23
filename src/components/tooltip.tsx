@@ -2,6 +2,7 @@
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip"
 import { cn } from "cn"
+import { useAppAccentProps } from "../clegra/app-accent"
 
 function TooltipProvider({
   delay = 0,
@@ -38,7 +39,7 @@ function TooltipContent({
     "align" | "alignOffset" | "side" | "sideOffset"
   >) {
   return (
-    <TooltipPrimitive.Portal>
+    <TooltipPrimitive.Portal {...useAppAccentProps()}>
       <TooltipPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}

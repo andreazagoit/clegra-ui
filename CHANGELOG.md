@@ -4,6 +4,16 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.13 (2026-11-23)
+
+- **Overlays in the app's accent** (owner, 2026-11-23: Calendar's date picker showed the chosen day in Clegra's blue
+  inside the red app). Popovers, menus, context menus, selects, comboboxes, dialogs, alert dialogs, sheets, drawers,
+  tooltips, hover cards and the navigation menu are portalled under `<body>`, outside the element carrying
+  `data-app-accent`; each overlay's `Portal` now takes `useAppAccentProps()` (new in `clegra/app-accent`: the accent in
+  force where the overlay opens, read from React's context, which crosses the portal; nothing outside every app's
+  area). `AppShell`'s `chrome` (the search, the open app's menu) is in the open app's accent context too, so what it
+  opens follows the app. A test keeps every web overlay's portal wired.
+
 ## 0.1.0-next.12 (2026-11-23)
 
 - **One base for every second sidebar** (owner, 2026-11-23: an app's bar, a list and a site's sidebar were 240 or

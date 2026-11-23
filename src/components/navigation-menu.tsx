@@ -1,6 +1,7 @@
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
 import { cva } from "class-variance-authority"
 import { cn } from "cn"
+import { useAppAccentProps } from "../clegra/app-accent"
 import { ChevronDownIcon } from "lucide-react"
 
 function NavigationMenu({
@@ -100,7 +101,7 @@ function NavigationMenuPositioner({
   ...props
 }: NavigationMenuPrimitive.Positioner.Props) {
   return (
-    <NavigationMenuPrimitive.Portal>
+    <NavigationMenuPrimitive.Portal {...useAppAccentProps()}>
       <NavigationMenuPrimitive.Positioner
         side={side}
         sideOffset={sideOffset}
