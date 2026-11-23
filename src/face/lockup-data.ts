@@ -1,4 +1,4 @@
-/** The lockup (the face with the wordmark): written by the brand's generator (storybook-brand), copied here as data. Do not edit by hand. */
+/** The lockup (the face with the wordmark): written by the brand's generator from the brand's sources, copied here as data. Do not edit by hand. */
 export default {
   "$comment": "The horizontal lockup «Faccina» + «clegra», copied from the site's logo (site/src/brand/logo.json, from the identity's logo files): the sign-in pages draw it. viewBox, the face's place in it, the wordmark's strokes; the face is face.json's, 1.92 of its 100-unit box (the Faccina is 20 % larger beside the wordmark than in the first drawing: owner, 2026-11-20; same gap to the word, same vertical centre). box: the drawing's own bounds, without the clear space (for layouts that set the space themselves).",
   "viewBox": "-257.03 -189 789.16 278",

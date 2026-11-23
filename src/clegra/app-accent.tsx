@@ -10,7 +10,7 @@ import { DEFAULT_APP_ACCENT, type AppAccentName } from "../brand/accents"
  * (@clegra/ui/styles.css, src/brand/accents.css) turns into --app-accent, --app-accent-foreground and
  * --app-accent-text and into the theme's roles of the app's own controls (--primary, --link, --ring,
  * --sidebar-active; every selected state is --primary as the glass fill): shadcn's components inside follow it untouched. Clegra's chrome stays outside
- * it (the shell's <AppShell accent> marks only the app's bar and content).
+ * it (an app shell's `accent` marks only the app's bar and content).
  *
  *   <AppAccent accent="red" className="flex flex-1 flex-col">…the app's page…</AppAccent>
  *

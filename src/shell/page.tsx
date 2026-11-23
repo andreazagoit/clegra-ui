@@ -16,9 +16,7 @@ import { cn } from "cn"
  *   its cards go two by two from 680 of room (`@[680px]:grid-cols-2`).
  *
  * ```tsx
- * <ShellMain label="Profilo">
- *   <ShellPage title="Profilo" description="Come ti vedono gli altri.">…cards…</ShellPage>
- * </ShellMain>
+ * <ShellPage title="Profilo" description="Come ti vedono gli altri.">…cards…</ShellPage>
  * ```
  */
 export function PageHeading({

@@ -4,7 +4,7 @@ import { createContext, forwardRef, useContext, type AnchorHTMLAttributes, type 
 
 /**
  * The app's link component (Next's `next/link`, the client's own `Link`), given
- * once to `AppShell` (`link`) and used for every internal link of the shell:
+ * once to the frame (`SiteShell`'s `link`) and used for every internal link of the shell:
  * the library imports no router. Without one, a plain `<a>`.
  */
 export type ShellLinkComponent = ComponentType<{ href: string; ref?: Ref<HTMLAnchorElement> } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href">>
@@ -15,7 +15,7 @@ const PlainLink = forwardRef<HTMLAnchorElement, { href: string } & Omit<AnchorHT
 
 const LinkContext = createContext<ShellLinkComponent>(PlainLink as ShellLinkComponent)
 
-/** Gives the shell's parts the app's link component (AppShell does it with its `link` prop). */
+/** Gives the shell's parts the app's link component (`SiteShell` does it with its `link` prop). */
 export function ShellLinkProvider({ link, children }: { link?: ShellLinkComponent; children: React.ReactNode }) {
   return <LinkContext.Provider value={link ?? (PlainLink as ShellLinkComponent)}>{children}</LinkContext.Provider>
 }

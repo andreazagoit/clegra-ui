@@ -4,11 +4,12 @@
 > read-only snapshot of each version, published from where the package is developed: issues are welcome there,
 > pull requests are not merged.
 
-Clegra's design system. MIT. The app shell every Clegra web app is framed by (the rail with the person's face, the
-inner bar, the floating glass header, the page's column), components for React (shadcn's components on Base UI) and React Native (the same names
-and props; SwiftUI through Expo UI on iOS where it has the control), the theme (light and dark), plain tokens, and
-`<ClegraProvider>`, which gives an app's own MCP Apps view the look of the host it is shown in. Every Clegra app uses
-it, Clegra's own included: there is one public `@clegra/ui`.
+Clegra's design system. MIT. Components for React (shadcn's components on Base UI) and React Native (the same names
+and props; SwiftUI through Expo UI on iOS where it has the control), the theme (light and dark), plain tokens, the
+apps' accents, the frame of an app's own pages (its website's sidebar, the inner bar, the floating glass header's
+pills, the page's column), and `<ClegraProvider>`, which gives an app's own MCP Apps view the look of the host it is
+shown in. Every Clegra app uses it, and Clegra is built on it too; Clegra's own window (its rail of apps, the
+account block, the assistant's panel) is Clegra's and not in this package.
 
 ```sh
 npm i @clegra/ui@next
@@ -34,29 +35,24 @@ made, checked and published. The full guide: [docs/guide.md](docs/guide.md).
 Without Tailwind: `import "@clegra/ui/prebuilt.css"` once, in the root layout (it holds both).
 
 ```tsx
-import { AppShell, ShellRail, ShellMain, ShellPage } from "@clegra/ui/shell"   // web
+import { SiteShell, ShellPage } from "@clegra/ui/shell"   // web
 import { Button } from "@clegra/ui/components/button"   // web, or native under the react-native condition
 import { RowList, Row, FactList, Fact } from "@clegra/ui/clegra/rows"
 import { ClegraProvider } from "@clegra/ui/frame"
 import { colorsFor } from "@clegra/ui/tokens"
 ```
 
-**The shell.** A Next.js app frames its pages exactly as Clegra's client does:
+**An app's pages.** `ShellPage` gives a page its column and heading, `NavBar` / `NavSections` an inner bar, the
+header's pills (`HeaderGroup`, `HeaderPill`, `PillItem`) its floating controls:
 
 ```tsx
-<AppShell link={Link} embedded={embedded} rail={<ShellRail brand={…} groups={[{ id: "pages", items }]} user={{ name, email, menu }} />}>
-  <ShellMain label="Orders">
-    <div className="px-(--shell-gutter) pt-(--shell-header) pb-(--shell-bottom)">
-      <ShellPage title="Orders" description="Every order, newest first.">{cards}</ShellPage>
-    </div>
-  </ShellMain>
-</AppShell>
+<ShellPage title="Orders" description="Every order, newest first." actions={<Button>New order</Button>}>
+  {cards}
+</ShellPage>
 ```
 
-Presentational: your link component (`link`), your words (props), your data. Inside Clegra (an embedded page) pass
-`embedded`: the shell draws no chrome, only the page, and `useShell()` says so; a layout of the app's embed route
-(`app/embed/layout.tsx`) passes it, so it is decided on the server. The guide has the full example
-([docs/guide.md](docs/guide.md#the-app-shell)).
+Presentational: your link component (`link`), your words (props), your data. Inside Clegra (an embedded page) Clegra
+draws the chrome around your page: render only the page there ([docs/guide.md](docs/guide.md#an-apps-pages)).
 
 **An app's own website.** `SiteShell` frames it (in a card inside Clegra, or on its own in a tab): the app's inner bar
 as a left sidebar flush to the page's edges, a slim top bar with ☰ and a drawer under 768
@@ -78,17 +74,16 @@ layer, so yours wins, and the bundled file is then never downloaded. `tokens` ca
 | `@clegra/ui/base-ui/<name>` (+ `react/`, `react-native/`) | both | Base UI parts the components build on (`popover`) |
 | `@clegra/ui/hooks/<name>` (+ `react/`, `react-native/`) | both | `use-mobile` |
 | `@clegra/ui/primitives` (+ `react/`, `react-native/`) | both | HTML's elements under the same names on both platforms |
-| `@clegra/ui/shell` | web | The app shell: `AppShell` (`embedded`), `ShellRail` (blocks of glass, the account block with `user`, slots), `NavBar`, `NavSections`, `SectionsPill`, `ShellHeader`, `DrawerPill`, `ShellMain`, `ShellPage`, `PageHeading`, `useShell`, `AppIconImage`, `ShortcutsDialog`, the header's pills and surfaces |
-| `@clegra/ui/shell/reorder` | web | `railReorder` for `ShellRail`'s `reorder` (the only entry using the optional `@dnd-kit/*` peers) |
+| `@clegra/ui/shell` | web | An app's frame: `SiteShell` (an app's own website), `NavBar`, `NavSections`, `NavLink`, `SectionsPill`, `ShellPage`, `PageHeading`, `AppIconImage`, `CountBadge`, `ShortcutsDialog`, the header's pills and surfaces |
 | `@clegra/ui/clegra/<name>` | web | `pill`, `surface`, `rows` (`RowList`, `Row`, `RowIcon`, `FactList`, `Fact`), `confirm-switch` (`ConfirmSwitch`), `app-accent` (`AppAccent`, `useAppAccent`) |
 | `@clegra/ui/frame` | web | `ClegraProvider`, `useClegraTheme`, `useClegraHost`, `hostContextFor` |
 | `@clegra/ui/tokens` | any | `colorsFor(mode)`, `radius`, `type` |
-| `@clegra/ui/accents` | any | The apps' accents, a closed palette of ten names (`blue` default … `gray`): `APP_ACCENT_NAMES`, `appAccentColors`, `isAppAccent`, `appAccentVariables`; `data-app-accent` / `<AppAccent>` / `<AppShell accent>` tint an app's area (docs/guide.md «An app's accent») |
+| `@clegra/ui/accents` | any | The apps' accents, a closed palette of ten names (`blue` default … `gray`): `APP_ACCENT_NAMES`, `appAccentColors`, `isAppAccent`, `appAccentVariables`; `data-app-accent` / `<AppAccent>` / `<SiteShell accent>` tint an app's area (docs/guide.md «An app's accent») |
 | `@clegra/ui/native/<name>` | React Native | `theme`, `overlay`, `toast`, `icons`, `icon-context`, `expo-ui-controls`, `expo-ui-*`, `tw`, `use-tw`, `slot`, `lucide`, `sf-symbols`, `form-context`, `chat-context`, `checkbox-el` |
 | `@clegra/ui/metro` | React Native | `withClegraUI(config)` for Expo's Metro |
-| `@clegra/ui/styles.css`, `glass.css`, `theme.css`, `shadcn.css`, `accents.css`, `prebuilt.css` | web | The stylesheets (`glass.css`: the glass layer the shell needs; `prebuilt.css`: compiled, both in, no Tailwind needed) |
+| `@clegra/ui/styles.css`, `glass.css`, `theme.css`, `shadcn.css`, `accents.css`, `prebuilt.css` | web | The stylesheets (`glass.css`: the glass layer of the panels and pills; `prebuilt.css`: compiled, both in, no Tailwind needed) |
 
-Everything is public: the app shell and every component, the assistant's too (sidebar, navigation-menu, menubar,
+Every component is public, the assistant's too (sidebar, navigation-menu, menubar,
 bubble, message, message-scroller, trace, questionnaire, marker, attachment, code-block, sonner, resizable, form).
 The shell and `clegra/*` are web only (no `react-native` condition): React Native apps use the components.
 
@@ -107,9 +102,9 @@ The package is the repository's root; `.github/workflows/publish.yml` publishes 
 ```sh
 npm ci
 npm run typecheck   # tsc over src/, then over the Storybook (storybook/tsconfig.json)
-npm test            # the theme's tests (tokens against the stylesheets, the frame's theme, the native tw helper), the shell's (its rules, its server render standalone and embedded), the confirm switch's rule
+npm test            # the theme's tests (tokens against the stylesheets, the frame's theme, the native tw helper), the shell's rules and `SiteShell`'s server render, the confirm switch's rule
 npm run build       # dist/ (git-ignored); npm pack builds it itself
-npm run pack:check  # slow: npm pack, the publish guard, the fonts, plain Node, a fresh Next.js + Tailwind 4 app with the sidebar and <AppShell> (standalone and embedded)
+npm run pack:check  # slow: npm pack, the publish guard, the fonts, plain Node, a fresh Next.js + Tailwind 4 app with the sidebar and a page in <SiteShell>
 npm run storybook                # the catalogue by eye (http://localhost:6006)
 npm run build-storybook:public   # the public catalogue, into storybook-public/ (git-ignored)
 npm run check:storybook:public -- --forbidden <list.mjs>   # only «Apps» stories, nothing internal in the build

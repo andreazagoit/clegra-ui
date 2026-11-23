@@ -86,7 +86,7 @@ export function NavSections({ label, sections, onNavigate }: { label: string; se
 
 /**
  * THE INNER BAR (the app shell design §3): an app's (or an account's) own column,
- * `--shell-sidebar` (320) wide in its floating panel beside the rail (`AppShell` `nav`) or a site's sidebar, or in a
+ * `--shell-sidebar` (320) wide in its floating panel beside a rail (an app shell's `nav`) or a site's sidebar, or in a
  * sheet when there is no room (the app decides, and gives `onClose` there).
  * A band of `--shell-sidebar-band` (56) with the name (or `band`), the content scrolling, `footer`
  * pinned at the bottom.

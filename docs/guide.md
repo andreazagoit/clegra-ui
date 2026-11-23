@@ -41,14 +41,13 @@ Nothing is bundled: your bundler sees one copy of React and Base UI.
 | `@clegra/ui/components/<name>` | web, React Native | A component: the web version in a browser bundle, the native one under the `react-native` condition (and the Expo UI one under Metro's `ios`, see «React Native») |
 | `@clegra/ui/react/components/<name>` | web | The web version, explicitly |
 | `@clegra/ui/react-native/components/<name>` | React Native | The native version, explicitly |
-| `@clegra/ui/shell` | web | The app shell: `AppShell`, `ShellRail`, `NavBar`, `NavSections`, `ShellHeader`, `ShellMain`, `ShellPage`, `PageHeading`, `useShell`, `SiteShell` (an app's own website), … (below, «The app shell») |
-| `@clegra/ui/shell/reorder` | web | `railReorder`: dragging the rail's items into the person's order (needs `@dnd-kit/*`) |
+| `@clegra/ui/shell` | web | An app's frame: `SiteShell` (an app's own website), `NavBar`, `NavSections`, `ShellPage`, `PageHeading`, `AppIconImage`, `ShortcutsDialog`, the header's pills, … (below, «An app's pages») |
 | `@clegra/ui/clegra/<name>` | web | Clegra's layer over shadcn: `pill` (the header's pills), `surface` (floating panels, the scroll edge, `Segmented`), `rows` (`RowList`, `Row`, `RowIcon`, `FactList`, `Fact`), `confirm-switch`, `app-accent` (`AppAccent`, `useAppAccent`, `appAccentProps`) |
 | `@clegra/ui/frame` | web | `ClegraProvider`, `useClegraTheme`, `useClegraHost`, `hostContextFor` |
 | `@clegra/ui/tokens` | any | The theme as plain values: `colorsFor(mode)`, `radius`, `type` |
 | `@clegra/ui/accents` | any | The apps' accents: `APP_ACCENT_NAMES`, `appAccentColors`, `isAppAccent`, `appAccentOf`, `appAccentVariables` (below, «An app's accent») |
 | `@clegra/ui/styles.css` | web | The stylesheet as a Tailwind CSS 4 entry: tokens, theme, the fonts, the components' variants |
-| `@clegra/ui/glass.css` | web | Clegra's glass layer (after `styles.css`): the shell's panels and pills, menus, `.glass-table`, `.glass-card` |
+| `@clegra/ui/glass.css` | web | Clegra's glass layer (after `styles.css`): the floating panels and the header's pills, menus, `.glass-table`, `.glass-card` |
 | `@clegra/ui/prebuilt.css` | web | `styles.css` and `glass.css` compiled: no Tailwind in your build |
 | `@clegra/ui/theme.css`, `@clegra/ui/shadcn.css` | web | The two parts of `styles.css`, separately |
 | `@clegra/ui/accents.css` | web | The accents' scopes (`data-app-accent`), already in `styles.css` and `theme.css` |
@@ -60,9 +59,10 @@ Nothing is bundled: your bundler sees one copy of React and Base UI.
 | `@clegra/ui/metro` | React Native | `withClegraUI(config)` for Metro |
 
 There is no `@clegra/ui` root entry: one import path per component, so a bundle holds what it uses. Only the
-stylesheets have side effects. Everything is public, the app shell and the components of Clegra's own assistant
-too (sidebar, navigation-menu, menubar, bubble, message, message-scroller, trace, questionnaire, marker, attachment,
-code-block, sonner, resizable, form): Clegra itself is built with this package, and so is every app.
+stylesheets have side effects. Every component is public, those of Clegra's own assistant too (sidebar,
+navigation-menu, menubar, bubble, message, message-scroller, trace, questionnaire, marker, attachment, code-block,
+sonner, resizable, form). Clegra's own window (its rail of apps, the person's account block, its assistant's panel)
+is not part of the package: it is Clegra's, drawn around your app, never by it.
 
 ## Tailwind 4
 
@@ -129,84 +129,26 @@ export default function Page() {
 }
 ```
 
-## The app shell
+## An app's pages
 
-Every Clegra web app has the same frame, Clegra's own client included: the **rail** (the app's places as tiles in glass
-blocks, the signed-in person's face in a block of its own at the bottom), an optional docked **inner bar** (`--shell-sidebar`, 320: every second sidebar), a **floating header** of glass pills
-over the content, and the page under it with the shell's gutters. `@clegra/ui/shell` draws it, exactly as the client
-does; you configure it with props. It is presentational: no router (your link component comes in as `link`), no
-i18n (every word is a prop), no data, no persistence. Web only (React DOM; there is no native shell).
+Inside Clegra your app is framed by Clegra itself: its window, the rail of apps and the assistant are Clegra's, and
+your app never draws them. What `@clegra/ui/shell` gives you is the frame of **your own pages**: your website's
+sidebar (`SiteShell`, below), the inner bar's entries (`NavBar`, `NavSections`, `NavLink`), the page's column and
+heading (`ShellPage`, `PageHeading`) and the floating header's glass pills (`HeaderGroup`, `HeaderPill`, `PillItem`).
+It is presentational: no router (your link component comes in as `link`), no i18n (every word is a prop), no data,
+no persistence. Web only (React DOM).
 
 ```css
 /* app/globals.css: the one way to style it */
 @import "tailwindcss";
 @import "@clegra/ui/styles.css";
-@import "@clegra/ui/glass.css";   /* the shell's glass: panels, header pills, menus, .glass-table, .glass-card */
+@import "@clegra/ui/glass.css";   /* the glass: floating panels, header pills, menus, .glass-table, .glass-card */
 ```
 
-(`prebuilt.css` already holds the glass.) Then, a client component the layouts share:
+(`prebuilt.css` already holds the glass.) A page:
 
 ```tsx
-// components/frame.tsx
-"use client"
-
-import Link from "next/link"
-import { BarChart3Icon, HouseIcon, InboxIcon, LogOutIcon, UserRoundIcon, UsersIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
-import { AppShell, DrawerPill, isCurrentPath, ShellHeader, ShellMain, ShellRail, useShell } from "@clegra/ui/shell"
-
-const pages = [
-  { id: "home", label: "Home", href: "/home", icon: HouseIcon, shortcut: "⌥1" },
-  { id: "orders", label: "Orders", href: "/orders", icon: InboxIcon, shortcut: "⌥2", badge: 4 },
-  { id: "customers", label: "Customers", href: "/customers", icon: UsersIcon, shortcut: "⌥3" },
-  { id: "reports", label: "Reports", href: "/reports", icon: BarChart3Icon, shortcut: "⌥4" },
-]
-
-function Header() {
-  const { phone } = useShell()
-  if (!phone) return null   // wider, the rail is on screen: the header holds only the page's own pills
-  return <ShellHeader phone><DrawerPill label="Open the menu" /></ShellHeader>
-}
-
-export function Frame({ embedded = false, children }: { embedded?: boolean; children: React.ReactNode }) {
-  const pathname = usePathname()
-  return (
-    <AppShell
-      link={Link}
-      embedded={embedded}
-      rail={
-        <ShellRail
-          brand={({ rail }) => <MyMark compact={rail} />}            // your mark, never Clegra's
-          groups={[{ id: "pages", label: "Pages", items: pages.map((p) => ({ ...p, active: isCurrentPath(pathname, p.href) })) }]}
-          user={{
-            name: "Anna Rossi",
-            email: "anna@example.com",
-            menu: [
-              { kind: "item", id: "profile", label: "Profile", icon: UserRoundIcon, href: "/profile" },
-              { kind: "separator", id: "line" },
-              { kind: "item", id: "sign-out", label: "Sign out", icon: LogOutIcon, onSelect: signOut },
-            ],
-          }}
-        />
-      }
-      header={<Header />}
-    >
-      <ShellMain label="Orders">
-        {/* The shell's gutters: 64 under the floating header, room for the bottom; embedded, the header's room is given back. */}
-        <div className="flex w-full min-w-0 flex-1 flex-col px-(--shell-gutter) pt-(--shell-header) pb-(--shell-bottom)">{children}</div>
-      </ShellMain>
-    </AppShell>
-  )
-}
-```
-
-```tsx
-// app/(app)/layout.tsx
-export default function AppLayout({ children }: { children: React.ReactNode }) {
-  return <Frame>{children}</Frame>
-}
-
-// app/(app)/orders/page.tsx
+// app/(site)/orders/page.tsx
 import { Button } from "@clegra/ui/components/button"
 import { ShellPage } from "@clegra/ui/shell"
 
@@ -222,55 +164,25 @@ export default function Orders() {
 
 What it takes:
 
-- `AppShell`: `link`, `rail`, `nav` (a docked inner bar: `NavBar` + `NavSections`), `list` (a docked list),
-  `header` (`ShellHeader` with `HeaderGroup`s of `HeaderPill`/`PillItem`), `bottomBar`, `aside`, `chrome` (key
-  listeners), `embedded`; `children` is the page in a `ShellMain` (the landmark, named after the page).
-- `ShellRail`: a `brand` slot (a function of `{ rail }`: the rail's compact look or the phone drawer's row),
-  `drawerSearch` (a field atop the phone's drawer only: the rail has no search tile), `groups` of `RailItem`s (`{ id,
-  label, href, icon, tile?, active?, badge?, description?, shortcut?, external? }`), a `controls` slot, `footer` items,
-  and `user`: `{ name, email, image?, label?, tooltip?, href? | onSelect?, active?, menu? }`. The rail is drawn in
-  **blocks**, each its own glass pill, 8 apart with the ground between them: `brand` alone in the first; then every
-  group is a block of its own, unless it has `join`: it goes on in the block of the group shown before it, right under
-  it (`join: "flush"`) or after a thin line inside the pill (`join: "line"`); the last of these scrolls inside when
-  the window is short. Detached at the bottom, aligned to the window's bottom edge, the **account block**:
-  `controls` (your own tiles, drawn with `RAIL_LINK` and `RailTile`), the `footer` items (the account's or the
-  system's places, such as settings) and the face. Test hooks: `data-rail-block="brand"` or `"<first group's id>"`, `data-rail-line`, `data-rail-account`. With `href`/`onSelect` and no `menu` the face goes
-  there; with `menu` (`item`, `choice` such as the language or the theme, `separator`) it opens the menu headed by
-  name and email.
-- Phone (under 768): the panels go, the rail becomes a drawer (`DrawerPill` opens it), the inner bar folds into the
-  header's `SectionsPill`. `useShell()` returns `{ phone, embedded, openDrawer, closeDrawer }`.
-- Dragging a group into the person's order: give the group `onOrder(ids)` and the rail
-  `reorder={railReorder}` from `@clegra/ui/shell/reorder`, the only entry that uses `@dnd-kit/core`,
-  `@dnd-kit/sortable` and `@dnd-kit/utilities` (optional peers: install them only then).
 - The page: `ShellPage` (`layout` `contained`, a 960 column, or `full`; `title`, `media`, `status`, `description`,
   `actions`, `toolbar`) and `PageHeading` alone. It is a container, so its cards can go two by two from 680 of room
   (`@[680px]:grid-cols-2`). Inside cards: `RowList`/`Row`/`RowIcon` (rows with a hairline between them) and
   `FactList`/`Fact` (label and value pairs) from `@clegra/ui/clegra/rows`; `ConfirmSwitch` from
   `@clegra/ui/clegra/confirm-switch` (a setting's switch whose consequential direction asks first). Wrap a shadcn
   `Table` in `.glass-table` and a plain block in `.glass-card` for Clegra's table and card.
+- The inner bar: `NavBar` (`id`, `name`, `label`, `band?`, `footer?`) around `NavSections` (`label`, `sections`:
+  `NavSection[]` of `NavItem`s `{ id, label, href, icon, active?, badge?, description?, shortcut?, tooltip?,
+  external? }`), each entry 34 high with its keys in a tooltip; `SectionsPill` is the header's way to the sections on
+  a phone.
+- The header's parts: `HeaderGroup`, `HeaderPill`, `PillItem`, `PillDivider`, `Hint`, `ShortcutKeys`, and the
+  surfaces `FloatingPanel`, `ScrollEdge`, `Segmented` (re-exported from `@clegra/ui/clegra/pill` and
+  `@clegra/ui/clegra/surface`).
 - Also: `AppIconImage` (an app icon in Apple's mask), `CountBadge`, `Keys`, `ShortcutsDialog` (the list of
-  shortcuts), `Face`, `isCurrentPath`, `initials`; the header's parts and surfaces (`HeaderGroup`, `HeaderPill`,
-  `PillItem`, `PillDivider`, `Hint`, `ShortcutKeys`, `FloatingPanel`, `ScrollEdge`, `Segmented`) are re-exported
-  from `@clegra/ui/clegra/pill` and `@clegra/ui/clegra/surface`.
-
-### Inside Clegra: `embedded`
+  shortcuts), `ShellLinkProvider` / `useShellLink`, `isCurrentPath`, `initials`, `countLabel`.
 
 When Clegra shows one of your pages (an embedded page, `url: "/embed/…"` in your app's definition), Clegra draws the
-chrome around it. Your page must not draw its own: with `embedded` the shell renders only the page (`children`) on
-the ground, with no rail, inner bar, header, bottom bar, aside or `chrome`, and gives the header's room back.
-`useShell().embedded` tells your components. Decide it on the server, so the chrome never flashes: the page's path is
-under your embed route, so that route gets a layout of its own:
-
-```tsx
-// app/embed/layout.tsx: every page under /embed is shown inside Clegra
-import { Frame } from "@/components/frame"
-export default function EmbedLayout({ children }: { children: React.ReactNode }) {
-  return <Frame embedded>{children}</Frame>
-}
-```
-
-(`@clegra/sdk` handles the embed route itself: its proxy, the ticket, `getEmbedCaller`; `@clegra/ui` only takes the
-boolean.)
+chrome around it: under your embed route render only the page (a `ShellPage`), with no sidebar of your own.
+`@clegra/sdk` handles the embed route itself (its proxy, the ticket, `getEmbedCaller`).
 
 ### An app's own website: `SiteShell`
 
@@ -369,8 +281,8 @@ Each has a foreground (on the fill); every pair is WCAG AA (4.5:1 for text, also
 grounds; 3:1 for the fill as a control), checked by `src/brand/accents.test.ts`. The values live in
 `src/brand/accents.ts`; `src/brand/accents.css` is generated from them (`npm run accents`).
 
-`data-app-accent="<name>"` on an element (or `<AppAccent accent>` from `@clegra/ui/clegra/app-accent`, or the
-shell's `<AppShell accent>`, which marks the app's bar, list and content but not the rail or `aside`) sets
+`data-app-accent="<name>"` on an element (or `<AppAccent accent>` from `@clegra/ui/clegra/app-accent`, or
+`<SiteShell accent>`, which marks the whole site) sets
 `--app-accent`, `--app-accent-foreground` and `--app-accent-text` (Tailwind: `bg-app-accent`, `text-app-accent-text`…)
 and points the roles of the app's own controls at them: `--primary` and `--primary-foreground` (primary buttons,
 switches, progress, checked boxes, every selected state), `--link` and `--ring` (links, the focus ring) and

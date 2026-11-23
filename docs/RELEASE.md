@@ -32,11 +32,11 @@ npm run pack:check -- --dir "$(mktemp -d /tmp/clegra-ui-pack.XXXX)" --port 3956
 ```
 
 Packs the tarball and checks its files and package.json, the formerly reserved components, the shell's entries
-(`shell`, `shell/reorder`, `clegra/*`, `glass.css`; `@dnd-kit` imported by `shell/reorder` only), the fonts (real
+(`shell`, `clegra/*`, `glass.css`), the fonts (real
 woff2, their OFL texts, the NOTICE rows, the `@font-face` blocks of `styles.css` and `prebuilt.css`, no
 self-referencing `--font-sans`), the hygiene of every file, the guard (dry runs), then plain Node (`tokens`, `metro`),
-a fresh Next.js App Router app with Tailwind 4 (no `@dnd-kit`) rendering Button, Card, the Sidebar and the Toaster, a
-page on `<AppShell>` with its chrome and the same frame `embedded` without it, serving the Inter woff2, after
+a fresh Next.js App Router app with Tailwind 4 rendering Button, Card, the Sidebar and the Toaster, a
+page framed by `<SiteShell>` with a `ShellPage`, serving the Inter woff2, after
 `next build` + `next start`, and `tsc` with `moduleResolution` `bundler` and `node16`.
 
 ## Publishing

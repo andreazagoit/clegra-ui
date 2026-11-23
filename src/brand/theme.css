@@ -411,7 +411,7 @@
   --rail-target: calc(var(--rail-tile) + 4px); /* 48: a tile's link (the face's too), 2 around the tile */
   /*
    * Every second sidebar (owner, 2026-11-23: «all the same base»): an app's inner bar, a sidebar page's list, a site's
-   * sidebar. One width, one top band, one side padding, one row: `AppShell`'s `nav` and `list` panels, `NavBar`,
+   * sidebar. One width, one top band, one side padding, one row: an app shell's `nav` and `list` panels, `NavBar`,
    * `NavSections`, `NavLink` and `SiteShell` read them; an app never sets a sidebar's width of its own.
    */
   --shell-sidebar: 20rem; /* 320: every second sidebar's width (Posta's list) */

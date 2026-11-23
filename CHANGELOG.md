@@ -4,6 +4,17 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.14 (2026-11-23)
+
+- **Breaking: Clegra's own window leaves the package.** `@clegra/ui/shell` no longer exports `AppShell`, `ShellMain`,
+  `ShellHeader`, `DrawerPill`, `useShell`, `ShellRail`, `RailTile`, `RailActiveBar`, `RAIL_LINK`, `UserButton`,
+  `Face` nor the types `RailItem`, `RailGroup`, `RailReorder`, `RailSlot`, `ShellUser`, `UserMenuEntry`; the entry
+  `@clegra/ui/shell/reorder` (`railReorder`) is gone and with it the optional `@dnd-kit/*` peers. They drew Clegra's
+  own chrome (its rail of apps, the account block), which apps never draw: Clegra frames them. What an app's own
+  pages use stays: `SiteShell`, `NavBar`, `NavSections`, `NavLink`, `SectionsPill`, `ShellPage`, `PageHeading`,
+  `AppIconImage`, `CountBadge`, `Keys`, `ShortcutsDialog`, the header's pills and surfaces, `ShellLinkProvider`,
+  `isCurrentPath`, `initials`, `countLabel`. The guide's «The app shell» is now «An app's pages».
+
 ## 0.1.0-next.13 (2026-11-23)
 
 - **Overlays in the app's accent** (owner, 2026-11-23: Calendar's date picker showed the chosen day in Clegra's blue

@@ -1,6 +1,6 @@
 /**
  * THE FACE'S SHAPE («Faccina»), read from face-data.ts (the brand's face.json, written by
- * storybook-brand's generator from its expressions). This file is the only
+ * the brand's generator from its expressions). This file is the only
  * reader of face-data.ts and lockup-data.ts in the library and the apps: the web
  * face (face.tsx), the React Native one (face.native.tsx), the lockup, the
  * brand pages and the static SVG string (faceSvg) all take the shapes from

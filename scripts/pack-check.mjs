@@ -6,16 +6,15 @@
 //    inside the tarball, the formerly reserved components (sidebar, sonner, form, …), drawn/* and native/toast
 //    published, the hygiene check (the private one of the repository it is developed in, when present), the publish guard (dry runs: a prerelease without a dist-tag
 //    is refused, `--tag next` passes; nothing is uploaded), the repository's package.json back after each. The shell
-//    (`shell`, `shell/reorder`, `clegra/*`, `glass.css`) built and exported, @dnd-kit imported by `shell/reorder` only;
-//    the fonts (Inter, Geist Mono) shipped as real woff2 with their OFL texts and NOTICE rows, declared by styles.css
-//    and prebuilt.css (@font-face, swap) with --font-sans / --font-mono on them and no self-reference.
+//    (`shell`, `clegra/*`, `glass.css`) built and exported, nothing importing @dnd-kit; the fonts (Inter, Geist Mono)
+//    shipped as real woff2 with their OFL texts and NOTICE rows, declared by styles.css and prebuilt.css (@font-face, swap) with --font-sans / --font-mono on them and no self-reference.
 // 2. Plain Node: @clegra/ui/tokens imported as ESM, @clegra/ui/metro required (no React needed for either).
 // 3. A fresh Next.js App Router app with Tailwind 4 (the repository's Next, React, TypeScript and Tailwind versions),
-//    the tarball and the web peer libraries installed (not @dnd-kit), `@import "@clegra/ui/styles.css"` and
+//    the tarball and the web peer libraries installed, `@import "@clegra/ui/styles.css"` and
 //    `"@clegra/ui/glass.css"` after Tailwind: a page drawn with Button, Card and the Sidebar (formerly reserved); a page
-//    framed by <AppShell> and the same frame under /embed (`embedded`); `next build` + `next start`: the page renders
+//    framed by <SiteShell> with a ShellPage; `next build` + `next start`: the page renders
 //    them and its stylesheet has their classes and the theme; the stylesheet declares Inter and serves its woff2 (the
-//    packaged bytes); the shell's page has its chrome, the embed page none (in the first HTML).
+//    packaged bytes); the site's page has its sidebar, its entries and the page's heading (in the first HTML).
 // 4. tsc on a file importing the web entries (components, a formerly reserved one, frame, tokens, hooks), with
 //    `moduleResolution` bundler and node16; the shell and clegra/* entries too.
 // The folder must have no node_modules or package.json above it. The server is stopped by PID; node_modules and .next
@@ -100,14 +99,14 @@ expect(FORMERLY_RESERVED.every((n) => files.has(`dist/components/${n}.js`) && fi
 expect(manifest.exports["./components/*"] && manifest.exports["./drawn/components/*"] && manifest.exports["./drawn/base-ui/*"] && manifest.exports["./native/toast"] && manifest.exports["./native/expo-ui-controls"], "drawn/*, native/toast and native/expo-ui-controls are exported")
 expect(Object.entries(manifest.peerDependencies ?? {}).every(([name]) => manifest.peerDependenciesMeta?.[name]?.optional === true) && !manifest.dependencies, "every library is an optional peer dependency (no dependency)")
 expect(!("@clegra/sdk" in (manifest.peerDependencies ?? {})), "@clegra/ui does not depend on @clegra/sdk")
-// The shell, public: its entries built and exported (web only, no react-native condition), @dnd-kit only in the reorder entry.
-const SHELL_FILES = ["dist/shell/index.js", "dist/shell/index.d.ts", "dist/shell/reorder.js", "dist/shell/reorder.d.ts", "dist/glass.css", ...["pill", "surface", "rows", "confirm-switch"].flatMap((n) => [`dist/clegra/${n}.js`, `dist/clegra/${n}.d.ts`])]
+// The shell's public parts: their entries built and exported (web only, no react-native condition), no @dnd-kit.
+const SHELL_FILES = ["dist/shell/index.js", "dist/shell/index.d.ts", "dist/glass.css", ...["pill", "surface", "rows", "confirm-switch"].flatMap((n) => [`dist/clegra/${n}.js`, `dist/clegra/${n}.d.ts`])]
 const missingShell = SHELL_FILES.filter((f) => !files.has(f))
-expect(missingShell.length === 0 && manifest.exports["./shell"]?.default === "./dist/shell/index.js" && manifest.exports["./shell"]?.types === "./dist/shell/index.d.ts" && manifest.exports["./shell/reorder"]?.default === "./dist/shell/reorder.js" && manifest.exports["./clegra/*"]?.default === "./dist/clegra/*.js" && manifest.exports["./glass.css"] === "./dist/glass.css", `the shell is exported and built: shell, shell/reorder, clegra/* (pill, surface, rows, confirm-switch), glass.css${missingShell.length ? `: missing ${missingShell.join(", ")}` : ""}`)
+expect(missingShell.length === 0 && manifest.exports["./shell"]?.default === "./dist/shell/index.js" && manifest.exports["./shell"]?.types === "./dist/shell/index.d.ts" && !manifest.exports["./shell/reorder"] && manifest.exports["./clegra/*"]?.default === "./dist/clegra/*.js" && manifest.exports["./glass.css"] === "./dist/glass.css", `the shell is exported and built: shell, clegra/* (pill, surface, rows, confirm-switch), glass.css${missingShell.length ? `: missing ${missingShell.join(", ")}` : ""}`)
 /** A file of the tarball, read from dist/ (the tarball holds exactly these bytes). */
 const packedFile = (f) => readFileSync(join(pkgDir, f), "utf8")
 const dndUsers = [...files].filter((f) => /^dist\/.+\.js$/.test(f) && /from\s*["']@dnd-kit\//.test(packedFile(f)))
-expect(dndUsers.length === 1 && dndUsers[0] === "dist/shell/reorder.js" && ["@dnd-kit/core", "@dnd-kit/sortable", "@dnd-kit/utilities"].every((n) => manifest.peerDependenciesMeta?.[n]?.optional === true), `only @clegra/ui/shell/reorder imports @dnd-kit (optional peers)${dndUsers.length !== 1 ? `: ${dndUsers.join(", ")}` : ""}`)
+expect(dndUsers.length === 0 && !Object.keys(manifest.peerDependencies ?? {}).some((n) => n.startsWith("@dnd-kit/")), `nothing imports @dnd-kit, and it is no peer${dndUsers.length ? `: ${dndUsers.join(", ")}` : ""}`)
 // The fonts in the package: a stylesheet alone gives Clegra's type.
 const FONTS = { "dist/fonts/inter-latin-wght-normal.woff2": "Inter", "dist/fonts/geist-mono-latin-wght-normal.woff2": "Geist Mono" }
 const fontBytes = Object.fromEntries(Object.keys(FONTS).map((f) => [f, files.has(f) ? execFileSync("tar", ["-xzOf", tarball, `package/${f}`]) : Buffer.alloc(0)]))
@@ -146,8 +145,7 @@ expect(isRepoManifest(), "after the dry-run publishes the repository's package.j
 /** The repository's installed version of a package. */
 const version = (name) => JSON.parse(readFileSync(join(pkgDir, "node_modules", ...name.split("/"), "package.json"), "utf8")).version
 const NATIVE_ONLY = ["react-native", "react-native-svg", "lucide-react-native", "@expo/ui"]
-// @dnd-kit stays out: the shell must work without it (only @clegra/ui/shell/reorder needs it).
-const webPeers = Object.keys(manifest.peerDependencies).filter((n) => !NATIVE_ONLY.includes(n) && n !== "tailwindcss" && !n.startsWith("@dnd-kit/"))
+const webPeers = Object.keys(manifest.peerDependencies).filter((n) => !NATIVE_ONLY.includes(n) && n !== "tailwindcss")
 
 // ------------------------------------------------------------ 2. plain Node
 const plain = join(work, "plain")
@@ -223,55 +221,43 @@ export default function Home() {
 }
 `,
 )
-// The shell, as the guide frames an app's pages (a client component, no @dnd-kit), and the same frame under /embed, whose
-// layout passes `embedded` (shown inside Clegra: no chrome).
+// An app's own website, as the guide frames it: SiteShell (a client component) around a ShellPage.
 mkdirSync(join(app, "components"), { recursive: true })
 writeFileSync(
   join(app, "components", "frame.tsx"),
   `"use client"
 
 import Link from "next/link"
-import { HouseIcon, InboxIcon, LogOutIcon } from "lucide-react"
-import { AppShell, ShellMain, ShellPage, ShellRail, useShell } from "@clegra/ui/shell"
+import { HouseIcon, InboxIcon, SettingsIcon } from "lucide-react"
+import { ShellPage, SiteShell } from "@clegra/ui/shell"
 
-function Probe() {
-  const { embedded } = useShell()
-  return <p data-probe-page={embedded ? "embedded" : "standalone"}>The shell's page</p>
-}
-
-export function Frame({ embedded = false }: { embedded?: boolean }) {
+export function Frame() {
   return (
-    <AppShell
+    <SiteShell
       link={Link}
-      embedded={embedded}
-      rail={
-        <ShellRail
-          groups={[{ id: "pages", items: [{ id: "home", label: "Home", href: "/shell", icon: HouseIcon }, { id: "orders", label: "Orders", href: "/shell", icon: InboxIcon, active: true }] }]}
-          user={{ name: "Pack Check", email: "pack@check.test", menu: [{ kind: "item", id: "out", label: "Sign out", icon: LogOutIcon, onSelect: () => {} }] }}
-        />
-      }
+      brand={{ name: "Orders app", icon: InboxIcon, href: "/site" }}
+      label="Orders app sections"
+      sections={[{ id: "main", items: [{ id: "home", label: "Home", href: "/site", icon: HouseIcon }, { id: "orders", label: "Orders", href: "/site", icon: InboxIcon, active: true }] }]}
+      footer={[{ id: "settings", label: "Settings", href: "/site", icon: SettingsIcon }]}
+      menuLabel="Open menu"
+      closeLabel="Close"
     >
-      <ShellMain label="Orders">
-        <div className="px-(--shell-gutter) pt-(--shell-header) pb-(--shell-bottom)">
-          <ShellPage title="Orders" description="The shell's page.">
-            <Probe />
-          </ShellPage>
-        </div>
-      </ShellMain>
-    </AppShell>
+      <div className="px-(--shell-gutter) py-8">
+        <ShellPage title="Orders" description="The site's page.">
+          <p data-probe-page="site">The site's page</p>
+        </ShellPage>
+      </div>
+    </SiteShell>
   )
 }
 `,
 )
-for (const [dir, up, embedded] of [["shell", "../..", false], [join("embed", "board"), "../../..", true]]) {
-  mkdirSync(join(app, "app", dir), { recursive: true })
-  writeFileSync(join(app, "app", dir, "page.tsx"), `import { Frame } from "${up}/components/frame"\n\nexport default function Page() {\n  return <Frame${embedded ? " embedded" : ""} />\n}\n`)
-}
+mkdirSync(join(app, "app", "site"), { recursive: true })
+writeFileSync(join(app, "app", "site", "page.tsx"), `import { Frame } from "../../components/frame"\n\nexport default function Page() {\n  return <Frame />\n}\n`)
 const install = run(npm, ["install", "--no-audit", "--no-fund", "--loglevel=error"], { cwd: app })
 if (install.status !== 0) throw new Error(`pack-check: npm install failed:\n${install.stderr}`)
 ok(`fresh Next.js app (Tailwind 4) installed with the tarball and the ${webPeers.length} web peer libraries`)
 expect(existsSync(join(app, "node_modules/@clegra/ui/dist/components/sidebar.js")) && !existsSync(join(app, "node_modules/@clegra/ui/src")), "node_modules/@clegra/ui holds the built package only")
-expect(!existsSync(join(app, "node_modules", "@dnd-kit")), "the fresh app has no @dnd-kit (the shell does not need it)")
 
 const nextBin = join(app, "node_modules", "next", "dist", "bin", "next")
 const ADVISORY = /affected by a known security vulnerability|SecurityFatalError/
@@ -281,7 +267,7 @@ if (build.status !== 0 && ADVISORY.test(build.stdout + build.stderr)) {
   console.log(`note Next.js ${version("next")} stopped \`next build\` once to report a security advisory for itself; run again`)
   build = nextBuild()
 }
-expect(build.status === 0, "next build (a page with Button, Card, Sidebar and Toaster; a page on <AppShell>, standalone and embedded)")
+expect(build.status === 0, "next build (a page with Button, Card, Sidebar and Toaster; a page in <SiteShell>)")
 if (build.status !== 0) console.log(build.stdout + build.stderr)
 else {
   const base = `http://localhost:${port}`
@@ -323,11 +309,9 @@ else {
     expect(Boolean(font?.ok) && served.subarray(0, 4).toString("latin1") === "wOF2" && served.equals(fontBytes["dist/fonts/inter-latin-wght-normal.woff2"]), `next start: the stylesheet declares Inter and its woff2 is served (${fontUrl ? `${fontUrl.pathname}: ${font?.status}, ${served.length} bytes` : "no @font-face url"})`)
     expect(/--font-sans:\s*"?Inter"?,/.test(css) && /(html|:host)[^{]*\{[^}]*font-family:\s*var\(--font-sans\)/.test(css) && !/--font-sans:\s*var\(--font-sans\)/.test(css), "next start: the root's font-family is var(--font-sans), Inter ahead of a system stack (no self-reference)")
     expect(/\.glass-thick\b/.test(css) && /\.scroll-edge\b/.test(css), "next start: the stylesheet has the shell's glass (glass.css)")
-    // The shell: a standalone page with its chrome, an embed page with none, decided in the first HTML.
-    const shellPage = await (await fetch(`${base}/shell`)).text()
-    const embedPage = await (await fetch(`${base}/embed/board`)).text()
-    expect(/data-sidebar-panels/.test(shellPage) && /data-app="orders"/.test(shellPage) && /account-button/.test(shellPage) && /data-page-heading/.test(shellPage) && /data-probe-page="standalone"/.test(shellPage) && !/data-shell-embedded/.test(shellPage), "next start: a page on <AppShell> has its rail, its items, the person's face and the ShellPage heading (no @dnd-kit installed)")
-    expect(/data-probe-page="embedded"/.test(embedPage) && /data-shell-embedded/.test(embedPage) && !/data-sidebar-panels|data-app="orders"|account-button|data-header-bar/.test(embedPage), "next start: the same frame embedded (/embed/board) has no chrome in its first HTML, only the page; useShell() says embedded")
+    // An app's own website: the sidebar, its entries and the page's heading, in the first HTML.
+    const sitePage = await (await fetch(`${base}/site`)).text()
+    expect(/data-site-shell/.test(sitePage) && /data-site-sidebar/.test(sitePage) && /data-app-bar-entry/.test(sitePage) && /data-page-heading/.test(sitePage) && /data-probe-page="site"/.test(sitePage), "next start: a page in <SiteShell> has its sidebar, its entries and the ShellPage heading")
   }
   stop()
 }
@@ -344,13 +328,13 @@ import { Toaster } from "@clegra/ui/components/sonner"
 import { useIsMobile } from "@clegra/ui/hooks/use-mobile"
 import { ClegraProvider, hostContextFor } from "@clegra/ui/frame"
 import { colorsFor } from "@clegra/ui/tokens"
-import { AppShell, ShellPage, ShellRail, HeaderPill, useShell, type RailItem, type ShellUser } from "@clegra/ui/shell"
+import { SiteShell, ShellPage, NavBar, NavSections, HeaderPill, type NavItem, type NavSection } from "@clegra/ui/shell"
 import { RowList, Row, FactList, Fact } from "@clegra/ui/clegra/rows"
 import { ConfirmSwitch, needsConfirmation } from "@clegra/ui/clegra/confirm-switch"
-export const shellParts = [AppShell, ShellPage, ShellRail, HeaderPill, useShell, RowList, Row, FactList, Fact, ConfirmSwitch]
+export const shellParts = [SiteShell, ShellPage, NavBar, NavSections, HeaderPill, RowList, Row, FactList, Fact, ConfirmSwitch]
 export const asks: boolean = needsConfirmation(true, "on")
-export const item: RailItem = { id: "a", label: "A", href: "/", icon: () => null }
-export const user: ShellUser = { name: "A", email: "a@b.test" }
+export const item: NavItem = { id: "a", label: "A", href: "/", icon: () => null }
+export const section: NavSection = { id: "s", items: [item] }
 export function View() {
   const mobile: boolean = useIsMobile()
   return (
