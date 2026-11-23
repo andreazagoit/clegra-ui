@@ -225,15 +225,16 @@ What it takes:
 - `AppShell`: `link`, `rail`, `nav` (a docked inner bar: `NavBar` + `NavSections`), `list` (a docked list),
   `header` (`ShellHeader` with `HeaderGroup`s of `HeaderPill`/`PillItem`), `bottomBar`, `aside`, `chrome` (key
   listeners), `embedded`; `children` is the page in a `ShellMain` (the landmark, named after the page).
-- `ShellRail`: `brand` and `search` slots (a function of `{ rail }`: the rail's compact look or the phone drawer's
-  row), `groups` of `RailItem`s (`{ id, label, href, icon, tile?, active?, badge?, description?, shortcut?,
-  external? }`), a `controls` slot, `footer` items, and `user`: `{ name, email, image?, label?, tooltip?, href? |
-  onSelect?, active?, menu? }`. The rail is drawn in **blocks**, each its own glass pill, 8 apart with the ground
-  between them: the first holds `brand`, `search` and the first group; every further group is a block of its own
-  (`joinPrevious: true` puts a group in the block before it, when that one is shown); the last of these scrolls inside
-  when the window is short. Detached at the bottom, aligned to the window's bottom edge, the **account block**:
+- `ShellRail`: a `brand` slot (a function of `{ rail }`: the rail's compact look or the phone drawer's row),
+  `drawerSearch` (a field atop the phone's drawer only: the rail has no search tile), `groups` of `RailItem`s (`{ id,
+  label, href, icon, tile?, active?, badge?, description?, shortcut?, external? }`), a `controls` slot, `footer` items,
+  and `user`: `{ name, email, image?, label?, tooltip?, href? | onSelect?, active?, menu? }`. The rail is drawn in
+  **blocks**, each its own glass pill, 8 apart with the ground between them: `brand` alone in the first; then every
+  group is a block of its own, unless it has `join`: it goes on in the block of the group shown before it, right under
+  it (`join: "flush"`) or after a thin line inside the pill (`join: "line"`); the last of these scrolls inside when
+  the window is short. Detached at the bottom, aligned to the window's bottom edge, the **account block**:
   `controls` (your own tiles, drawn with `RAIL_LINK` and `RailTile`), the `footer` items (the account's or the
-  system's places, such as settings) and the face. Test hooks: `data-rail-block="<first group's id>"`, `data-rail-account`. With `href`/`onSelect` and no `menu` the face goes
+  system's places, such as settings) and the face. Test hooks: `data-rail-block="brand"` or `"<first group's id>"`, `data-rail-line`, `data-rail-account`. With `href`/`onSelect` and no `menu` the face goes
   there; with `menu` (`item`, `choice` such as the language or the theme, `separator`) it opens the menu headed by
   name and email.
 - Phone (under 768): the panels go, the rail becomes a drawer (`DrawerPill` opens it), the inner bar folds into the
@@ -384,12 +385,15 @@ transparency». The colour is `--glass-fill` (default `--primary`, so the app's 
 (their default variant), the tinted `HeaderPill`, `.btn-yes` on a `Button` (in the «sì» colour) and the `Bubble`'s
 `default` (`muted`: neutral) are glass fills; bubbles have corners of `--radius-bubble` (a capsule on one line).
 
-A selected state (a set `PillItem`, the chosen `Segmented` segment, the active `TabsTrigger`, a pressed `Toggle` or
-`ToggleGroupItem`, the sidebar's active entry, an active `NavLink`, the open rail tile, a table's checked row) is the
-glass fill, never a faded tint; anything else adds the class `selected` while it is chosen. Inside it the text roles
-(`--foreground`, `--muted-foreground`, `--link`…) are the fill's foreground, so secondary lines and icons stay
-readable. The recipe is written outside Tailwind's layers, so a hover or ground a control sets for its other states
-never paints over it.
+The selected state has two tiers. A selected **control** (a set `PillItem`, the chosen `Segmented` segment, the active
+`TabsTrigger`, a pressed `Toggle` or `ToggleGroupItem`, the open rail tile, a chosen chip) is the glass fill, never a
+faded tint; anything else of the kind adds the class `selected` while it is chosen. Inside it the text roles
+(`--foreground`, `--muted-foreground`, `--link`…) are the fill's foreground, so its words and icons stay readable;
+an `Avatar`, an `AvatarGroupCount` or a `Badge` inside keeps its own colours. A selected **row** (the open row of a
+list, the sidebar's active entry, an active `NavLink`, a sub-nav's open page, a table's checked row) is a subtle
+neutral highlight instead: `--fill-strong` with the words in their usual colours; anything else of the kind adds the
+class `selected-row`. Both are written outside Tailwind's layers, so a hover or ground a component sets for its other
+states never paints over them.
 shadcn's components are not restyled: they read the roles.
 
 ### A view in a frame

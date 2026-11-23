@@ -24,8 +24,8 @@ const ENTRY =
   "flex h-8.5 items-center gap-2.5 rounded-nav px-2.5 text-[0.84375rem] text-sidebar-foreground outline-none hover:bg-(--fill) focus-visible:ring-2 focus-visible:ring-sidebar-ring [&>svg:first-child]:text-muted-foreground"
 
 /**
- * One entry of a nav: 34 high, radius 10, its icon and words; the open one on
- * the strong fill in the link colour; a count after the label; an external one
+ * One entry of a nav: 34 high, radius 10, its icon and words; the open one a
+ * selected row (the neutral strong fill, its usual words); a count after the label; an external one
  * opens a new tab with ↗. With keys (or a `tooltip`) it has a tooltip that
  * shows them. `onNavigate`: a pick puts a sheet away.
  */
@@ -45,7 +45,7 @@ export function NavLink({ item, onNavigate }: { item: NavItem; onNavigate?: () =
       onClick={() => onNavigate?.()}
       aria-current={item.active ? "page" : undefined}
       {...marks}
-      className={cn(ENTRY, item.active && "selected font-semibold")}
+      className={cn(ENTRY, item.active && "selected-row font-semibold")}
     >
       <Icon className="size-4 shrink-0" />
       <span className="min-w-0 flex-1 truncate">{item.label}</span>

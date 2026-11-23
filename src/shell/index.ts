@@ -16,9 +16,9 @@
  *   embedded={embedded}                           // inside Clegra: only the page, no chrome
  *   rail={
  *     <ShellRail
- *       brand={({ rail }) => …}                   // whose it is: the mark (rail) or the lockup (drawer)
- *       search={({ rail }) => …}                  // optional
- *       groups={[{ id, label?, items: RailItem[], onOrder?, reorderHint?, joinPrevious? }, …]}  // a glass block per group (joinPrevious: in the one before)
+ *       brand={({ rail }) => …}                   // whose it is: the mark (rail, a block of its own) or the lockup (drawer)
+ *       drawerSearch={…}                          // optional: a search field atop the phone's drawer only
+ *       groups={[{ id, label?, items: RailItem[], onOrder?, reorderHint?, join? }, …]}  // a glass block per group (join: in the one before, "flush" or after a "line")
  *       reorder={railReorder}                     // only with a group's onOrder: @clegra/ui/shell/reorder (@dnd-kit)
  *       controls={({ rail }) => …}                // optional: the app's own tiles atop the account block (bells)
  *       footer={[administration]}                 // the account block, detached at the bottom, above the face

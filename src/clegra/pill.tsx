@@ -10,7 +10,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../components/tooltip"
  * THE HEADER'S PILLS (the design system §3): the Clegra layer over
  * shadcn's components, never inside them. A group of controls is one glass
  * capsule (40 high, radius 20) holding items of 32 (radius 16); a lone
- * control is a 40 circle. Items are buttons (or links, through `render`), so
+ * control is a 40 circle. The gap between items is the pill's side padding
+ * (4), so a row of icon buttons sits evenly and each item's hover stays in its
+ * own circle. Items are buttons (or links, through `render`), so
  * shadcn's triggers compose with them: `<DropdownMenuTrigger render={<PillItem …/>}/>`.
  */
 
@@ -56,7 +58,7 @@ export function HeaderPill({
       data-header-pill={tone}
       className={cn(
         "flex h-(--shell-pill) shrink-0 items-center rounded-pill",
-        round ? "w-(--shell-pill) justify-center" : "px-1",
+        round ? "w-(--shell-pill) justify-center" : "gap-1 px-1",
         tone === "tinted" ? "glass-fill" : "glass",
         className
       )}
@@ -65,9 +67,9 @@ export function HeaderPill({
   )
 }
 
-/** A thin line between the parts of one pill (the filters, then «Colonne»). */
+/** A thin line between the parts of one pill (the filters, then «Colonne»), the pill's gap on each side. */
 export function PillDivider({ className }: { className?: string }) {
-  return <span aria-hidden className={cn("mx-0.5 h-4.5 w-px shrink-0 bg-(--hairline-strong)", className)} />
+  return <span aria-hidden className={cn("h-4.5 w-px shrink-0 bg-(--hairline-strong)", className)} />
 }
 
 export type PillItemProps = React.ComponentProps<"button"> & {

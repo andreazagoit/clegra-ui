@@ -28,19 +28,20 @@ export function isCurrentPath(pathname: string, href: string) {
 /**
  * The rail's groups as drawn: the empty ones dropped, then gathered into
  * BLOCKS, each its own glass pill (the design system §5; owner, 2026-11-23).
- * Every group starts a block of its own, except one with `joinPrevious` that
- * goes on in the block of the group just before it, when that one is shown
- * (the client's store after the installed apps; with no installed apps it
- * stands alone). The groups' labels are said to screen readers instead, and
- * shown only in the phone's drawer.
+ * Every group starts a block of its own, except one with `join` that goes on
+ * in the block of the group shown before it, whichever that is (an empty
+ * group in between does not part them): «flush» right under it, «line» after
+ * a thin line inside the pill. A group that is the first of its block has no
+ * line. The groups' labels are said to screen readers instead, and shown only
+ * in the phone's drawer.
  */
-export function railBlocks<G extends { items: readonly unknown[]; joinPrevious?: boolean }>(groups: readonly G[]): G[][] {
-  const blocks: G[][] = []
-  groups.forEach((group, i) => {
-    if (group.items.length === 0) return
-    const previousShown = i > 0 && groups[i - 1]!.items.length > 0
-    if (group.joinPrevious && previousShown && blocks.length > 0) blocks[blocks.length - 1]!.push(group)
-    else blocks.push([group])
-  })
+export function railBlocks<G extends { items: readonly unknown[]; join?: "flush" | "line" }>(groups: readonly G[]): { group: G; line: boolean }[][] {
+  const blocks: { group: G; line: boolean }[][] = []
+  for (const group of groups) {
+    if (group.items.length === 0) continue
+    const last = blocks[blocks.length - 1]
+    if (group.join && last) last.push({ group, line: group.join === "line" })
+    else blocks.push([{ group, line: false }])
+  }
   return blocks
 }

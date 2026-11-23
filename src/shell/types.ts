@@ -46,7 +46,7 @@ export type RailReorder = {
   Item: ComponentType<{ id: string; className?: string; children: ReactNode }>
 }
 
-/** A group of the rail: a glass block of its own (or, `joinPrevious`, in the one before), its label said (shown in the drawer only). */
+/** A group of the rail: a glass block of its own (or, with `join`, in the one before), its label said (shown in the drawer only). */
 export type RailGroup = {
   id: string
   label?: string
@@ -55,8 +55,12 @@ export type RailGroup = {
   onOrder?: (ids: string[]) => void
   /** Said to screen readers when an item is picked up. */
   reorderHint?: string
-  /** Set: drawn in the block (the rail's pill) of the group just before it, when that one is shown; otherwise every group is a block of its own. */
-  joinPrevious?: boolean
+  /**
+   * Set: drawn in the block (the rail's pill) of the group shown before it, whichever that is; otherwise every group
+   * is a block of its own. «flush»: right under it; «line»: after a thin line inside the pill (the client's installed
+   * apps after its apps of base, its store after them).
+   */
+  join?: "flush" | "line"
   data?: DataAttributes
 }
 

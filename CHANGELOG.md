@@ -4,6 +4,25 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.9 (2026-11-23)
+
+- **The rail's blocks, with lines inside** (`ShellRail`, owner 2026-11-23). `brand` is a block of its own
+  (`data-rail-block="brand"`), no longer with the first group. `RailGroup`'s `joinPrevious` is replaced by
+  `join: "flush" | "line"`: the group goes on in the block of the group shown before it (an empty group in between no
+  longer parts them), right under it or after a thin line inside the pill (40 wide, `data-rail-line`; in the phone's
+  drawer the sidebar's separator). `railBlocks` returns each block's groups with their `line`. The `search` slot is
+  gone from the rail: `drawerSearch` (a node) is a field atop the phone's drawer only; an app opens its search its own
+  way from tablet width (⌘K).
+- **The selected state in two tiers** (owner, 2026-11-23). Selected rows are neutral again: the new class
+  `selected-row`, the sidebar's active entry (`SidebarMenuButton`, `SidebarMenuSubButton`), an active `NavLink` and a
+  table's checked row are `--fill-strong` with the words in their usual colours, no longer the glass fill. Controls
+  (a set `PillItem`, a segment, a tab, a pressed toggle, the open rail tile, `selected`) keep the glass fill in the
+  app's colour. Inside a selected control an `Avatar`, `AvatarGroupCount` or `Badge` keeps its own initials, ground
+  and ring (new `--own-foreground`, `--own-muted-foreground`).
+- **Pills hold their items evenly** (owner, 2026-11-23): a `HeaderPill`'s gap between items equals its side padding
+  (4), so icon buttons no longer touch while the sides have room; `PillDivider` drops its own margin (the gap is on
+  each side).
+
 ## 0.1.0-next.8 (2026-11-23)
 
 - **The glass fill and the selected state** (owner, 2026-11-23). One recipe for every solid coloured thing,
