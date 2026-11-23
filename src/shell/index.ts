@@ -25,7 +25,7 @@
  *       user={{ name, email, image?, label?, tooltip?, href? | onSelect?, active?, menu?: UserMenuEntry[] }}
  *     />
  *   }
- *   nav={<NavBar id name label band? footer?><NavSections label sections={NavSection[]} /></NavBar>}  // docked 240
+ *   nav={<NavBar id name label band? footer?><NavSections label sections={NavSection[]} /></NavBar>}  // docked --shell-sidebar (320)
  *   list={…}                                      // a sidebar page's docked list
  *   chrome={…}                                    // key listeners and other parts with no place
  *   header={<ShellHeader phone={phone}><HeaderGroup …>…</HeaderGroup></ShellHeader>}

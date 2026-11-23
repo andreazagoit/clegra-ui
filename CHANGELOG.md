@@ -4,6 +4,15 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.12 (2026-11-23)
+
+- **One base for every second sidebar** (owner, 2026-11-23: an app's bar, a list and a site's sidebar were 240 or
+  320). One width, `--shell-sidebar` (320, Posta's list), replaces `--shell-nav` (240) and `--shell-list`; with it
+  `--shell-sidebar-band` (56, the top band), `--shell-sidebar-pad` (8, the rows from the sides) and
+  `--shell-sidebar-row` (34, a nav row). `AppShell` sizes its `nav` and `list` panels itself (their content fills
+  them), `NavBar`, `NavSections`, `NavLink` and `SiteShell`'s docked sidebar read the same tokens; the site's phone
+  drawer stays 240. `--shell-clegra` becomes `--shell-side-panel` (380): every right side panel's width.
+
 ## 0.1.0-next.11 (2026-11-23)
 
 - **One surface for every panel** (owner, 2026-11-23: the rail's blocks, the list, the side panel and the page were

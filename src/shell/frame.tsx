@@ -15,8 +15,9 @@ import { ShellLinkProvider, type ShellLinkComponent } from "./link"
  * THE FRAME (the app shell design, the design system §5): content is the
  * ground and the chrome floats on it. Down the left, floating panels inset 8
  * from the window with a gap of 8: the `rail` (a column of pills, its
- * blocks, the account's detached at the bottom: `ShellRail`), then the docked `nav` (240, the app's inner bar) and a
- * sidebar page's docked `list`, each hidden when it is empty. Then the
+ * blocks, the account's detached at the bottom: `ShellRail`), then the docked `nav` (the app's inner bar) and a
+ * sidebar page's docked `list`, each hidden when it is empty: both are a second sidebar, `--shell-sidebar` wide
+ * (one width for every one: their content fills it). Then the
  * content slot: the scroll edge, the floating `header`, the page
  * (`children`, a `ShellMain`), the phone's `bottomBar`; `aside` after it (the
  * Clegra panel, the FAB, a browser column). On a phone (under 768) the panels
@@ -105,12 +106,12 @@ export function AppShell({
             </div>
           </div>
           {nav && (
-            <FloatingPanel data-sidebar-panel="nav" {...tint} className="h-full shrink-0 has-[>:only-child:empty]:hidden">
+            <FloatingPanel data-sidebar-panel="nav" {...tint} className="h-full w-(--shell-sidebar) shrink-0 *:w-full has-[>:only-child:empty]:hidden">
               {inApp(nav)}
             </FloatingPanel>
           )}
           {list && (
-            <FloatingPanel data-sidebar-panel="list" {...tint} className="h-full shrink-0 has-[>:only-child:empty]:hidden">
+            <FloatingPanel data-sidebar-panel="list" {...tint} className="h-full w-(--shell-sidebar) shrink-0 *:w-full has-[>:only-child:empty]:hidden">
               {inApp(list)}
             </FloatingPanel>
           )}

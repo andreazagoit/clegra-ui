@@ -54,7 +54,7 @@ function SiteBrandMark({ brand, onNavigate }: { brand: SiteBrand; onNavigate?: (
  * AN APP'S OWN WEBSITE'S FRAME (owner, 2026-11-22): the inner bar of Clegra's
  * apps (`NavBar` + `NavSections`) as the site's left sidebar, flush to the
  * page's top, bottom and left (no panel, no radius, no glass; a hairline on its
- * right), 240 wide on `bg-sidebar`; the band of 56 with the app's tile and
+ * right), `--shell-sidebar` (320, every second sidebar's width) on `bg-sidebar`, 240 as the phone's drawer; the band of 56 with the app's tile and
  * name, the `sections` (the open one marked by its `active`), the `footer`
  * items (the app's settings) and `footerExtra` (the signed-in person, sign
  * out) pinned at the bottom. Then the page (`children`), on `bg-background`,
@@ -162,7 +162,7 @@ export function SiteShell({
           <SiteBrandMark brand={brand} />
         </div>
         {/* The docked sidebar: flush to the top, bottom and left, a hairline on its right. */}
-        <div data-site-sidebar="" className="hidden w-(--shell-nav) shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
+        <div data-site-sidebar="" className="hidden w-(--shell-sidebar) shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
           {bar("docked")}
         </div>
         <div data-site-main="" className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain">
@@ -176,7 +176,7 @@ export function SiteShell({
         aria-label={label}
         data-site-drawer=""
         {...tint}
-        className="flex flex-col gap-0 border-sidebar-border bg-sidebar p-0 text-sidebar-foreground data-[side=left]:w-(--shell-nav) data-[side=left]:max-w-[85vw]"
+        className="flex flex-col gap-0 border-sidebar-border bg-sidebar p-0 text-sidebar-foreground data-[side=left]:w-60 data-[side=left]:max-w-[85vw]"
       >
         {bar("sheet")}
       </SheetContent>

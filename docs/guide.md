@@ -132,7 +132,7 @@ export default function Page() {
 ## The app shell
 
 Every Clegra web app has the same frame, Clegra's own client included: the **rail** (the app's places as tiles in glass
-blocks, the signed-in person's face in a block of its own at the bottom), an optional docked **inner bar** (240), a **floating header** of glass pills
+blocks, the signed-in person's face in a block of its own at the bottom), an optional docked **inner bar** (`--shell-sidebar`, 320: every second sidebar), a **floating header** of glass pills
 over the content, and the page under it with the shell's gutters. `@clegra/ui/shell` draws it, exactly as the client
 does; you configure it with props. It is presentational: no router (your link component comes in as `link`), no
 i18n (every word is a prop), no data, no persistence. Web only (React DOM; there is no native shell).
@@ -276,7 +276,7 @@ boolean.)
 
 An app's own website (its pages Clegra shows in a card, the client drawing nothing around them, and the same pages
 open on their own in a browser tab) has one frame: the app's inner bar as a **left sidebar**, flush to the page's
-top, bottom and left (no floating panel, no radius, no glass; a hairline on its right), 240 wide on the sidebar's
+top, bottom and left (no floating panel, no radius, no glass; a hairline on its right), `--shell-sidebar` (320) wide on the sidebar's
 ground. At the top a band of 56 with the app's tile and name; then its sections (the open one marked); its settings
 and `footerExtra` pinned at the bottom. The page is beside it on `bg-background`, scrolling on its own at the
 window's full height. Under 768 the sidebar folds into a slim flush top bar (☰ and the name) and opens as a drawer
@@ -337,8 +337,9 @@ account), light and dark:
   `--link`). Each is a Tailwind colour too (`bg-primary`, `text-muted-foreground`).
 - Radii: `--radius` (0.875rem) and the scale `rounded-sm` … `rounded-4xl` derived from it; the glass layer's
   concentric radii (`--radius-panel` 22, `--radius-pill` 20, `--radius-card` 18, `--radius-item` 16, …).
-- The shell's measures: `--shell-gutter`, `--shell-header`, `--shell-bottom`, `--shell-column`, `--shell-nav`,
-  `--shell-rail`; a field's edge where it carries the control: `--control-edge`.
+- The shell's measures: `--shell-gutter`, `--shell-header`, `--shell-bottom`, `--shell-column`, `--shell-rail`; every second
+  sidebar's `--shell-sidebar` (320), `--shell-sidebar-band` (56), `--shell-sidebar-pad` (8), `--shell-sidebar-row`
+  (34), and every right side panel's `--shell-side-panel` (380); a field's edge where it carries the control: `--control-edge`.
 - Dark mode: the `dark` class on an ancestor (`<html class="dark">`); `@custom-variant dark` is in `styles.css`.
 - Plain values for code that can't read CSS (React Native, canvas, email): `colorsFor("light" | "dark")` from
   `@clegra/ui/tokens`.

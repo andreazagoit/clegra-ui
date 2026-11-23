@@ -409,14 +409,21 @@
   --rail-radius: calc(var(--rail-tile-radius) + var(--rail-inset)); /* 23: the rail's panel */
   --rail-gap: 12px; /* between two tiles */
   --rail-target: calc(var(--rail-tile) + 4px); /* 48: a tile's link (the face's too), 2 around the tile */
-  --shell-nav: 15rem; /* 240: an app's inner bar */
-  --shell-list: 20rem; /* 320: the list of sidebar and split */
+  /*
+   * Every second sidebar (owner, 2026-11-23: «all the same base»): an app's inner bar, a sidebar page's list, a site's
+   * sidebar. One width, one top band, one side padding, one row: `AppShell`'s `nav` and `list` panels, `NavBar`,
+   * `NavSections`, `NavLink` and `SiteShell` read them; an app never sets a sidebar's width of its own.
+   */
+  --shell-sidebar: 20rem; /* 320: every second sidebar's width (Posta's list) */
+  --shell-sidebar-band: 3.5rem; /* 56: its top band (the name, or the list's search) */
+  --shell-sidebar-pad: 0.5rem; /* 8: its rows from its sides */
+  --shell-sidebar-row: 2.125rem; /* 34: a nav row */
   --shell-column: 60rem; /* 960: contained */
   --shell-gutter: 1.5rem; /* 24 (16 on a phone): the page's side inset, the same for the floating header's pills and the content under them */
   --shell-header: 4rem; /* 64: the floating header's zone, every layout's top padding */
   --shell-pill: 2.5rem; /* 40: a header pill (44 on a phone) */
   --shell-pill-item: 2rem; /* 32: an item inside a pill */
-  --shell-clegra: 23.75rem; /* 380: the Clegra panel (drag 320–560) */
+  --shell-side-panel: 23.75rem; /* 380: every right side panel (the assistant, a page's own: drag 320–560) */
   --shell-bottom: 6.875rem; /* 110: the content's bottom padding, the FAB (52 at 20) never covers the last row */
   --shell-edge: 4.625rem; /* 74: the scroll edge under the header (64 + the safe area on a phone: glass.css) */
 
