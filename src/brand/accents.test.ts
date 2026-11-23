@@ -24,6 +24,16 @@ export function contrast(a: string, b: string) {
   return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)
 }
 
+/** The glass fill's share of the accent (glass.css «THE GLASS FILL»: color-mix(… var(--glass-fill) 90%, transparent)). */
+const GLASS_FILL = 0.9
+
+/** An opaque #RRGGBB at `share` over an opaque ground, as #RRGGBB. */
+function over(fill: string, ground: string, share: number) {
+  const channels = (hex: string) => [16, 8, 0].map((shift) => (parseInt(hex.slice(1), 16) >> shift) & 255)
+  const [f, g] = [channels(fill), channels(ground)]
+  return `#${f.map((v, i) => Math.round(v * share + g[i]! * (1 - share)).toString(16).padStart(2, "0")).join("")}`
+}
+
 /** The grounds an app's text and controls sit on, per mode (the theme's background, card and muted fills). */
 const GROUNDS = {
   light: { background: light.background, card: light.card, muted: light.muted, sidebar: light.sidebar },
@@ -42,14 +52,13 @@ test("every accent meets WCAG AA in light and dark", () => {
       for (const [ground, colour] of Object.entries(GROUNDS[mode])) {
         const ratio = contrast(tone.text, colour)
         assert.ok(ratio >= 4.5, `${at}: the accent as text on ${ground} is ${ratio.toFixed(2)}:1`)
+        // The glass fill (glass.css): the accent at 90% over what is behind it, and its foreground on that.
+        const glass = contrast(tone.foreground, over(tone.accent, colour, GLASS_FILL))
+        assert.ok(glass >= 4.5, `${at}: the foreground on the glass fill over ${ground} is ${glass.toFixed(2)}:1`)
       }
-      const onSoft = contrast(tone.text, tone.soft)
-      assert.ok(onSoft >= 4.5, `${at}: the accent as text on soft is ${onSoft.toFixed(2)}:1`)
-      const pageOnSoft = contrast(page.foreground, tone.soft)
-      assert.ok(pageOnSoft >= 4.5, `${at}: the page's text on soft is ${pageOnSoft.toFixed(2)}:1`)
       const control = contrast(tone.accent, page.background)
       assert.ok(control >= 3, `${at}: the accent's fill against the background is ${control.toFixed(2)}:1 (a control needs 3:1)`)
-      rows.push(`${at.padEnd(13)} fill ${tone.accent} fg ${onFill.toFixed(2)} | text ${tone.text} ${contrast(tone.text, page.background).toFixed(2)} | soft ${tone.soft} ${onSoft.toFixed(2)} | control ${control.toFixed(2)}`)
+      rows.push(`${at.padEnd(13)} fill ${tone.accent} fg ${onFill.toFixed(2)} | text ${tone.text} ${contrast(tone.text, page.background).toFixed(2)} | control ${control.toFixed(2)}`)
     }
   }
   if (process.env.ACCENTS_TABLE) console.log(rows.join("\n"))
@@ -72,7 +81,7 @@ test("the palette is closed: names only, absent is blue, anything else an error"
   assert.equal(appAccentOf(undefined), "blue")
   assert.equal(appAccentOf("teal"), "teal")
   assert.throws(() => appAccentOf("#00FF00"), /is not one of blue, indigo/)
-  assert.deepEqual(appAccentVariables("red", "dark"), { "--app-accent": "#E0302F", "--app-accent-foreground": "#FFFFFF", "--app-accent-text": "#FCA5A5", "--app-accent-soft": "#3B1414" })
+  assert.deepEqual(appAccentVariables("red", "dark"), { "--app-accent": "#E0302F", "--app-accent-foreground": "#FFFFFF", "--app-accent-text": "#FCA5A5" })
 })
 
 /** @clegra/sdk's sources beside this package: where both are developed together, not in this package's own repository. */
@@ -93,7 +102,7 @@ test("the stylesheet scopes every accent in light and dark and maps the app's co
     assert.ok(css.includes(`[data-app-accent="${name}"] {\n  --app-accent: ${appAccentColors[name].light.accent};`), name)
     assert.ok(css.includes(`[data-app-accent="${name}"]:is(.dark, .dark *) {\n  --app-accent: ${appAccentColors[name].dark.accent};`), `${name} dark`)
   }
-  for (const role of ["--primary: var(--app-accent)", "--primary-foreground: var(--app-accent-foreground)", "--ring: var(--app-accent-text)", "--link: var(--app-accent-text)", "--sidebar-active: var(--app-accent-text)", "--selection: var(--app-accent-soft)"])
+  for (const role of ["--primary: var(--app-accent)", "--primary-foreground: var(--app-accent-foreground)", "--ring: var(--app-accent-text)", "--link: var(--app-accent-text)", "--sidebar-active: var(--app-accent-text)"])
     assert.ok(css.includes(role), role)
   // The status colours are never the accent's.
   assert.doesNotMatch(css, /--(destructive|success|warning):/)

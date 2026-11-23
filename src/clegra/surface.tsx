@@ -35,8 +35,8 @@ export function ScrollEdge({ side = "top", className }: { side?: "top" | "bottom
 }
 
 /**
- * A segmented control: a capsule track of `--fill`, the chosen segment
- * Foglio with a small shadow (the strong fill in dark). One value.
+ * A segmented control: a capsule track of `--fill`, the chosen segment the
+ * selected state (the glass fill in the app's colour, theme.css). One value.
  * «Tutti · Non letti · Con allegati», calendar views.
  */
 export function Segmented<T extends string>({
@@ -66,7 +66,7 @@ export function Segmented<T extends string>({
         <ToggleGroupItem
           key={item.value}
           value={item.value}
-          className="h-7 rounded-full px-3 text-[0.8125rem] font-medium data-pressed:bg-card data-pressed:shadow-sm dark:data-pressed:bg-(--fill-strong)"
+          className="h-7 rounded-full px-3 text-[0.8125rem] font-medium"
         >
           {item.label}
         </ToggleGroupItem>

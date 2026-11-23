@@ -197,7 +197,7 @@ export const Glass: StoryObj = {
         <div className="flex gap-4 p-6">
           <div className="glass flex h-24 w-48 items-center justify-center rounded-pill text-sm font-semibold">.glass</div>
           <div className="glass-thick flex h-24 w-48 items-center justify-center rounded-panel text-sm font-semibold">.glass-thick</div>
-          <div className="glass-tinted flex h-24 w-48 items-center justify-center rounded-pill text-sm font-semibold">.glass-tinted</div>
+          <div className="glass-fill flex h-24 w-48 items-center justify-center rounded-pill text-sm font-semibold">.glass-fill</div>
         </div>
       </Ground>
       <div className="grid max-w-3xl gap-3 sm:grid-cols-3">

@@ -45,7 +45,7 @@ export function NavLink({ item, onNavigate }: { item: NavItem; onNavigate?: () =
       onClick={() => onNavigate?.()}
       aria-current={item.active ? "page" : undefined}
       {...marks}
-      className={cn(ENTRY, item.active && "bg-(--selection) font-semibold text-sidebar-active [&>svg:first-child]:text-current")}
+      className={cn(ENTRY, item.active && "selected font-semibold")}
     >
       <Icon className="size-4 shrink-0" />
       <span className="min-w-0 flex-1 truncate">{item.label}</span>

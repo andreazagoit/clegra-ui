@@ -9,7 +9,7 @@ import { Switch } from "@clegra/ui/components/switch"
 
 /**
  * The apps' accents (src/brand/accents.ts): every app has its own tint, like Apple's apps, one of ten names. Each
- * swatch shows the fill with its foreground, the accent as text, and the soft ground, in light and dark; below, the
+ * swatch shows the fill with its foreground (also every selected state's) and the accent as text, in light and dark; below, the
  * same controls inside `<AppAccent>` for each name (the toolbar's theme switches the mode). Every pair is WCAG AA
  * (src/brand/accents.test.ts).
  */
@@ -26,7 +26,6 @@ function Swatch({ name, mode, tone }: { name: AppAccentName; mode: "light" | "da
       </div>
       <div style={{ background: tone.accent, color: tone.foreground, borderRadius: 9999, padding: "6px 12px", font: "600 13px/1.2 Inter, sans-serif" }}>{tone.accent}</div>
       <div style={{ color: tone.text, font: "600 13px/1.2 Inter, sans-serif" }}>Link {tone.text}</div>
-      <div style={{ background: tone.soft, color: tone.text, borderRadius: 8, padding: "6px 10px", font: "500 13px/1.2 Inter, sans-serif" }}>Selected {tone.soft}</div>
     </div>
   )
 }
@@ -55,7 +54,7 @@ export const InAnApp: StoryObj = {
           <Switch defaultChecked aria-label={`${name} switch`} />
           <Checkbox defaultChecked aria-label={`${name} checkbox`} />
           <Progress value={60} className="w-32" />
-          <span className="rounded-lg bg-(--selection) px-2.5 py-1 text-sm font-semibold text-sidebar-active">Selezionato</span>
+          <span className="selected rounded-full px-2.5 py-1 text-sm font-semibold">Selezionato</span>
           <input aria-label={`${name} focus`} className="h-8 rounded-md border px-2 text-sm outline-none focus-visible:ring-3 focus-visible:ring-ring/50" defaultValue="Focus" />
         </AppAccent>
       ))}

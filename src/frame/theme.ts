@@ -10,7 +10,7 @@ import { CLEGRA_STYLE_PREFIX, CLEGRA_UI_META_KEY, type ClegraMode, type ClegraTh
  * style variables, locale, platform) and under `_meta["clegra/ui"]` Clegra's
  * roles as `--clegra-<role>` (`variables`), the app's accent and the text size.
  * With an `accent` (src/brand/accents.ts) the roles of the app's own controls
- * (primary, its foreground, link, ring, the app-accent ones, selection) and the
+ * (primary, its foreground, link, ring, the app-accent ones) and the
  * standard info and ring variables are the accent's.
  * The values are the worked-out colours of src/tokens.ts (the ones the
  * stylesheet resolves to: tokens.test.ts).
@@ -52,7 +52,7 @@ const ROLES: Record<string, (c: Colors, mode: ClegraMode) => string> = {
 }
 
 /** The accent's roles (src/brand/accents.css): sent for every view, Clegra's blue unless the app has its own. */
-const ACCENT_ROLES = ["app-accent", "app-accent-foreground", "app-accent-text", "app-accent-soft", "selection"] as const
+const ACCENT_ROLES = ["app-accent", "app-accent-foreground", "app-accent-text"] as const
 
 /** Clegra's roles a view receives (as `--clegra-<name>`) and this library's stylesheet reads (as `--<name>`). */
 export const CLEGRA_ROLE_NAMES: readonly string[] = [...Object.keys(ROLES), ...ACCENT_ROLES, "radius"]
@@ -158,14 +158,13 @@ export function clegraStyleVariables(mode: ClegraMode, accent?: AppAccentName): 
   for (const [name, read] of Object.entries(ROLES)) variables[`${CLEGRA_STYLE_PREFIX}${name}`] = read(colors, mode)
   const own = appAccentColors[accent ?? DEFAULT_APP_ACCENT][mode]
   for (const [name, value] of Object.entries(appAccentVariables(accent ?? DEFAULT_APP_ACCENT, mode))) variables[`${CLEGRA_STYLE_PREFIX}${name.slice(2)}`] = value
-  variables[`${CLEGRA_STYLE_PREFIX}selection`] = accent ? own.soft : mode === "dark" ? "rgba(255,255,255,0.14)" : "rgba(10,10,10,0.1)"
   if (accent) {
     Object.assign(variables, {
       [`${CLEGRA_STYLE_PREFIX}primary`]: own.accent,
       [`${CLEGRA_STYLE_PREFIX}primary-foreground`]: own.foreground,
       [`${CLEGRA_STYLE_PREFIX}link`]: own.text,
       [`${CLEGRA_STYLE_PREFIX}ring`]: own.text,
-      "--color-background-info": own.soft,
+      "--color-background-info": soft(own.accent, mode === "dark" ? 0.2 : 0.1),
       "--color-text-info": own.text,
       "--color-border-info": own.accent,
       "--color-ring-primary": own.text,

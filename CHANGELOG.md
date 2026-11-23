@@ -4,6 +4,27 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.8 (2026-11-23)
+
+- **The glass fill and the selected state** (owner, 2026-11-23). One recipe for every solid coloured thing,
+  `.glass-fill` (`src/brand/theme.css`, in `styles.css`): the colour at 90% with the regular blur behind it, a light
+  inner edge and top highlight, the pills' shadow and the colour's foreground (`--glass-fill`,
+  `--glass-fill-foreground`, default `--primary`; `--glass-fill-share`, `--glass-fill-edge`; solid with «Reduce
+  transparency»), and `.glass-fill-neutral`. It replaces `.glass-tinted` (removed from `glass.css`; the tinted
+  `HeaderPill` uses it). `Button` and `Badge`'s default variant is `glass-fill`; `.btn-yes` on a `Button` is the glass
+  fill in its colour. Every **selected state** is the glass fill in the app's colour, never a faded tint: a set
+  `PillItem` (its count reverses), the chosen `Segmented` segment, the active `TabsTrigger` (line tabs: the underline
+  in the accent), a pressed `Toggle`/`ToggleGroupItem`, the sidebar's active entry, an active `NavLink`, the open
+  rail tile and the face, a table's checked row, and the new class `selected` for anything else; inside it the text
+  roles are the fill's foreground. A `QuestionnaireChoice` that is checked has a solid accent edge instead of a tint.
+- **Bubbles**: `Bubble`'s `default` is the glass fill and `muted` the neutral one (no hover tint); `BubbleContent`'s
+  corners are the new `--radius-bubble` (22: a capsule on one line, like the button).
+- **Accents**: the soft ground is gone (`soft` from `AppAccentTone` and `appAccentVariables`, `--app-accent-soft`,
+  `bg-app-accent-soft`, `--selection`; an MCP Apps view no longer receives `--clegra-app-accent-soft` and
+  `--clegra-selection`; `--color-background-info` is the accent at 10%/20%). The light fills of `red` (`#D02424`),
+  `green` (`#127535`), `teal` (`#0F716A`) and `gray` (`#636363`) are a shade deeper so their foreground is AA on the
+  glass fill too (`accents.test.ts` checks it). Storybook: «Clegra/Selected states».
+
 ## 0.1.0-next.7 (2026-11-23)
 
 - **The rail in blocks** (`ShellRail`, owner 2026-11-23): no longer one tall panel. Each group is its own glass pill

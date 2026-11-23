@@ -67,7 +67,7 @@ test("an app's accent reaches the view: its controls' roles, the standard info a
     assert.equal((context._meta?.[CLEGRA_UI_META_KEY] as ClegraUiContext).accent, "red")
     assert.equal(context.styles?.variables?.["--color-text-info"], tone.text)
     assert.equal(context.styles?.variables?.["--color-ring-primary"], tone.text)
-    assert.equal(context.styles?.variables?.["--color-background-info"], tone.soft)
+    assert.match(context.styles?.variables?.["--color-background-info"] ?? "", /^rgba\(/)
     const theme = themeOfHostContext(context)
     assert.equal(theme.accent, "red")
     const applied = variablesToApply(theme)
@@ -76,8 +76,6 @@ test("an app's accent reaches the view: its controls' roles, the standard info a
     assert.equal(applied["--link"], tone.text)
     assert.equal(applied["--ring"], tone.text)
     assert.equal(applied["--app-accent"], tone.accent)
-    assert.equal(applied["--app-accent-soft"], tone.soft)
-    assert.equal(applied["--selection"], tone.soft)
     // Clegra's own and the statuses stay.
     assert.equal(applied["--background"], colorsFor(mode).background)
     assert.equal(applied["--destructive"], colorsFor(mode).destructive)

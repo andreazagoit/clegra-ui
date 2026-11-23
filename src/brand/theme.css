@@ -15,8 +15,8 @@
  * One palette for every account, a company's or a personal one: the type of
  * account changes what is in the app, never its colours.
  *
- * An app's area (data-app-accent, accents.css) points --primary, --link, --ring, --sidebar-active and --selection
- * at the app's own accent; everything else here stays as it is.
+ * An app's area (data-app-accent, accents.css) points --primary, --link, --ring and --sidebar-active at the app's
+ * own accent; everything else here stays as it is. A selected state is the glass fill in --primary (THE GLASS FILL, below).
  *
  * Arancio (--yes, --highlight) is the second accent, used sparingly: the «sì»
  * (the button that says yes to what Clegra prepared, the «sì» chip), counts
@@ -153,8 +153,10 @@
   color: var(--link);
 }
 
-/* The «sì» button: Arancio with Nero text, a Nero edge on light grounds (components: className="btn-yes"). */
+/* The «sì» button: Arancio with Nero text, a Nero edge on light grounds (components: className="btn-yes"); on a Button it is the glass fill in Arancio. */
 .btn-yes {
+  --glass-fill: var(--yes);
+  --glass-fill-foreground: var(--on-yes);
   background-color: var(--yes);
   color: var(--on-yes);
   border: var(--palette-accent-edge-width, 1.5px) solid var(--yes-edge);
@@ -170,13 +172,99 @@
 /*
  * THE SIDEBAR («sidebar bianca», owner's decision of 2026-11-09; neutral since
  * 2026-11-12): in light the floating panel is Grigio 50 beside the white page,
- * in dark Grigio 850 beside the Nero one. Hover and the open item are a
- * neutral fill (--sidebar-accent), and the open item is marked in the brand's
- * colour: its words and icon in --sidebar-active (Blu; Azzurro in dark).
+ * in dark Grigio 850 beside the Nero one. Hover is a neutral fill
+ * (--sidebar-accent); the open item is a selected state (below).
  * The second accent (Arancio) stays for the counts and the «sì» only.
  */
-:is([data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"])[data-active] {
-  color: var(--sidebar-active);
+
+/*
+ * THE GLASS FILL (owner, 2026-11-23): the one recipe of every solid,
+ * coloured thing (the primary button and a solid badge: their default
+ * variant is `glass-fill`; the header's tinted pill «+ Nuova voce»; the «sì»
+ * button; the person's own chat bubble; every selected state, below), so they
+ * never drift apart. iOS-style: the colour at 90% with the
+ * chrome's blur behind it, a light inner edge and a 1 px top highlight, the
+ * pills' shadow, and the colour's foreground. The colour is --glass-fill
+ * (default --primary: Clegra's blue, or the app's accent in its area) with
+ * --glass-fill-foreground (default --primary-foreground); a neutral fill (the
+ * other people's bubbles, the Bubble's «muted») is .glass-fill-neutral. A
+ * chat bubble's corners are --radius-bubble: a capsule on one line, like the
+ * button. Every accent's foreground on this fill is at least 4.5:1 over the page's grounds, light and dark
+ * (accents.test.ts). Without backdrop-filter and with «Riduci trasparenza» it
+ * is solid (--glass-fill-share).
+ *
+ * It is written outside Tailwind's layers on purpose: a hover or a ground a
+ * control sets for its other states never paints over it.
+ */
+@property --glass-fill {
+  syntax: "*";
+  inherits: false;
+}
+@property --glass-fill-foreground {
+  syntax: "*";
+  inherits: false;
+}
+.glass-fill,
+[data-slot="bubble"]:is([data-variant="default"], [data-variant="muted"]) > [data-slot="bubble-content"],
+.selected,
+[data-pill-item][data-set],
+[data-slot="table-row"][data-state="selected"],
+:is([data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"])[data-active]:not([data-active="false"]),
+[data-slot="tabs-list"]:not([data-variant="line"]) > [data-slot="tabs-trigger"]:is([data-active]:not([data-active="false"]), [data-state="active"]),
+:is([data-slot="toggle"], [data-slot="toggle-group-item"]):is([aria-pressed="true"], [data-pressed]:not([data-pressed="false"])) {
+  background-color: color-mix(in srgb, var(--glass-fill, var(--primary)) var(--glass-fill-share), transparent);
+  background-clip: border-box; /* under a control's border too (shadcn's buttons clip to the padding) */
+  border-color: transparent;
+  color: var(--glass-fill-foreground, var(--primary-foreground));
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-fill-edge), var(--glass-shadow);
+}
+.glass-fill-neutral,
+[data-slot="bubble"][data-variant="muted"] > [data-slot="bubble-content"] {
+  --glass-fill: var(--muted);
+  --glass-fill-foreground: var(--foreground);
+}
+:is(.glass-fill):is(a, button):hover:not(:disabled, [aria-disabled="true"]) {
+  filter: brightness(0.94);
+}
+
+/*
+ * THE SELECTED STATE (owner, 2026-11-23): what is chosen, open or on (a set
+ * filter pill, a segment, a tab, the open entry of a bar, the open row of a
+ * list, a table's checked row, a pressed toggle) is the glass fill above, exactly like the primary
+ * button, never a faded tint. In an app's area --primary is the app's accent
+ * (accents.css: Calendar red, Memoria teal); elsewhere it is Clegra's blue.
+ * The class `selected` (a component adds it while its item is chosen) and the
+ * shared controls' own chosen states (in the list above) take it. Inside it,
+ * the page's text roles (foreground, muted, links, the open entry's colour)
+ * are the fill's foreground, so a row's secondary line and icons stay readable.
+ */
+.selected,
+[data-pill-item][data-set],
+[data-slot="table-row"][data-state="selected"],
+:is([data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"])[data-active]:not([data-active="false"]),
+[data-slot="tabs-list"]:not([data-variant="line"]) > [data-slot="tabs-trigger"]:is([data-active]:not([data-active="false"]), [data-state="active"]),
+:is([data-slot="toggle"], [data-slot="toggle-group-item"]):is([aria-pressed="true"], [data-pressed]:not([data-pressed="false"])) {
+  --foreground: var(--primary-foreground);
+  --card-foreground: var(--primary-foreground);
+  --accent-foreground: var(--primary-foreground);
+  --muted-foreground: var(--primary-foreground);
+  --sidebar-foreground: var(--primary-foreground);
+  --sidebar-accent-foreground: var(--primary-foreground);
+  --sidebar-active: var(--primary-foreground);
+  --link: var(--primary-foreground);
+  --app-accent-text: var(--primary-foreground);
+  --faint: var(--primary-foreground);
+
+  /* A checkbox on the fill (a selected table row) keeps its edge. */
+  & [data-slot="checkbox"] {
+    border-color: var(--primary-foreground);
+  }
+}
+/* The line tabs keep their underline: the chosen one is drawn in the accent. */
+[data-slot="tabs-list"][data-variant="line"] > [data-slot="tabs-trigger"]:is([data-active]:not([data-active="false"]), [data-state="active"])::after {
+  background-color: var(--primary);
 }
 
 /*
@@ -253,6 +341,9 @@
   --faint: color-mix(in srgb, var(--palette-neutral-500) 80%, var(--palette-neutral-0)); /* shortcuts in menus, section labels */
   --edge-blur: blur(6px);
   --radius-button: 9999px; /* buttons are capsules (glass layer: [data-slot=button]) */
+  --radius-bubble: 1.375rem; /* 22: a chat bubble, half a one-line bubble's height: a capsule on one line like the button, 22 on many */
+  --glass-fill-share: 90%; /* THE GLASS FILL: the colour's share over what is behind it (solid when glass is opaque) */
+  --glass-fill-edge: inset 0 0 0 0.5px rgb(255 255 255 / 22%), inset 0 1px 0 rgb(255 255 255 / 14%); /* its inner edge and top highlight */
 }
 
 /* A phone (narrower than 768, layout-room.ts SHELL.phone): the gutter is 16. */
@@ -285,6 +376,7 @@
   :root,
   .dark {
     --glass: var(--glass-opaque);
+    --glass-fill-share: 100%;
     --glass-thick: var(--glass-opaque);
     --head: var(--card);
   }
@@ -293,6 +385,7 @@
   :root,
   .dark {
     --glass: var(--glass-opaque);
+    --glass-fill-share: 100%;
     --glass-thick: var(--glass-opaque);
     --head: var(--card);
     --glass-blur: none;
@@ -305,6 +398,7 @@ html[data-glass="opaque"],
 html[data-glass="opaque"] .dark,
 html[data-glass="opaque"].dark {
   --glass: var(--glass-opaque);
+  --glass-fill-share: 100%;
   --glass-thick: var(--glass-opaque);
   --head: var(--card);
   --glass-blur: none;

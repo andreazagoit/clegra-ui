@@ -103,7 +103,7 @@ export function UserButton({ user, rail, onNavigate }: { user: ShellUser; rail: 
         className="size-(--rail-tile)"
         fallbackClassName={cn(
           "text-base font-medium transition-colors",
-          active ? "bg-(--fill-strong) text-link" : "bg-(--fill) text-sidebar-foreground group-hover/app:bg-(--fill-strong)"
+          active ? "selected" : "bg-(--fill) text-sidebar-foreground group-hover/app:bg-(--fill-strong)"
         )}
       />
     </>

@@ -356,25 +356,40 @@ in its manifest (`accent` in `@clegra/sdk`; absent: `blue`, Clegra's).
 | `indigo` | `#4F46E5` / `#4338CA` | `#5850EC` / `#A5B4FC` |
 | `purple` | `#8B2FD9` / `#7E22CE` | `#9340E0` / `#C9A6FF` |
 | `pink` | `#C81E73` / `#BE185D` | `#D42A82` / `#F9A8D4` |
-| `red` | `#DC2626` / `#C81E1E` | `#E0302F` / `#FCA5A5` |
+| `red` | `#D02424` / `#C81E1E` | `#E0302F` / `#FCA5A5` |
 | `orange` | `#EA580C` / `#B33E05` | `#FB8C3C` / `#FB8C3C` |
 | `yellow` | `#B88300` / `#875A00` | `#FACC15` / `#FACC15` |
-| `green` | `#15803D` / `#15803D` | `#34C759` / `#4ADE80` |
-| `teal` | `#0F766E` / `#0F766E` | `#2DD4BF` / `#2DD4BF` |
-| `gray` | `#6B6B6B` / `#5C5C5C` | `#6B6B6B` / `#A3A3A3` |
+| `green` | `#127535` / `#15803D` | `#34C759` / `#4ADE80` |
+| `teal` | `#0F716A` / `#0F766E` | `#2DD4BF` / `#2DD4BF` |
+| `gray` | `#636363` / `#5C5C5C` | `#6B6B6B` / `#A3A3A3` |
 
-Each has a foreground (on the fill) and a soft ground too; every pair is WCAG AA (4.5:1 for text, 3:1 for the fill
-as a control), checked by `src/brand/accents.test.ts`. The values live in `src/brand/accents.ts`;
-`src/brand/accents.css` is generated from them (`npm run accents`).
+Each has a foreground (on the fill); every pair is WCAG AA (4.5:1 for text, also on the glass fill over the page's
+grounds; 3:1 for the fill as a control), checked by `src/brand/accents.test.ts`. The values live in
+`src/brand/accents.ts`; `src/brand/accents.css` is generated from them (`npm run accents`).
 
 `data-app-accent="<name>"` on an element (or `<AppAccent accent>` from `@clegra/ui/clegra/app-accent`, or the
 shell's `<AppShell accent>`, which marks the app's bar, list and content but not the rail or `aside`) sets
-`--app-accent`, `--app-accent-foreground`, `--app-accent-text`, `--app-accent-soft` (Tailwind: `bg-app-accent`,
-`text-app-accent-text`, `bg-app-accent-soft`…) and points the roles of the app's own controls at them: `--primary`
-and `--primary-foreground` (primary buttons, switches, progress, checked boxes), `--link` and `--ring` (links, the
-focus ring), `--sidebar-active` (the open entry of the app's bar) and `--selection` (the open entry's ground, a set
-filter pill). Outside every app's area these are Clegra's blue; Clegra's chrome (the rail, the account menu, the
-Faccina, the assistant) never takes an app's accent, and `--destructive`, `--success`, `--warning` never change.
+`--app-accent`, `--app-accent-foreground` and `--app-accent-text` (Tailwind: `bg-app-accent`, `text-app-accent-text`…)
+and points the roles of the app's own controls at them: `--primary` and `--primary-foreground` (primary buttons,
+switches, progress, checked boxes, every selected state), `--link` and `--ring` (links, the focus ring) and
+`--sidebar-active`. Outside every app's area these are Clegra's blue; Clegra's chrome (the rail, the account menu, the Faccina,
+the assistant) never takes an app's accent, and `--destructive`, `--success`, `--warning` never change.
+
+### The glass fill and the selected state
+
+Every solid coloured thing is one recipe, `.glass-fill` (in `styles.css`): the colour at 90% with the chrome's blur
+behind it, a light inner edge and top highlight, the pills' shadow, the colour's foreground; solid with «Reduce
+transparency». The colour is `--glass-fill` (default `--primary`, so the app's accent in its area) with
+`--glass-fill-foreground`; `.glass-fill-neutral` is the neutral form. The primary `Button` and the solid `Badge`
+(their default variant), the tinted `HeaderPill`, `.btn-yes` on a `Button` (in the «sì» colour) and the `Bubble`'s
+`default` (`muted`: neutral) are glass fills; bubbles have corners of `--radius-bubble` (a capsule on one line).
+
+A selected state (a set `PillItem`, the chosen `Segmented` segment, the active `TabsTrigger`, a pressed `Toggle` or
+`ToggleGroupItem`, the sidebar's active entry, an active `NavLink`, the open rail tile, a table's checked row) is the
+glass fill, never a faded tint; anything else adds the class `selected` while it is chosen. Inside it the text roles
+(`--foreground`, `--muted-foreground`, `--link`…) are the fill's foreground, so secondary lines and icons stay
+readable. The recipe is written outside Tailwind's layers, so a hover or ground a control sets for its other states
+never paints over it.
 shadcn's components are not restyled: they read the roles.
 
 ### A view in a frame

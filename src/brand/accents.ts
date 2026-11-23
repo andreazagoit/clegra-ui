@@ -11,11 +11,14 @@
  * Each colour has, for light and for dark:
  *   accent      the fill: a primary button, a switch that is on, a progress bar, a checked box
  *   foreground  the text and icons on the fill
- *   text        the accent as text or a line on the page: links, an active item's words, the focus ring
- *   soft        a quiet ground: a selected row, an active pill, a set filter (the page's text and `text` read on it)
- * Every pair meets WCAG 2.2 AA (accents.test.ts computes them): foreground on accent, text on the page's grounds
- * (background, card, muted) and on soft at least 4.5:1; the fill against the page's background at least 3:1
- * (non-text contrast of a control).
+ *   text        the accent as text or a line on the page: links, the focus ring
+ * A selected or active state (an active pill, a selected row, the open entry, a set filter, a tab, a segment) is the
+ * fill with its foreground, solid like the primary button (owner, 2026-11-23: never a faded tint; theme.css
+ * «THE SELECTED STATE»).
+ * Every pair meets WCAG 2.2 AA (accents.test.ts computes them): foreground on accent, solid and as the glass fill
+ * (the fill at 90% over the page's grounds: glass.css «THE GLASS FILL»), and text on the page's grounds
+ * (background, card, muted) at least 4.5:1; the fill against the page's background at least 3:1 (non-text contrast
+ * of a control).
  *
  * `blue` is Clegra's blue (src/brand/colors.css --palette-blue, Azzurro as text in dark): an app that declares no
  * accent, and Clegra itself, look as they always did.
@@ -30,7 +33,7 @@ export type AppAccentName = (typeof APP_ACCENT_NAMES)[number]
 export const DEFAULT_APP_ACCENT: AppAccentName = "blue"
 
 /** One accent in one mode. */
-export type AppAccentTone = { accent: string; foreground: string; text: string; soft: string }
+export type AppAccentTone = { accent: string; foreground: string; text: string }
 
 export type AppAccentColors = { light: AppAccentTone; dark: AppAccentTone }
 
@@ -40,44 +43,44 @@ const BLACK = "#0A0A0A"
 /** The palette, light and dark, hand-tuned (accents.test.ts holds every pair to WCAG AA). */
 export const appAccentColors: Readonly<Record<AppAccentName, AppAccentColors>> = {
   blue: {
-    light: { accent: "#2D4BEE", foreground: WHITE, text: "#2D4BEE", soft: "#E2E5FF" },
-    dark: { accent: "#2D4BEE", foreground: WHITE, text: "#8FA2FF", soft: "#1A2150" },
+    light: { accent: "#2D4BEE", foreground: WHITE, text: "#2D4BEE" },
+    dark: { accent: "#2D4BEE", foreground: WHITE, text: "#8FA2FF" },
   },
   indigo: {
-    light: { accent: "#4F46E5", foreground: WHITE, text: "#4338CA", soft: "#E0E7FF" },
-    dark: { accent: "#5850EC", foreground: WHITE, text: "#A5B4FC", soft: "#1E1B4B" },
+    light: { accent: "#4F46E5", foreground: WHITE, text: "#4338CA" },
+    dark: { accent: "#5850EC", foreground: WHITE, text: "#A5B4FC" },
   },
   purple: {
-    light: { accent: "#8B2FD9", foreground: WHITE, text: "#7E22CE", soft: "#F3E8FF" },
-    dark: { accent: "#9340E0", foreground: WHITE, text: "#C9A6FF", soft: "#2A1745" },
+    light: { accent: "#8B2FD9", foreground: WHITE, text: "#7E22CE" },
+    dark: { accent: "#9340E0", foreground: WHITE, text: "#C9A6FF" },
   },
   pink: {
-    light: { accent: "#C81E73", foreground: WHITE, text: "#BE185D", soft: "#FCE7F3" },
-    dark: { accent: "#D42A82", foreground: WHITE, text: "#F9A8D4", soft: "#3A1229" },
+    light: { accent: "#C81E73", foreground: WHITE, text: "#BE185D" },
+    dark: { accent: "#D42A82", foreground: WHITE, text: "#F9A8D4" },
   },
   red: {
-    light: { accent: "#DC2626", foreground: WHITE, text: "#C81E1E", soft: "#FEE2E2" },
-    dark: { accent: "#E0302F", foreground: WHITE, text: "#FCA5A5", soft: "#3B1414" },
+    light: { accent: "#D02424", foreground: WHITE, text: "#C81E1E" },
+    dark: { accent: "#E0302F", foreground: WHITE, text: "#FCA5A5" },
   },
   orange: {
-    light: { accent: "#EA580C", foreground: BLACK, text: "#B33E05", soft: "#FFEDD5" },
-    dark: { accent: "#FB8C3C", foreground: BLACK, text: "#FB8C3C", soft: "#3A1D0B" },
+    light: { accent: "#EA580C", foreground: BLACK, text: "#B33E05" },
+    dark: { accent: "#FB8C3C", foreground: BLACK, text: "#FB8C3C" },
   },
   yellow: {
-    light: { accent: "#B88300", foreground: BLACK, text: "#875A00", soft: "#FEF3C7" },
-    dark: { accent: "#FACC15", foreground: BLACK, text: "#FACC15", soft: "#3A2E08" },
+    light: { accent: "#B88300", foreground: BLACK, text: "#875A00" },
+    dark: { accent: "#FACC15", foreground: BLACK, text: "#FACC15" },
   },
   green: {
-    light: { accent: "#15803D", foreground: WHITE, text: "#15803D", soft: "#DCFCE7" },
-    dark: { accent: "#34C759", foreground: BLACK, text: "#4ADE80", soft: "#0F2E1B" },
+    light: { accent: "#127535", foreground: WHITE, text: "#15803D" },
+    dark: { accent: "#34C759", foreground: BLACK, text: "#4ADE80" },
   },
   teal: {
-    light: { accent: "#0F766E", foreground: WHITE, text: "#0F766E", soft: "#CCFBF1" },
-    dark: { accent: "#2DD4BF", foreground: BLACK, text: "#2DD4BF", soft: "#0B2E2B" },
+    light: { accent: "#0F716A", foreground: WHITE, text: "#0F766E" },
+    dark: { accent: "#2DD4BF", foreground: BLACK, text: "#2DD4BF" },
   },
   gray: {
-    light: { accent: "#6B6B6B", foreground: WHITE, text: "#5C5C5C", soft: "#EDEDED" },
-    dark: { accent: "#6B6B6B", foreground: WHITE, text: "#A3A3A3", soft: "#2A2A2A" },
+    light: { accent: "#636363", foreground: WHITE, text: "#5C5C5C" },
+    dark: { accent: "#6B6B6B", foreground: WHITE, text: "#A3A3A3" },
   },
 }
 
@@ -96,7 +99,6 @@ export const APP_ACCENT_VARIABLES = {
   accent: "--app-accent",
   foreground: "--app-accent-foreground",
   text: "--app-accent-text",
-  soft: "--app-accent-soft",
 } as const satisfies Record<keyof AppAccentTone, string>
 
 /** An accent's colours as its custom properties, for a mode (an MCP Apps host, a style attribute). */

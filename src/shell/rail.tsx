@@ -41,7 +41,7 @@ export function RailActiveBar({ active }: { active: boolean }) {
 /**
  * A quiet tile for an item without an icon of its own (Panoramica,
  * Amministrazione, an account's areas): a rounded square on `--fill`, the
- * glyph in it; open, the strong fill and the link colour, while the bar at the
+ * glyph in it; open, the selected state (the glass fill in Clegra's blue), while the bar at the
  * rail's edge marks it as it marks every app. `size`: «rail» (44) or «row» (24,
  * the drawer).
  */
@@ -59,7 +59,7 @@ export function RailTile({
       className={cn(
         "inline-flex shrink-0 items-center justify-center transition-colors",
         size === "rail" ? "size-(--rail-tile) rounded-(--rail-tile-radius) [&_svg]:size-6" : "size-6 rounded-[6px] [&_svg]:size-3.5",
-        active ? "bg-(--fill-strong) text-link" : "bg-(--fill) text-sidebar-foreground group-hover/app:bg-(--fill-strong)",
+        active ? "selected" : "bg-(--fill) text-sidebar-foreground group-hover/app:bg-(--fill-strong)",
         className
       )}
     >
