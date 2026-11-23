@@ -14,8 +14,8 @@ import { ShellLinkProvider, type ShellLinkComponent } from "./link"
 /**
  * THE FRAME (the app shell design, the design system §5): content is the
  * ground and the chrome floats on it. Down the left, floating panels inset 8
- * from the window with a gap of 8: the `rail` (its radius from its tiles,
- * --rail-radius), then the docked `nav` (240, the app's inner bar) and a
+ * from the window with a gap of 8: the `rail` (a column of glass pills, its
+ * blocks, the account's detached at the bottom: `ShellRail`), then the docked `nav` (240, the app's inner bar) and a
  * sidebar page's docked `list`, each hidden when it is empty. Then the
  * content slot: the scroll edge, the floating `header`, the page
  * (`children`, a `ShellMain`), the phone's `bottomBar`; `aside` after it (the
@@ -94,15 +94,15 @@ export function AppShell({
     <ShellLinkProvider link={link}>
       {/* Open on wide screens; on a phone the rail is the drawer (shadcn's Sidebar). */}
       <SidebarProvider open className={className} style={{ "--sidebar-width": "20rem" } as React.CSSProperties}>
-        {/* Two floating panels (the design system §5; owner, 2026-11-12) and the list's: inset 8 from the window, a gap of 8, thick glass. The content starts right after them and never runs under them. */}
+        {/* The rail's blocks, the app's bar and the list's panel (the design system §5; owner, 2026-11-12 and 2026-11-23): inset 8 from the window, a gap of 8, thick glass. The content starts right after them and never runs under them. */}
         <div data-sidebar-panels="" className="m-2 mr-0 hidden h-[calc(100svh-1rem)] shrink-0 gap-2 md:flex">
           <div className="flex h-full shrink-0 flex-col gap-2">
             {/* The Mac app's window buttons: a free strip above the rail, shown by the app's stylesheet (html.desktop-mac). */}
             <div data-window-buttons="" aria-hidden className="hidden h-(--window-buttons-strip) w-(--shell-rail) shrink-0" />
-            {/* Concentric with its tiles: radius = the tile's + the inset (--rail-radius). */}
-            <FloatingPanel data-sidebar-panel="rail" className="min-h-0 flex-1 rounded-(--rail-radius)!">
+            {/* The rail's column: no panel of its own, the ground shows through; `ShellRail` draws its blocks, each a glass pill (data-rail-block). */}
+            <div data-sidebar-panel="rail" className="flex min-h-0 w-(--shell-rail) flex-1">
               {rail}
-            </FloatingPanel>
+            </div>
           </div>
           {nav && (
             <FloatingPanel data-sidebar-panel="nav" {...tint} className="h-full shrink-0 has-[>:only-child:empty]:hidden">

@@ -78,7 +78,7 @@ layer, so yours wins, and the bundled file is then never downloaded. `tokens` ca
 | `@clegra/ui/base-ui/<name>` (+ `react/`, `react-native/`) | both | Base UI parts the components build on (`popover`) |
 | `@clegra/ui/hooks/<name>` (+ `react/`, `react-native/`) | both | `use-mobile` |
 | `@clegra/ui/primitives` (+ `react/`, `react-native/`) | both | HTML's elements under the same names on both platforms |
-| `@clegra/ui/shell` | web | The app shell: `AppShell` (`embedded`), `ShellRail` (`user`, slots), `NavBar`, `NavSections`, `SectionsPill`, `ShellHeader`, `DrawerPill`, `ShellMain`, `ShellPage`, `PageHeading`, `useShell`, `AppIconImage`, `ShortcutsDialog`, the header's pills and surfaces |
+| `@clegra/ui/shell` | web | The app shell: `AppShell` (`embedded`), `ShellRail` (blocks of glass, the account block with `user`, slots), `NavBar`, `NavSections`, `SectionsPill`, `ShellHeader`, `DrawerPill`, `ShellMain`, `ShellPage`, `PageHeading`, `useShell`, `AppIconImage`, `ShortcutsDialog`, the header's pills and surfaces |
 | `@clegra/ui/shell/reorder` | web | `railReorder` for `ShellRail`'s `reorder` (the only entry using the optional `@dnd-kit/*` peers) |
 | `@clegra/ui/clegra/<name>` | web | `pill`, `surface`, `rows` (`RowList`, `Row`, `RowIcon`, `FactList`, `Fact`), `confirm-switch` (`ConfirmSwitch`), `app-accent` (`AppAccent`, `useAppAccent`) |
 | `@clegra/ui/frame` | web | `ClegraProvider`, `useClegraTheme`, `useClegraHost`, `hostContextFor` |

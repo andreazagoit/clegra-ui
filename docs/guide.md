@@ -131,8 +131,8 @@ export default function Page() {
 
 ## The app shell
 
-Every Clegra web app has the same frame, Clegra's own client included: the **rail** (the app's places as tiles, the
-signed-in person's face at its foot), an optional docked **inner bar** (240), a **floating header** of glass pills
+Every Clegra web app has the same frame, Clegra's own client included: the **rail** (the app's places as tiles in glass
+blocks, the signed-in person's face in a block of its own at the bottom), an optional docked **inner bar** (240), a **floating header** of glass pills
 over the content, and the page under it with the shell's gutters. `@clegra/ui/shell` draws it, exactly as the client
 does; you configure it with props. It is presentational: no router (your link component comes in as `link`), no
 i18n (every word is a prop), no data, no persistence. Web only (React DOM; there is no native shell).
@@ -227,8 +227,13 @@ What it takes:
   listeners), `embedded`; `children` is the page in a `ShellMain` (the landmark, named after the page).
 - `ShellRail`: `brand` and `search` slots (a function of `{ rail }`: the rail's compact look or the phone drawer's
   row), `groups` of `RailItem`s (`{ id, label, href, icon, tile?, active?, badge?, description?, shortcut?,
-  external? }`; a thin line between groups, the last pinned last), `footer` items, and `user`: `{ name, email,
-  image?, label?, tooltip?, href? | onSelect?, active?, menu? }`. With `href`/`onSelect` and no `menu` the face goes
+  external? }`), a `controls` slot, `footer` items, and `user`: `{ name, email, image?, label?, tooltip?, href? |
+  onSelect?, active?, menu? }`. The rail is drawn in **blocks**, each its own glass pill, 8 apart with the ground
+  between them: the first holds `brand`, `search` and the first group; every further group is a block of its own
+  (`joinPrevious: true` puts a group in the block before it, when that one is shown); the last of these scrolls inside
+  when the window is short. Detached at the bottom, aligned to the window's bottom edge, the **account block**:
+  `controls` (your own tiles, drawn with `RAIL_LINK` and `RailTile`), the `footer` items (the account's or the
+  system's places, such as settings) and the face. Test hooks: `data-rail-block="<first group's id>"`, `data-rail-account`. With `href`/`onSelect` and no `menu` the face goes
   there; with `menu` (`item`, `choice` such as the language or the theme, `separator`) it opens the menu headed by
   name and email.
 - Phone (under 768): the panels go, the rail becomes a drawer (`DrawerPill` opens it), the inner bar folds into the

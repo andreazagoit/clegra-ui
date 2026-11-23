@@ -4,7 +4,18 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
-## 0.1.0-next.6 (unreleased)
+## 0.1.0-next.7 (2026-11-23)
+
+- **The rail in blocks** (`ShellRail`, owner 2026-11-23): no longer one tall panel. Each group is its own glass pill
+  (the panels' thick glass, `--rail-radius`, the rail's tint), stacked `--shell-inset` (8) apart with the ground
+  between them; `brand` and `search` open the first block with the first group, and a group with the new
+  `joinPrevious` goes on in the block before it (when that one is shown). The last of these blocks scrolls inside when
+  the window is short. Detached at the bottom, aligned to the window's bottom edge, the **account block**: the new
+  `controls` slot (an app's own tiles, such as notifications), the `footer` items and the face. The thin lines between
+  groups are gone (the blocks part them). `AppShell`'s rail column (`data-sidebar-panel="rail"`) has no panel of its
+  own any more; each block is `data-rail-block` (its first group's id), the account block `data-rail-account`. The phone's drawer is unchanged.
+
+## 0.1.0-next.6 (2026-11-23)
 
 - **`SiteShell`** (`@clegra/ui/shell`): the frame of an app's own website, shown in a card inside Clegra and on its
   own in a tab. The inner bar (`NavBar` + `NavSections`) as a left sidebar flush to the page's edges (240, no panel,

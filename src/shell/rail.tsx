@@ -14,14 +14,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   useSidebar,
 } from "../components/sidebar"
+import { FloatingPanel } from "../clegra/surface"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../components/tooltip"
 import { CountBadge } from "./badge"
 import { Keys } from "./keys"
 import { useShellLink } from "./link"
-import { railGroupsShown } from "./model"
+import { railBlocks } from "./model"
 import type { RailGroup, RailItem, RailReorder, RailSlot, ShellIcon, ShellUser } from "./types"
 import { UserButton } from "./user"
 
@@ -132,7 +132,7 @@ function StillItem({ className, children }: { id: string; className?: string; ch
   return <SidebarMenuItem className={className}>{children}</SidebarMenuItem>
 }
 
-/** A group of the rail; its label is said, and shown in the phone's drawer only; `onOrder` set: its items can be dragged into the person's order. */
+/** A group of the rail (in its block, no line: the blocks part the groups); its label is said, and shown in the phone's drawer only; `onOrder` set: its items can be dragged into the person's order. */
 function RailGroupView({ group, onNavigate, rail, reorder }: { group: RailGroup; onNavigate?: () => void; rail: boolean; reorder?: RailReorder }) {
   // On a phone's drawer the order is read, not changed: a drag there scrolls.
   const onOrder = rail ? group.onOrder : undefined
@@ -159,22 +159,51 @@ function RailGroupView({ group, onNavigate, rail, reorder }: { group: RailGroup;
 }
 
 /**
- * THE RAIL (the app shell design §1, the design system §5): a narrow column of
- * tiles inside the floating panel, as Slack's, Teams' or Discord's. From the
- * top: whose it is (`brand`), `search`, the `groups` with a thin line between
- * them (the last group is the one pinned last, as the client's store), then at
- * the bottom, fixed, the `footer` items (Amministrazione) and the person's
- * face (`user`). On a phone (under 768) the same things are the drawer
- * (shadcn's Sidebar as a sheet): each small tile beside its name, the groups'
- * labels shown, the face with name and email; picking one closes it.
- * A group with `onOrder` is dragged into the person's order with `reorder`
- * (`railReorder` from `@clegra/ui/shell/reorder`, on @dnd-kit: an app that
- * never reorders imports none of it).
+ * One block of the rail: its own glass pill (the frame's floating panels'
+ * glass, its radius concentric with its tiles, --rail-radius), the rail's
+ * tint over it, its tiles in a column at the rail's grid (--rail-*: every
+ * tile at the inset from the pill's edges, --rail-gap apart). It scrolls
+ * inside when the window is too short for it, never below one tile
+ * (`grow`: the block that gives up its height first; then the others).
+ */
+function RailBlock({ id, grow = false, children }: { id: string | null; grow?: boolean; children: React.ReactNode }) {
+  // The account block (id null) keeps its height: the blocks above give theirs up.
+  // A block of groups is marked by its first group's id; the account block by `data-rail-account` (a group may be called «account»).
+  const mark = id === null ? { "data-rail-account": "" } : { "data-rail-block": id }
+  return (
+    <FloatingPanel {...mark} className={cn("min-h-(--shell-rail) w-full flex-col rounded-(--rail-radius)!", id === null ? "shrink-0" : grow ? "shrink-[1000]" : "shrink")}>
+      <div className="flex min-h-0 flex-1 flex-col items-center gap-[calc(var(--rail-gap)-4px)] overflow-x-hidden overflow-y-auto overscroll-contain bg-(--rail-tint) py-[calc(var(--rail-inset)-2px)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {children}
+      </div>
+    </FloatingPanel>
+  )
+}
+
+/**
+ * THE RAIL (the app shell design §1, the design system §5): a narrow column
+ * of tiles, as Slack's, Teams' or Discord's, in BLOCKS (owner, 2026-11-23):
+ * each its own glass pill, stacked --shell-inset apart, the window's ground
+ * between them. From the top: whose it is (`brand`) and `search` in the
+ * first block with the first group, then a block for each further group (a
+ * group with `joinPrevious` goes on in the block before it: the client's
+ * store after the installed apps); the last of these gives up its height
+ * first and scrolls inside. Detached at the bottom, aligned to the window's
+ * bottom edge, the ACCOUNT block (`data-rail-account`): the app's
+ * own controls (`controls`: the client's approvals and notifications), the
+ * `footer` items (the account's or the system's places: Amministrazione,
+ * «Chiavi», «Impostazioni») and the person's face (`user`). On a phone
+ * (under 768) the same things are the drawer (shadcn's Sidebar as a sheet):
+ * each small tile beside its name, the groups' labels shown, the face with
+ * name and email; picking one closes it. A group with `onOrder` is dragged
+ * into the person's order with `reorder` (`railReorder` from
+ * `@clegra/ui/shell/reorder`, on @dnd-kit: an app that never reorders
+ * imports none of it).
  */
 export function ShellRail({
   brand,
   search,
   groups,
+  controls,
   footer = [],
   user,
   reorder,
@@ -182,7 +211,9 @@ export function ShellRail({
   brand?: RailSlot
   search?: RailSlot
   groups: RailGroup[]
-  /** Fixed at the bottom, above the face (never dragged). */
+  /** The app's own controls at the top of the account block (the client's approvals and notifications), as rail tiles (`RAIL_LINK`, `RailTile`). */
+  controls?: RailSlot
+  /** In the account block, under `controls` and above the face (never dragged): the account's or the system's places. */
   footer?: RailItem[]
   user?: ShellUser
   /** How a group with `onOrder` is dragged: `railReorder` from `@clegra/ui/shell/reorder`. */
@@ -191,17 +222,12 @@ export function ShellRail({
   const { isMobile, setOpenMobile } = useSidebar()
   const rail = !isMobile
   const close = isMobile ? () => setOpenMobile(false) : undefined
-  // In the rail a thin line between the groups stands for their labels.
-  const shown = railGroupsShown(groups)
-  const content = shown.map(({ group, line }) => (
-    <RailGroupLine key={group.id} line={line && rail}>
-      <RailGroupView group={group} onNavigate={close} rail={rail} reorder={reorder} />
-    </RailGroupLine>
-  ))
-  const bottom = (
+  const blocks = railBlocks(groups)
+  const view = (group: RailGroup) => <RailGroupView key={group.id} group={group} onNavigate={close} rail={rail} reorder={reorder} />
+  const items = (
     <>
       {footer.length > 0 && (
-        <SidebarMenu className={cn(rail && "items-center")}>
+        <SidebarMenu className={cn(rail && "items-center gap-[calc(var(--rail-gap)-4px)]")}>
           {footer.map((item) => (
             <RailEntry key={item.id} item={item} onNavigate={close} rail={rail} />
           ))}
@@ -219,31 +245,42 @@ export function ShellRail({
             {slot(brand, false)}
             {slot(search, false)}
           </SidebarHeader>
-          <SidebarContent className="gap-0">{content}</SidebarContent>
-          <SidebarFooter>{bottom}</SidebarFooter>
+          <SidebarContent className="gap-0">{blocks.flat().map(view)}</SidebarContent>
+          <SidebarFooter>
+            {slot(controls, false)}
+            {items}
+          </SidebarFooter>
         </div>
       </Sidebar>
     )
 
+  const head = brand || search ? (
+    // The brand and the search are 44 tiles, not 48 links: 2 more on each side keeps them on the grid.
+    <div className="flex shrink-0 flex-col items-center gap-(--rail-gap) py-0.5">
+      {slot(brand, true)}
+      {slot(search, true)}
+    </div>
+  ) : null
+  const tops = blocks.length > 0 ? blocks : head ? [[]] : []
+  const control = slot(controls, true)
+  const account = Boolean(control) || footer.length > 0 || Boolean(user)
   return (
-    <Sidebar collapsible="none" className="h-full w-(--shell-rail)! shrink-0 bg-(--rail-tint)">
-      {/* The rail's grid (theme.css --rail-*): every tile at the inset from the panel's edges, --rail-gap apart. */}
-      <SidebarHeader className="items-center gap-(--rail-gap) px-0 pt-(--rail-inset) pb-[calc(var(--rail-gap)-2px)]">
-        {slot(brand, true)}
-        {slot(search, true)}
-      </SidebarHeader>
-      <SidebarContent className="gap-[calc(var(--rail-gap)-2px)] overflow-x-hidden">{content}</SidebarContent>
-      <SidebarFooter className="items-center gap-[calc(var(--rail-gap)-4px)] px-0 pt-[calc(var(--rail-gap)-2px)] pb-[calc(var(--rail-inset)-2px)]">{bottom}</SidebarFooter>
+    <Sidebar collapsible="none" className="h-full w-(--shell-rail)! shrink-0 justify-between gap-(--shell-inset) bg-transparent">
+      {/* No scroller and no background here: the ground shows between the blocks, and nothing clips their shadows. Each block scrolls inside itself. */}
+      <div data-rail-blocks="" className="flex min-h-0 flex-col gap-(--shell-inset)">
+        {tops.map((block, i) => (
+          <RailBlock key={block[0]?.id ?? "brand"} id={block[0]?.id ?? "brand"} grow={i === tops.length - 1}>
+            {i === 0 && head}
+            {block.map(view)}
+          </RailBlock>
+        ))}
+      </div>
+      {account && (
+        <RailBlock id={null}>
+          {control}
+          {items}
+        </RailBlock>
+      )}
     </Sidebar>
-  )
-}
-
-/** A group, with the rail's thin line before it when it is not the first. */
-function RailGroupLine({ line, children }: { line: boolean; children: React.ReactNode }) {
-  return (
-    <>
-      {line && <SidebarSeparator className="mx-auto my-0 w-10!" />}
-      {children}
-    </>
   )
 }

@@ -31,6 +31,8 @@ describe("AppShell: embedded inside Clegra, only the page", () => {
     const html = page()
     assert.match(html, /data-sidebar-panels/)
     assert.match(html, /data-sidebar-panel="rail"/)
+    // The rail in blocks: the group's glass pill, and the account's detached under it.
+    assert.match(html, /data-rail-block="pages"[\s\S]*data-rail-account=""/)
     assert.match(html, /data-app="orders"/)
     assert.match(html, /data-probe-nav/)
     assert.match(html, /data-header-bar/)

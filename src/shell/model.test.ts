@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 
-import { countLabel, initials, isCurrentPath, railGroupsShown } from "./model"
+import { countLabel, initials, isCurrentPath, railBlocks } from "./model"
 
 test("counts past 99 read 99+", () => {
   assert.equal(countLabel(3), "3")
@@ -24,15 +24,17 @@ test("the current place: sub-pages count, the root only itself", () => {
   assert.equal(isCurrentPath("/store", "/store?app=x"), true)
 })
 
-test("the rail's lines go only between groups that are shown", () => {
-  const shown = railGroupsShown([{ id: "home", items: [1] }, { id: "builtin", items: [] }, { id: "installed", items: [1, 2] }, { id: "store", items: [1] }])
+test("the rail's blocks: one per shown group; a joining group goes on in the block before it only when that one is shown", () => {
+  const ids = (blocks: { id: string }[][]) => blocks.map((block) => block.map((group) => group.id))
   assert.deepEqual(
-    shown.map(({ group, line }) => [group.id, line]),
-    [
-      ["home", false],
-      ["installed", true],
-      ["store", true],
-    ]
+    ids(railBlocks([{ id: "home", items: [1] }, { id: "builtin", items: [] }, { id: "installed", items: [1, 2] }, { id: "store", items: [1], joinPrevious: true }])),
+    [["home"], ["installed", "store"]]
   )
-  assert.deepEqual(railGroupsShown([{ items: [] }]), [])
+  // No installed apps: the store stands alone, it never joins the block of a group further up.
+  assert.deepEqual(
+    ids(railBlocks([{ id: "home", items: [1] }, { id: "builtin", items: [1] }, { id: "installed", items: [] }, { id: "store", items: [1], joinPrevious: true }])),
+    [["home"], ["builtin"], ["store"]]
+  )
+  assert.deepEqual(ids(railBlocks([{ id: "store", items: [1], joinPrevious: true }])), [["store"]])
+  assert.deepEqual(railBlocks([{ items: [] }]), [])
 })

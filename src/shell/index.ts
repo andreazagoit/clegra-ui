@@ -18,9 +18,10 @@
  *     <ShellRail
  *       brand={({ rail }) => …}                   // whose it is: the mark (rail) or the lockup (drawer)
  *       search={({ rail }) => …}                  // optional
- *       groups={[{ id, label?, items: RailItem[], onOrder?, reorderHint? }, …]}  // a thin line between groups; the last is pinned last (the store)
+ *       groups={[{ id, label?, items: RailItem[], onOrder?, reorderHint?, joinPrevious? }, …]}  // a glass block per group (joinPrevious: in the one before)
  *       reorder={railReorder}                     // only with a group's onOrder: @clegra/ui/shell/reorder (@dnd-kit)
- *       footer={[administration]}                 // fixed at the bottom, above the face
+ *       controls={({ rail }) => …}                // optional: the app's own tiles atop the account block (bells)
+ *       footer={[administration]}                 // the account block, detached at the bottom, above the face
  *       user={{ name, email, image?, label?, tooltip?, href? | onSelect?, active?, menu?: UserMenuEntry[] }}
  *     />
  *   }

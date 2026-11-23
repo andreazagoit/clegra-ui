@@ -26,10 +26,21 @@ export function isCurrentPath(pathname: string, href: string) {
 }
 
 /**
- * The rail's groups as drawn: the empty ones dropped, and whether a thin line
- * goes before each (between two groups that are both shown; the groups' labels
- * are said to screen readers instead, and shown only in the phone's drawer).
+ * The rail's groups as drawn: the empty ones dropped, then gathered into
+ * BLOCKS, each its own glass pill (the design system §5; owner, 2026-11-23).
+ * Every group starts a block of its own, except one with `joinPrevious` that
+ * goes on in the block of the group just before it, when that one is shown
+ * (the client's store after the installed apps; with no installed apps it
+ * stands alone). The groups' labels are said to screen readers instead, and
+ * shown only in the phone's drawer.
  */
-export function railGroupsShown<G extends { items: readonly unknown[] }>(groups: readonly G[]): { group: G; line: boolean }[] {
-  return groups.filter((group) => group.items.length > 0).map((group, i) => ({ group, line: i > 0 }))
+export function railBlocks<G extends { items: readonly unknown[]; joinPrevious?: boolean }>(groups: readonly G[]): G[][] {
+  const blocks: G[][] = []
+  groups.forEach((group, i) => {
+    if (group.items.length === 0) return
+    const previousShown = i > 0 && groups[i - 1]!.items.length > 0
+    if (group.joinPrevious && previousShown && blocks.length > 0) blocks[blocks.length - 1]!.push(group)
+    else blocks.push([group])
+  })
+  return blocks
 }
