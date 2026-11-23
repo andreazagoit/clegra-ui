@@ -24,6 +24,8 @@ export const light = {
   border: "#E5E5E5",
   input: "#D4D4D4",
   ring: "rgba(45,75,238,0.5)",
+  /* The panels' one surface (theme.css --panel): every sidebar and panel of the shell. */
+  panel: "#FAFAFA",
   sidebar: "#FAFAFA",
   sidebarForeground: "#0A0A0A",
   sidebarAccent: "#F5F5F5",
@@ -63,6 +65,7 @@ export const dark: Colors = {
   border: "rgba(255,255,255,0.1)",
   input: "rgba(255,255,255,0.16)",
   ring: "rgba(143,162,255,0.5)",
+  panel: "#1C1C1C",
   sidebar: "#1C1C1C",
   sidebarForeground: "#FAFAFA",
   sidebarAccent: "#262626",

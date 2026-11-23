@@ -39,7 +39,19 @@
   box-shadow: none;
 }
 
-/* Thick: the floating panels, menus, popovers, the composer. */
+/*
+ * The shell's panels (owner, 2026-11-23): the rail's blocks, an app's bar, a
+ * sidebar page's list, the right side panels (the assistant, «Widget»). One
+ * solid surface, --panel (the glass panels' own tone), the hairline edge and
+ * no shadow: they sit on the ground, so every panel is the same tone and only
+ * the ground shows between and around them (a shadow drew a grey halo).
+ */
+.surface-panel {
+  background-color: var(--panel);
+  box-shadow: inset 0 0 0 0.5px var(--glass-stroke);
+}
+
+/* Thick: menus, popovers, the composer. */
 .glass-thick {
   background-color: var(--glass-thick);
   -webkit-backdrop-filter: var(--glass-blur-thick);
@@ -259,7 +271,7 @@ html[data-glass="opaque"] .scroll-edge {
  * pill. A field shows focus on its own (shadcn's Input) or, inside a header
  * pill, the PILL does: below.
  */
-:is(.glass, .glass-thick) :focus-visible:not(:is(input, textarea, select, [contenteditable])),
+:is(.glass, .glass-thick, .surface-panel) :focus-visible:not(:is(input, textarea, select, [contenteditable])),
 .glass-fill:focus-visible,
 .glass-fill :focus-visible {
   outline: 2px solid var(--ring);
@@ -271,7 +283,7 @@ html[data-glass="opaque"] .scroll-edge {
  * rounded shape, iOS-style: a 1 px line in the ring colour and a soft 3 px
  * halo. Typing focus is always shown, whatever brought it (mouse or keyboard).
  */
-:is(.glass, .glass-thick) :is(input, textarea, select):focus {
+:is(.glass, .glass-thick, .surface-panel) :is(input, textarea, select):focus {
   outline: none;
 }
 .glass:has(:is(input, textarea, select):focus) {

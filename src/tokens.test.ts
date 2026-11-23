@@ -80,7 +80,8 @@ for (const [name, selector, tokens, vars] of cases) {
       if (derived.has(key)) continue
       const variable = Object.keys(roles).find((role) => camel(role) === key)
       assert.ok(variable, `${key}: no --variable in theme.css`)
-      const want = resolve(roles[variable], vars)
+      // A role may name another role (--sidebar: var(--panel)): the theme's own roles resolve too.
+      const want = resolve(roles[variable], { ...vars, ...roles })
       const got = rgba(value)
       for (let i = 0; i < 3; i++) assert.ok(Math.abs(want[i]! - got[i]!) <= 1, `${name} ${key}: ${value} is not ${roles[variable]} (${want.join(",")})`)
       assert.ok(Math.abs(want[3] - got[3]) < 0.01, `${name} ${key}: alpha`)

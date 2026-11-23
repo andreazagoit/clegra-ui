@@ -69,7 +69,13 @@
   --chart-3: var(--palette-blue-deep);
   --chart-4: var(--palette-neutral-500);
   --chart-5: var(--palette-neutral-400);
-  --sidebar: var(--palette-neutral-50); /* the floating panel beside the white page */
+  /*
+   * THE PANELS' SURFACE (owner, 2026-11-23): one tone for every sidebar and panel of the shell (the rail's blocks,
+   * an app's bar, a sidebar page's list, the right side panels, the drawer, a site's sidebar), in light and dark.
+   * Solid, on the ground: the page (--background) keeps its own.
+   */
+  --panel: var(--palette-neutral-50);
+  --sidebar: var(--panel);
   --sidebar-foreground: var(--palette-neutral-950);
   --sidebar-primary: var(--palette-blue);
   --sidebar-primary-foreground: var(--palette-white);
@@ -120,7 +126,8 @@
   --chart-3: var(--palette-blue-mist);
   --chart-4: var(--palette-neutral-400);
   --chart-5: var(--palette-neutral-500);
-  --sidebar: var(--palette-neutral-850);
+  --panel: var(--palette-neutral-850);
+  --sidebar: var(--panel);
   --sidebar-foreground: var(--palette-neutral-50);
   --sidebar-primary: var(--palette-blue);
   --sidebar-primary-foreground: var(--palette-white);
@@ -302,6 +309,9 @@
 .glass-thick {
   --face-ring: var(--glass-opaque);
 }
+.surface-panel {
+  --face-ring: var(--panel);
+}
 [data-slot="avatar-group"] > :is([data-slot="avatar"], [data-slot="avatar-group-count"]) {
   --tw-ring-color: var(--face-ring);
 }
@@ -341,6 +351,13 @@
 :is([data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"])[data-active]:not([data-active="false"]) {
   background-color: var(--fill-strong);
   color: var(--foreground);
+  /* Its secondary words a step towards the text: AA on --fill-strong over the panel (about 6:1 light and dark; Grigio 500 / 400 were 4.1 / 4.4). */
+  --muted-foreground: color-mix(in srgb, var(--foreground) 35%, var(--palette-neutral-500));
+}
+.dark .selected-row,
+.dark [data-slot="table-row"][data-state="selected"],
+.dark :is([data-slot="sidebar-menu-button"], [data-slot="sidebar-menu-sub-button"])[data-active]:not([data-active="false"]) {
+  --muted-foreground: color-mix(in srgb, var(--foreground) 35%, var(--palette-neutral-400));
 }
 /* The line tabs keep their underline: the chosen one is drawn in the accent. */
 [data-slot="tabs-list"][data-variant="line"] > [data-slot="tabs-trigger"]:is([data-active]:not([data-active="false"]), [data-state="active"])::after {
@@ -415,7 +432,6 @@
   --fill-strong: color-mix(in srgb, var(--palette-neutral-950) 10%, transparent); /* the selection, a set filter */
   --head: color-mix(in srgb, var(--palette-neutral-0) 76%, transparent); /* a sticky table head */
   --head-blur: blur(16px) saturate(170%);
-  --rail-tint: color-mix(in srgb, var(--palette-neutral-950) 3.5%, transparent);
   --hairline: color-mix(in srgb, var(--palette-neutral-950) 9%, transparent);
   --hairline-strong: color-mix(in srgb, var(--palette-neutral-950) 14%, transparent);
   --faint: color-mix(in srgb, var(--palette-neutral-500) 80%, var(--palette-neutral-0)); /* shortcuts in menus, section labels */
@@ -445,7 +461,6 @@
   --fill: rgb(255 255 255 / 8%);
   --fill-strong: rgb(255 255 255 / 14%);
   --head: color-mix(in srgb, var(--palette-neutral-900) 74%, transparent);
-  --rail-tint: rgb(0 0 0 / 18%);
   --hairline: rgb(255 255 255 / 10%);
   --hairline-strong: rgb(255 255 255 / 16%);
   --faint: color-mix(in srgb, var(--palette-neutral-400) 78%, var(--palette-neutral-950));

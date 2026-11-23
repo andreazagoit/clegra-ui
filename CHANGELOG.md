@@ -4,6 +4,17 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.11 (2026-11-23)
+
+- **One surface for every panel** (owner, 2026-11-23: the rail's blocks, the list, the side panel and the page were
+  four tones). The new token `--panel` (light Grigio 50, dark Grigio 850; `--sidebar` is it, `tokens.ts` `panel`) and
+  the class `.surface-panel` (`glass.css`): solid `--panel`, the hairline, no shadow. `FloatingPanel` uses it, so
+  the rail's blocks, an app's bar and a sidebar page's list are one tone, the same as the phone's drawer and a
+  site's sidebar; the rail's own tint (`--rail-tint`) is removed. With no shadow only the ground shows between and
+  around the panels (the shadows drew a grey halo around the rail's blocks and in the window's corners).
+  `.glass-thick` stays for menus, popovers and the composer. A selected row's secondary words are a step towards
+  the text (about 6:1 on `--fill-strong` over the panel, light and dark; 4.1 / 4.4 before).
+
 ## 0.1.0-next.10 (2026-11-23)
 
 - **Faces on a surface** (owner, 2026-11-23). A stack's ring (`AvatarGroup`'s faces and count) is the colour of the

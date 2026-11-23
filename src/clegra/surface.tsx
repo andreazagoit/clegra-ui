@@ -11,12 +11,13 @@ import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group"
  */
 
 /**
- * A window-level panel (the sidebar with the rail and the app's bar, the
- * Clegra panel): thick glass, radius 22, inset 8 from the window's edges
- * (the caller places it).
+ * A window-level panel (a rail's block, the app's bar, a sidebar page's list,
+ * the Clegra panel): the panels' one surface (`.surface-panel`, --panel, the
+ * hairline, no shadow), radius 22, inset 8 from the window's edges (the
+ * caller places it).
  */
 export function FloatingPanel({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-floating-panel="" className={cn("glass-thick flex min-h-0 overflow-hidden rounded-panel", className)} {...props} />
+  return <div data-floating-panel="" className={cn("surface-panel flex min-h-0 overflow-hidden rounded-panel", className)} {...props} />
 }
 
 /**

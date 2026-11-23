@@ -172,9 +172,9 @@ function RailLine({ rail }: { rail: boolean }) {
 }
 
 /**
- * One block of the rail: its own glass pill (the frame's floating panels'
- * glass, its radius concentric with its tiles, --rail-radius), the rail's
- * tint over it, its tiles in a column at the rail's grid (--rail-*: every
+ * One block of the rail: its own pill on the panels' one surface (the frame's
+ * floating panels', `.surface-panel`; its radius concentric with its tiles,
+ * --rail-radius), its tiles in a column at the rail's grid (--rail-*: every
  * tile at the inset from the pill's edges, --rail-gap apart). It scrolls
  * inside when the window is too short for it, never below one tile
  * (`grow`: the block that gives up its height first; then the others).
@@ -183,7 +183,7 @@ function RailBlock({ mark, fixed = false, grow = false, children }: { mark: Reco
   // The brand's and the account's blocks (`fixed`) keep their height: the blocks between give theirs up.
   return (
     <FloatingPanel {...mark} className={cn("min-h-(--shell-rail) w-full flex-col rounded-(--rail-radius)!", fixed ? "shrink-0" : grow ? "shrink-[1000]" : "shrink")}>
-      <div className="flex min-h-0 flex-1 flex-col items-center gap-[calc(var(--rail-gap)-4px)] overflow-x-hidden overflow-y-auto overscroll-contain bg-(--rail-tint) py-[calc(var(--rail-inset)-2px)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex min-h-0 flex-1 flex-col items-center gap-[calc(var(--rail-gap)-4px)] overflow-x-hidden overflow-y-auto overscroll-contain py-[calc(var(--rail-inset)-2px)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {children}
       </div>
     </FloatingPanel>
@@ -193,7 +193,7 @@ function RailBlock({ mark, fixed = false, grow = false, children }: { mark: Reco
 /**
  * THE RAIL (the app shell design §1, the design system §5): a narrow column
  * of tiles, as Slack's, Teams' or Discord's, in BLOCKS (owner, 2026-11-23):
- * each its own glass pill, stacked --shell-inset apart, the window's ground
+ * each its own pill on the panels' surface, stacked --shell-inset apart, the window's ground
  * between them. From the top: whose it is (`brand`), a block of its own
  * (`data-rail-block="brand"`); then a block for each group, except a group
  * with `join` that goes on in the block before it, right under the group
