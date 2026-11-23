@@ -104,14 +104,14 @@ function Controls({ accent }: { accent: AppAccentName }) {
 }
 
 /** Faces as a stack: each keeps its own initials, ground and ring, in a selected row and in a selected control. */
-const Faces = ({ names, more }: { names: string[]; more?: number }) => (
+const Faces = ({ names, more, face = "size-6" }: { names: string[]; more?: number; face?: string }) => (
   <AvatarGroup className="shrink-0">
     {names.map((name) => (
-      <Avatar key={name} size="sm">
+      <Avatar key={name} size="sm" className={face}>
         <AvatarFallback className="text-[10px]">{name.split(" ").map((p) => p[0]).join("")}</AvatarFallback>
       </Avatar>
     ))}
-    {more ? <AvatarGroupCount className="size-6 text-[10px]">+{more}</AvatarGroupCount> : null}
+    {more ? <AvatarGroupCount className={`${face} text-[10px]`}>+{more}</AvatarGroupCount> : null}
   </AvatarGroup>
 )
 
@@ -120,20 +120,26 @@ function PeopleList({ accent }: { accent: AppAccentName }) {
   const [filter, setFilter] = useState("Tutte")
   return (
     <AppAccent accent={accent} className="grid w-80 gap-2" data-story-people="">
+      <div className="flex items-center gap-2">
+        <div className="glass flex h-(--shell-pill) w-fit items-center rounded-pill px-1.5" aria-label="People in the chat">
+          <Faces names={["Sam Lee", "Alex Morgan", "Robin Hale"]} more={2} face="size-7" />
+        </div>
+      </div>
       <HeaderPill className="w-fit">
         {["Tutte", "Non lette"].map((f) => (
           <PillItem key={f} label={f} set={filter === f} onClick={() => setFilter(f)} />
         ))}
-        <PillItem set label={<span className="flex items-center gap-1.5"><Faces names={["Sam Lee", "Alex Morgan"]} />Team</span>} />
+        <PillItem set icon={<Faces names={["Sam Lee", "Alex Morgan"]} />} label="Team" />
+        <PillItem icon={<Faces names={["Kim Park", "Jamie Fox"]} more={3} />} label="Vendite" />
       </HeaderPill>
       <div className="grid gap-0.5 rounded-2xl bg-sidebar p-1.5">
         {[
           { names: ["Sam Lee"], title: "Sam Lee", line: "See you at ten", time: "10:42", unread: 2, open: false },
-          { names: ["Alex Morgan", "Jamie Fox", "Robin Hale"], more: 2, title: "Sales team", line: "The price list is updated", time: "09:15", unread: 0, open: true },
+          { names: ["Alex Morgan"], title: "Alex Morgan", line: "The price list is updated", time: "09:15", unread: 0, open: true },
           { names: ["Kim Park"], title: "Kim Park", line: "Thanks!", time: "Mon", unread: 0, open: false },
         ].map((row) => (
           <div key={row.title} className={`flex items-center gap-2 rounded-(--radius-cell) px-3 py-2.5 hover:bg-(--fill) ${row.open ? "selected-row" : ""}`}>
-            <Faces names={row.names} more={row.more} />
+            <Faces names={row.names.slice(0, 1)} />
             <span className="flex min-w-0 flex-1 flex-col gap-0.5">
               <span className="flex min-w-0 items-baseline gap-2">
                 <span className="min-w-0 flex-1 truncate text-sm">{row.title}</span>

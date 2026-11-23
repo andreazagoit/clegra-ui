@@ -4,6 +4,14 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.10 (2026-11-23)
+
+- **Faces on a surface** (owner, 2026-11-23). A stack's ring (`AvatarGroup`'s faces and count) is the colour of the
+  surface it sits on, never a hard white: the page (`--face-ring`, default `--background`), a glass pill or panel
+  (its opaque tone), a selected control's fill. Faces in a `PillItem`'s `icon` are sized from the item (its height
+  less 12, initials 8, each covering a third of the one before) with the same start padding, so a filter chip with
+  people holds them evenly.
+
 ## 0.1.0-next.9 (2026-11-23)
 
 - **The rail's blocks, with lines inside** (`ShellRail`, owner 2026-11-23). `brand` is a block of its own

@@ -73,7 +73,7 @@ export function PillDivider({ className }: { className?: string }) {
 }
 
 export type PillItemProps = React.ComponentProps<"button"> & {
-  /** The item's icon (an svg element). */
+  /** The item's icon (an svg element), or people's faces (an `AvatarGroup`: sized from the item, theme.css). */
   icon?: React.ReactNode
   /** Its words; none: icon only, then `aria-label` is required. */
   label?: React.ReactNode

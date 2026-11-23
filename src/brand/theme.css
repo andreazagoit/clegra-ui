@@ -265,6 +265,9 @@
     border-color: var(--primary-foreground);
   }
 
+  /* A face's ring is the fill it sits on (FACES ON A SURFACE, below). */
+  --face-ring: var(--primary);
+
   /* Avatars, face counts and badges keep their own initials, ground and ring in every state: the page's text roles back. */
   & :is([data-slot="avatar"], [data-slot="avatar-group-count"], [data-slot="badge"]) {
     --foreground: var(--own-foreground);
@@ -280,6 +283,47 @@
 .dark {
   --own-foreground: var(--foreground);
   --own-muted-foreground: var(--muted-foreground);
+  --face-ring: var(--background);
+}
+
+/*
+ * FACES ON A SURFACE (owner, 2026-11-23): a stack of faces (AvatarGroup, and
+ * the apps' own stacks built on it) parts its faces with a ring in the colour
+ * of the surface they sit on, never a hard white: the page (--background), a
+ * glass pill or panel (its opaque tone), a selected control's fill (above).
+ * Inside a pill's item (a filter chip with people) the faces are sized from
+ * the item: the item's height less 12 (20 in a 32 item; with the 2 px ring,
+ * 4 from every edge, like the pill's own padding), the initials 8, each face
+ * covering about a third of the one before (as the chat header's stack), the
+ * last one whole; the item's start padding is the same 6, so the faces sit
+ * evenly. Faces go in the item's `icon`, never inside its truncated words.
+ */
+.glass,
+.glass-thick {
+  --face-ring: var(--glass-opaque);
+}
+[data-slot="avatar-group"] > :is([data-slot="avatar"], [data-slot="avatar-group-count"]) {
+  --tw-ring-color: var(--face-ring);
+}
+[data-pill-item] {
+  --pill-face: calc(var(--shell-pill-item) - 0.75rem);
+}
+[data-pill-item]:has(> :is([data-slot="avatar-group"], [data-slot="avatar"]):first-child) {
+  padding-inline-start: calc((var(--shell-pill-item) - var(--pill-face)) / 2);
+}
+[data-pill-item] :is([data-slot="avatar"], [data-slot="avatar-group-count"]) {
+  width: var(--pill-face);
+  height: var(--pill-face);
+  font-size: 0.5rem;
+}
+[data-pill-item] [data-slot="avatar-fallback"] {
+  font-size: 0.5rem;
+}
+[data-pill-item] [data-slot="avatar-group"] > * {
+  margin-inline: 0;
+}
+[data-pill-item] [data-slot="avatar-group"] > * + * {
+  margin-inline-start: calc(var(--pill-face) / -3);
 }
 
 /*
