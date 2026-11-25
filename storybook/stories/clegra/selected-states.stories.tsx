@@ -6,7 +6,7 @@ import "@clegra/ui/glass.css"
 
 import { AppAccent } from "@clegra/ui/clegra/app-accent"
 import { HeaderGroup, HeaderPill, PillDivider, PillItem } from "@clegra/ui/clegra/pill"
-import { Segmented } from "@clegra/ui/clegra/surface"
+import { SegmentedControl } from "@clegra/ui/clegra/segmented"
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@clegra/ui/components/avatar"
 import { Badge } from "@clegra/ui/components/badge"
 import { Bubble, BubbleContent } from "@clegra/ui/components/bubble"
@@ -74,7 +74,7 @@ function Controls({ accent }: { accent: AppAccentName }) {
   return (
     <AppAccent accent={accent} className="grid gap-3">
       <div className="flex flex-wrap items-center gap-3">
-        <Segmented label="Mostra" value={filter} onValueChange={setFilter} items={[{ value: "all", label: "Tutti" }, { value: "unread", label: "Non letti" }, { value: "files", label: "Con allegati" }]} />
+        <SegmentedControl surface="fill" label="Mostra" value={filter} onValueChange={setFilter} items={[{ value: "all", label: "Tutti" }, { value: "unread", label: "Non letti" }, { value: "files", label: "Con allegati" }]} />
         <Tabs defaultValue="open">
           <TabsList>
             <TabsTrigger value="open">Aperti</TabsTrigger>

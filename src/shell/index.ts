@@ -28,8 +28,8 @@
  * - Shortcuts are what the platform writes («⌥1», «⌘J») or a sequence (`["G", "H"]`): `ShortcutKeysValue`. The app
  *   listens for them; the shell shows them (tooltips, `ShortcutsDialog`).
  * - The header's parts (`HeaderGroup`, `HeaderPill`, `PillItem`, `PillDivider`, `Hint`, `ShortcutKeys`) and the
- *   surfaces (`FloatingPanel`, `ScrollEdge`, `Segmented`) are re-exported here from `@clegra/ui/clegra/pill` and
- *   `@clegra/ui/clegra/surface` (they need `@clegra/ui/glass.css` after `styles.css`).
+ *   surfaces (`FloatingPanel`, `ScrollEdge`) and `SegmentedControl` are re-exported here from
+ *   `@clegra/ui/clegra/pill`, `@clegra/ui/clegra/surface` and `@clegra/ui/clegra/segmented` (they need `@clegra/ui/glass.css` after `styles.css`).
  */
 export { NavBar, NavLink, NavSections, SectionsPill } from "./nav"
 export { PageHeading, ShellPage } from "./page"
@@ -39,7 +39,8 @@ export { CountBadge } from "./badge"
 export { Keys } from "./keys"
 export { ShortcutsDialog, type ShortcutGroup } from "./shortcuts"
 export { HeaderGroup, HeaderPill, Hint, PillDivider, PillItem, ShortcutKeys, type PillItemProps } from "../clegra/pill"
-export { FloatingPanel, ScrollEdge, Segmented } from "../clegra/surface"
+export { FloatingPanel, ScrollEdge } from "../clegra/surface"
+export { SegmentedControl, type SegmentedItem } from "../clegra/segmented"
 export { ShellLinkProvider, useShellLink, type ShellLinkComponent } from "./link"
 export { countLabel, initials, isCurrentPath } from "./model"
 export type { DataAttributes, NavItem, NavSection, ShellIcon, ShortcutKeysValue } from "./types"

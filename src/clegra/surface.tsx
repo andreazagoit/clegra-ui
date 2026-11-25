@@ -2,11 +2,10 @@
 
 import { cn } from "cn"
 
-import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group"
-
 /*
  * The Clegra layer's surfaces (the design system §2, §4, §5, §8):
- * the floating panels, the scroll edge, the segmented control. Glass on
+ * the floating panels and the scroll edge (the segmented control is
+ * `clegra/segmented`). Glass on
  * chrome only; content stays solid.
  */
 
@@ -32,46 +31,5 @@ export function ScrollEdge({ side = "top", className }: { side?: "top" | "bottom
       data-side={side}
       className={cn("scroll-edge absolute inset-x-0 z-10", side === "top" ? "top-0" : "bottom-0", className)}
     />
-  )
-}
-
-/**
- * A segmented control: a capsule track of `--fill`, the chosen segment the
- * selected state (the glass fill in the app's colour, theme.css). One value.
- * «Tutti · Non letti · Con allegati», calendar views.
- */
-export function Segmented<T extends string>({
-  value,
-  onValueChange,
-  items,
-  label,
-  className,
-}: {
-  value: T
-  onValueChange: (value: T) => void
-  items: { value: T; label: React.ReactNode }[]
-  label: string
-  className?: string
-}) {
-  return (
-    <ToggleGroup
-      aria-label={label}
-      value={[value]}
-      onValueChange={(next: unknown[]) => {
-        const picked = next[0] as T | undefined
-        if (picked) onValueChange(picked)
-      }}
-      className={cn("h-8 gap-0 rounded-full bg-(--fill) p-0.5", className)}
-    >
-      {items.map((item) => (
-        <ToggleGroupItem
-          key={item.value}
-          value={item.value}
-          className="h-7 rounded-full px-3 text-[0.8125rem] font-medium"
-        >
-          {item.label}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
   )
 }

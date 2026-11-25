@@ -6,6 +6,8 @@ import {
   CircleDashedIcon,
   DownloadIcon,
   LayersIcon,
+  LayoutGridIcon,
+  ListIcon,
   ListFilterIcon,
   MoreHorizontalIcon,
   PlusIcon,
@@ -20,7 +22,8 @@ import { useState } from "react"
 import "@clegra/ui/glass.css"
 
 import { HeaderGroup, HeaderPill, Hint, PillDivider, PillItem, ShortcutKeys } from "@clegra/ui/clegra/pill"
-import { FloatingPanel, ScrollEdge, Segmented } from "@clegra/ui/clegra/surface"
+import { SegmentedControl } from "@clegra/ui/clegra/segmented"
+import { FloatingPanel, ScrollEdge } from "@clegra/ui/clegra/surface"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@clegra/ui/components/table"
 
 /**
@@ -174,7 +177,8 @@ export const Surfaces: StoryObj = {
             </div>
           </div>
         </Ground>
-        <Segmented
+        <SegmentedControl
+          surface="fill"
           label="Messaggi"
           value={view}
           onValueChange={setView}
@@ -234,4 +238,46 @@ export const Glass: StoryObj = {
       </div>
     </div>
   ),
+}
+
+/**
+ * The segmented control in the header: a pill like the others (40, the glass, items of 32), the chosen segment the
+ * selected state. Icon-only (Finder's list · icons, each with its tooltip) or with words; ← → choose.
+ */
+export const Segmented: StoryObj = {
+  render: function Render() {
+    const [shape, setShape] = useState<"list" | "icons">("list")
+    const [span, setSpan] = useState<"day" | "week" | "month">("week")
+    return (
+      <Ground className="h-28">
+        <div className="flex justify-end p-3">
+          <HeaderGroup label="Strumenti della pagina">
+            <SegmentedControl
+              label="Vista"
+              iconOnly
+              value={shape}
+              onValueChange={setShape}
+              items={[
+                { value: "list", label: "Elenco", icon: <ListIcon />, keys: "V" },
+                { value: "icons", label: "Icone", icon: <LayoutGridIcon />, keys: "V" },
+              ]}
+            />
+            <SegmentedControl
+              label="Periodo"
+              value={span}
+              onValueChange={setSpan}
+              items={[
+                { value: "day", label: "Giorno", hint: "Mostra il giorno", keys: "D" },
+                { value: "week", label: "Settimana", hint: "Mostra la settimana", keys: "W" },
+                { value: "month", label: "Mese", hint: "Mostra il mese", keys: "M" },
+              ]}
+            />
+            <HeaderPill tone="tinted">
+              <PillItem icon={<PlusIcon />} label="Nuovo" />
+            </HeaderPill>
+          </HeaderGroup>
+        </div>
+      </Ground>
+    )
+  },
 }

@@ -4,6 +4,16 @@
 Until this repository existed the library was the `ui` entry of the unscoped package that preceded `@clegra/sdk`; its
 history is kept here.
 
+## 0.1.0-next.15 (2026-11-24)
+
+- **Breaking: `SegmentedControl` replaces `Segmented`** (owner, 2026-11-24: a view toggle in the header did not look
+  like the pills beside it). `@clegra/ui/clegra/segmented` (also in `@clegra/ui/shell`): in the header it is a pill
+  like the others (`surface="glass"`: 40 high, the glass, segments of 32 with the pills' type), in content its
+  segments sit on a `--fill` track (`surface="fill"`); the chosen segment is the selected state. A radiogroup with one
+  tab stop, the arrow keys and Home/End choose (a header group's arrows don't also move). `iconOnly` segments have a
+  tooltip each; `hint` and `keys` give a labelled one its tooltip and shortcut; `data` puts test hooks on a segment.
+  `Segmented` is gone from `@clegra/ui/clegra/surface` and `@clegra/ui/shell`.
+
 ## 0.1.0-next.14 (2026-11-23)
 
 - **Breaking: Clegra's own window leaves the package.** `@clegra/ui/shell` no longer exports `AppShell`, `ShellMain`,

@@ -42,7 +42,7 @@ Nothing is bundled: your bundler sees one copy of React and Base UI.
 | `@clegra/ui/react/components/<name>` | web | The web version, explicitly |
 | `@clegra/ui/react-native/components/<name>` | React Native | The native version, explicitly |
 | `@clegra/ui/shell` | web | An app's frame: `SiteShell` (an app's own website), `NavBar`, `NavSections`, `ShellPage`, `PageHeading`, `AppIconImage`, `ShortcutsDialog`, the header's pills, … (below, «An app's pages») |
-| `@clegra/ui/clegra/<name>` | web | Clegra's layer over shadcn: `pill` (the header's pills), `surface` (floating panels, the scroll edge, `Segmented`), `rows` (`RowList`, `Row`, `RowIcon`, `FactList`, `Fact`), `confirm-switch`, `app-accent` (`AppAccent`, `useAppAccent`, `appAccentProps`) |
+| `@clegra/ui/clegra/<name>` | web | Clegra's layer over shadcn: `pill` (the header's pills), `surface` (floating panels, the scroll edge), `segmented` (`SegmentedControl`), `rows` (`RowList`, `Row`, `RowIcon`, `FactList`, `Fact`), `confirm-switch`, `app-accent` (`AppAccent`, `useAppAccent`, `appAccentProps`) |
 | `@clegra/ui/frame` | web | `ClegraProvider`, `useClegraTheme`, `useClegraHost`, `hostContextFor` |
 | `@clegra/ui/tokens` | any | The theme as plain values: `colorsFor(mode)`, `radius`, `type` |
 | `@clegra/ui/accents` | any | The apps' accents: `APP_ACCENT_NAMES`, `appAccentColors`, `isAppAccent`, `appAccentOf`, `appAccentVariables` (below, «An app's accent») |
@@ -175,8 +175,12 @@ What it takes:
   external? }`), each entry 34 high with its keys in a tooltip; `SectionsPill` is the header's way to the sections on
   a phone.
 - The header's parts: `HeaderGroup`, `HeaderPill`, `PillItem`, `PillDivider`, `Hint`, `ShortcutKeys`, and the
-  surfaces `FloatingPanel`, `ScrollEdge`, `Segmented` (re-exported from `@clegra/ui/clegra/pill` and
-  `@clegra/ui/clegra/surface`).
+  surfaces `FloatingPanel`, `ScrollEdge`, and `SegmentedControl` (re-exported from `@clegra/ui/clegra/pill`,
+  `@clegra/ui/clegra/surface` and `@clegra/ui/clegra/segmented`).
+- `SegmentedControl`: one choice among a few (a view, a period). In the header it is a pill like the others
+  (`surface="glass"`, the default); in content its segments sit on a `--fill` track (`surface="fill"`). The chosen
+  segment is the selected state; it is a radiogroup (one tab stop, ← → and Home/End choose). `iconOnly` draws
+  icons with a tooltip each (a list · icons view); `hint` and `keys` add a tooltip to a labelled segment.
 - Also: `AppIconImage` (an app icon in Apple's mask), `CountBadge`, `Keys`, `ShortcutsDialog` (the list of
   shortcuts), `ShellLinkProvider` / `useShellLink`, `isCurrentPath`, `initials`, `countLabel`.
 
@@ -298,7 +302,7 @@ transparency». The colour is `--glass-fill` (default `--primary`, so the app's 
 (their default variant), the tinted `HeaderPill`, `.btn-yes` on a `Button` (in the «sì» colour) and the `Bubble`'s
 `default` (`muted`: neutral) are glass fills; bubbles have corners of `--radius-bubble` (a capsule on one line).
 
-The selected state has two tiers. A selected **control** (a set `PillItem`, the chosen `Segmented` segment, the active
+The selected state has two tiers. A selected **control** (a set `PillItem`, the chosen `SegmentedControl` segment, the active
 `TabsTrigger`, a pressed `Toggle` or `ToggleGroupItem`, the open rail tile, a chosen chip) is the glass fill, never a
 faded tint; anything else of the kind adds the class `selected` while it is chosen. Inside it the text roles
 (`--foreground`, `--muted-foreground`, `--link`…) are the fill's foreground, so its words and icons stay readable;
